@@ -136,9 +136,7 @@ var j,
     option;
 
 for (j = 0; j < volcanoes.length; j += 1) {
-    // if (volcanoes[j].vw.active === 0) {
-    //     continue;
-    // }
+    if (volcanoes[j].vw.active === 0) continue;
     switch (volcanoes[j].vw.status){
     case 'inactive':
         option =  {icon: icon_inactive, title: volcanoes[j].Name};
