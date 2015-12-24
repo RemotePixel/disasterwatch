@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Disaster Watch - Disaster monitoring with satellite imagery">
+    <meta name="author" content="Vincent Sarago for RemotePixel">
+    <meta name="twitter:title" content="Disaster Watch" />
+    <meta name="twitter:site" content="@RemotePixel" />
+    <meta name="twitter:description" content="Disaster Watch - Disaster monitoring with satellite imagery" />
+
+	<title>Remote Pixel | Disaster Watch</title>
+
+	<!-- Bootstrap Core CSS -->
+	<link href="/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+	<link href="/css/checkbox-slider.css" rel="stylesheet">
+	<link href='/js/leaflet/leaflet.css' rel='stylesheet' />
+    <link href="/css/style.min.css" rel="stylesheet">
+
+	<!-- Custom Fonts -->
+	<link href="/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+	<link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	    <![endif]-->
+
+ 	<script>
+   	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+   	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+   	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+   	  })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+   	  ga('create', 'UA-60678866-1', 'auto');
+   	  ga('send', 'pageview');
+	</script>
+
+</head>
+
+<body>
+	<div class="content">
+        <div class="menu-bar-left">
+            <div class="NavButtonGroup">
+
+				<a class="home-butt" href="/">
+					<img src="img/dw.png" class="img-responsive">
+				</a>
+
+                <!-- Basemaps Button -->
+                <button id="basemaps-btn" type="button" class="btn btn-default" onclick="toggleParam('basemaps')">
+                    <i class="fa fa-globe fa-2x"></i>
+                    <span class="buttonTitle">Basemaps</span>
+                </button>
+
+                <!-- Setting Button -->
+                <button id="settings-btn" type="button" class="btn btn-default" onclick="toggleParam('settings')">
+                    <i class="fa fa-cog fa-2x"></i>
+                    <span class="buttonTitle">Settings</span>
+                </button>
+
+                <!-- Add Volcano Activty Button -->
+                <button id="add-btn" type="button" class="btn btn-default">
+                    <i class="fa fa-plus fa-2x"></i>
+                    <span class="buttonTitle">Add</span>
+                </button>
+
+                <!-- Info Button -->
+                <div id="info-btn" class="float-bottom" data-toggle="modal" data-target="#modalAbout">
+                    <i class="fa fa-info fa-2x"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-container">
+
+            <div id="map" class="map"></div>
+            <!-- <h4 id="data-date" class="data-date"></h4> -->
+
+            <div id="SideViewCtrl" class="side-view">
+                <div id="basemaps-panel" class="navpanel side-view-container">
+
+                    <button class="side-view-close btn btn-lg btn-primary" onclick="toggleParam('basemaps')">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                    </button>
+                    <div class="title">Basemaps</div>
+
+                    <div class="side-view-content">
+                        <div class="side-element">
+                            <a class="link" onclick="changeOverlay('mapbox')">
+                                <div id="map-default" class="mini-map"></div>
+                                Default
+                            </a>
+                        </div>
+                        <div class="side-element">
+                            <a class="link" onclick="changeOverlay('VIIRS_SNPP_CorrectedReflectance_TrueColor')">
+                                <div id="map-suomi-true" class="mini-map"></div>
+                                VIIRS True Color (CR)
+                            </a>
+                        </div>
+						<div class="side-element">
+                            <a class="link" onclick="changeOverlay('MODIS_Terra_CorrectedReflectance_TrueColor')">
+                                <div id="map-terra-true" class="mini-map"></div>
+                                Terra True Color (CR)
+                            </a>
+                        </div>
+						<div class="side-element">
+                            <a class="link" onclick="changeOverlay('MODIS_Aqua_CorrectedReflectance_TrueColor')">
+                                <div id="map-aqua-true" class="mini-map"></div>
+                                Aqua True Color (CR)
+                            </a>
+                        </div>
+						<div class="side-element">
+                            <a class="link" onclick="changeOverlay('VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1')">
+                                <div id="map-suomi-1121" class="mini-map"></div>
+                                VIIRS M11-I2-I1 (CR)
+                            </a>
+                        </div>
+                        <div class="side-element">
+                            <a class="link" onclick="changeOverlay('MODIS_Terra_CorrectedReflectance_Bands721')">
+                                <div id="map-terra-721" class="mini-map"></div>
+                                Terra Bands 7-2-1 (CR)
+                            </a>
+                        </div>
+                        <div class="side-element">
+                            <a class="link" onclick="changeOverlay('MODIS_Aqua_CorrectedReflectance_Bands721')">
+                                <div id="map-aqua-721" class="mini-map"></div>
+                                Aqua Bands 7-2-1 (CR)
+                            </a>
+                        </div>
+						<div class="side-element">
+                            <a class="link" onclick="changeOverlay('VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11')">
+                                <div id="map-suomi-3311" class="mini-map"></div>
+                                VIIRS M3-I3-M11 (CR)
+                            </a>
+                        </div>
+						<div class="side-element">
+                            <a class="link" onclick="changeOverlay('MODIS_Terra_CorrectedReflectance_Bands367')">
+                                <div id="map-terra-367" class="mini-map"></div>
+                                Terra Bands 3-6-7 (CR)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="settings-panel" class="navpanel side-view-container">
+
+                    <button class="side-view-close btn btn-lg btn-primary" onclick="toggleParam('settings')">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                    </button>
+                    <div class="title">Settings</div>
+
+                    <div class="side-view-content">
+						<div class="block-control">
+                            <div class="text-align-left">Earthquake Locations:</div>
+							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary green" >
+                                <input id="earthquake-checkbox" type="checkbox" checked/><span></span>
+                            </label>
+                        </div>
+
+						<div class="block-control">
+                            <div class="text-align-left">Fire Locations (Thermal Anomalies):</div>
+							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary" >
+                                <input id="fire-checkbox" type="checkbox"/><span></span>
+                            </label>
+                        </div>
+
+						<div class="block-control">
+                            <div class="text-align-left">Volcanoes Locations:</div>
+							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary green" >
+                                <input id="volcanoes-checkbox" type="checkbox" checked/><span></span>
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+	</div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalAbout" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" style="text-align:center; color:#000;">Disaster Watch</h4>
+                </div>
+                   <div class="modal-body">
+                        <div class="hmodal-info">
+	                        <p>Disaster watch is a tool to visualize latest satellite imagery available for a disaster area.</p>
+
+		                    <p><a href="https://github.com/vincentsarago/disasterwatch" target="_blank">GitHub</a></p>
+
+		                    <p>Questions or comments to <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></p>
+
+                        </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <!-- /.modal -->
+
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/moment.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/js/bootstrap/js/bootstrap.min.js"></script>
+
+    <!--  Leaflet JavaScript -->
+    <script src='/js/leaflet/leaflet.js'></script>
+	<script src="/js/GIBSMetadata.min.js"></script>
+	<script src="/js/GIBSLayer.min.js"></script>
+    <script src="/js/L.Map.Sync.js"></script>
+
+	<script src='/data/ActiveVolcanoes.js'></script>
+
+	<script src='/js/app.min.js'></script>
+</body>
+</html>
