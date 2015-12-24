@@ -7,9 +7,10 @@ What
 
 Aim of this project is to ease access to satelite imagery where we need the most.
 
-####Two purposes are define:
-- Catalog disaster.
-- Visualize latest imagery available on each area (Landsat, SENTINEL, ,UrtheCast, PlanetLab, Digitalglobe, Airbus DS).
+####Two purposes are define: 
+* Catalog disaster.
+* Visualize latest imagery available on each area (Landsat, SENTINEL, ,UrtheCast, PlanetLab, Digitalglobe, Airbus DS).
+
 
 Why
 -------
@@ -22,12 +23,11 @@ To Do
 
 ####Back End:
 
-####Front End:
+######Front End:
 - Interface to visualize imagery quicklook and metadata.
 - Interface to add disaster to the database (login required ?).
 - Connect to other services like [OpenArialMap](http://openaerialmap.org).
-- add time.
-
+- Add time.
 
 Ressources
 -------
