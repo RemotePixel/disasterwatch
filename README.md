@@ -14,7 +14,8 @@ Aim of this project is to ease access to satelite imagery where we need the most
 Why
 -------
 
-Imagery as a service is a reality. Accessing 
+Imagery as a service is a reality. Accessing medium or high resolution image has never been easier.
+My concern is that  
 
 
 To Do
