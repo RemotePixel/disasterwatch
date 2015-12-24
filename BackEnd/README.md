@@ -1,5 +1,11 @@
 #BackEnd Server 
-#nodeJs
-#Elasctisearch
-#Python?
-#MongoDB?
+
+Technologies
+-------
+- NodeJS
+- Elasctisearch or MongoDB
+
+
+To Do
+-------
+- Everything
