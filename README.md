@@ -33,16 +33,16 @@ To Do
 -------
 
 #####Back End:
-  [ ] Create a nodejs server
-  [ ] Create a database (ElasticSearch or MongoDB)
-  [ ] Build a REST like service to add disaster to a database (GET, PUT)
-  [ ] Build a REST like service to get imagery available (GET)
+[ ] Create a nodejs server
+[ ] Create a database (ElasticSearch or MongoDB)
+[ ] Build a REST like service to add disaster to a database (GET, PUT)
+[ ] Build a REST like service to get imagery available (GET)
   
 #####Front End:
-  [ ] Interface to visualize imagery quicklook and metadata.
-  [ ] Interface to add disaster to the database (login required ?).
-  [ ] Connect to other services like [OpenArialMap](http://openaerialmap.org).
-  [ ] Add time.
+[ ] Interface to visualize imagery quicklook and metadata.
+[ ] Interface to add disaster to the database (login required ?).
+[ ] Connect to other services like [OpenArialMap](http://openaerialmap.org).
+[ ] Add time.
 
 Ressources
 -------
