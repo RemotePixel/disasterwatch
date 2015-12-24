@@ -227,7 +227,6 @@ body {
     width: 100%;
     cursor: pointer;
     font-size: 12px;
-    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #777;
     font-weight: 100;
 }
@@ -256,6 +255,24 @@ body {
     min-height: 32px;
 }
 
+.block-control .date-button {
+    color: #000;
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    font-size: 22px;
+    cursor: pointer;
+    background: none;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #000;
+}
+
+.block-control .date-button:hover{
+    color: #FFF;
+    background-color: #000;
+    border: 1px solid #000;
+}
 /* End Side View */
 
 .map {
@@ -429,6 +446,10 @@ ol li i{
 
     .side-view .side-view-close {
         font-size: 10px;
+    }
+
+    .block-control .date-button {
+        font-size: 15px;
     }
 
     .text-align-left {

@@ -35,28 +35,27 @@ var map = L.map('map', {
     minZoom: 2,
     maxZoom: 9
 }),
-icon_inactive = L.icon({
-    iconUrl: '../img/volcano_rest.png',
-    iconAnchor: [10, 40],
-    iconSize: [20, 40]
-}),
-icon_warning = L.icon({
-    iconUrl: '../img/volcano_warn.png',
-    iconAnchor: [20, 80],
-    iconSize: [40, 80]
-}),
-icon_active = L.icon({
-    iconUrl: '../img/volcano_act.png',
-    iconAnchor: [20, 80],
-    iconSize: [40, 80]
-}),
-volcanoesGroup = new L.featureGroup().addTo(map),
-seismesGroup = new L.featureGroup().addTo(map),
-fireGroup = new L.layerGroup(),
-lyrGr = new L.layerGroup().addTo(map),
-j;
+    icon_inactive = L.icon({
+        iconUrl: '../img/volcano_rest.png',
+        iconAnchor: [10, 40],
+        iconSize: [20, 40]
+    }),
+    icon_warning = L.icon({
+        iconUrl: '../img/volcano_warn.png',
+        iconAnchor: [20, 80],
+        iconSize: [40, 80]
+    }),
+    icon_active = L.icon({
+        iconUrl: '../img/volcano_act.png',
+        iconAnchor: [20, 80],
+        iconSize: [40, 80]
+    }),
+    volcanoesGroup = new L.featureGroup().addTo(map),
+    seismesGroup = new L.featureGroup().addTo(map),
+    fireGroup = new L.layerGroup(),
+    lyrGr = new L.layerGroup().addTo(map);
 
-L.control.attribution({prefix:"<a href='http://remotepixel.ca/' target='_blank'>&copy; RemotePixel", position: 'bottomright'}).addTo(map);
+L.control.attribution({prefix: "<a href='http://remotepixel.ca/' target='_blank'>&copy; RemotePixel", position: 'bottomright'}).addTo(map);
 
 fireGroup.addLayer(L.tileLayer.wms("https://firms.modaps.eosdis.nasa.gov/wms/", {
     layers: 'fires24',
@@ -133,26 +132,30 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 //         });
 //     });
 // }
+var j,
+    option;
 
-for (j = 0; j < volcanoes.length; j += 1){
-    if (volcanoes[j].vw.active === 0) continue
+for (j = 0; j < volcanoes.length; j += 1) {
+    // if (volcanoes[j].vw.active === 0) {
+    //     continue;
+    // }
     switch (volcanoes[j].vw.status){
-        case 'inactive':
-            var option =  {icon: icon_inactive, title: volcanoes[j].Name};
-            break;
+    case 'inactive':
+        option =  {icon: icon_inactive, title: volcanoes[j].Name};
+        break;
 
-        case 'warning':
-            var option =  {icon: icon_warning, title: volcanoes[j].Name};
-            break;
+    case 'warning':
+        option =  {icon: icon_warning, title: volcanoes[j].Name};
+        break;
 
-        case 'active':
-            var option =  {icon: icon_active, title: volcanoes[j].Name};
-            break;
+    case 'active':
+        option =  {icon: icon_active, title: volcanoes[j].Name};
+        break;
 
-        case null:
-            var option =  {icon: icon_inactive, title: volcanoes[j].Name};
-            break;
-    };
+    case null:
+        option =  {icon: icon_inactive, title: volcanoes[j].Name};
+        break;
+    }
     var vol = L.marker([volcanoes[j].Lat, volcanoes[j].Lon], option);
     vol.properties = volcanoes[j];
     volcanoesGroup.addLayer(vol);
@@ -171,6 +174,7 @@ var mini_map_option = {
         scrollWheelZoom: false,
         doubleClickZoom: false,
         boxZoom: false,
+        dragging: false,
         tap: false,
         attributionControl: false,
         zoomControl: false,
@@ -179,8 +183,6 @@ var mini_map_option = {
         maxZoom: 10,
         center: [1, 1]
     };
-
-var modis_option = {date: scope.current_date, transparent: scope.transparent_modis};
 
 var minimap0 = L.map('map-default', mini_map_option);
 minimap0.dragging.disable();
@@ -192,44 +194,44 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 map.sync(minimap0);
 
 var minimap1 = L.map('map-terra-true', mini_map_option);
-minimap1.dragging.disable();
-L.GIBSLayer('MODIS_Terra_CorrectedReflectance_TrueColor', modis_option).addTo(minimap1);
+//minimap1.dragging.disable();
 map.sync(minimap1);
+var minimap1_lyr = L.layerGroup().addTo(minimap1);
 
 var minimap2 = L.map('map-terra-721', mini_map_option);
-minimap2.dragging.disable();
-L.GIBSLayer('MODIS_Terra_CorrectedReflectance_Bands721', modis_option).addTo(minimap2);
+//minimap2.dragging.disable();
 map.sync(minimap2);
+var minimap2_lyr = L.layerGroup().addTo(minimap2);
 
 var minimap3 =  L.map('map-terra-367', mini_map_option);
-minimap3.dragging.disable();
-L.GIBSLayer('MODIS_Terra_CorrectedReflectance_Bands367', modis_option).addTo(minimap3);
+//minimap3.dragging.disable();
 map.sync(minimap3);
+var minimap3_lyr = L.layerGroup().addTo(minimap3);
 
 var minimap4 = L.map('map-aqua-true', mini_map_option);
-minimap4.dragging.disable();
-L.GIBSLayer('MODIS_Aqua_CorrectedReflectance_TrueColor', modis_option).addTo(minimap4);
+//minimap4.dragging.disable();
 map.sync(minimap4);
+var minimap4_lyr = L.layerGroup().addTo(minimap4);
 
 var minimap5 = L.map('map-aqua-721', mini_map_option);
-minimap5.dragging.disable();
-L.GIBSLayer('MODIS_Aqua_CorrectedReflectance_Bands721', modis_option).addTo(minimap5);
+//minimap5.dragging.disable();
 map.sync(minimap5);
+var minimap5_lyr = L.layerGroup().addTo(minimap5);
 
 var minimap6 = L.map('map-suomi-true', mini_map_option);
-L.GIBSLayer('VIIRS_SNPP_CorrectedReflectance_TrueColor', modis_option).addTo(minimap6);
-minimap6.dragging.disable();
+//minimap6.dragging.disable();
 map.sync(minimap6);
+var minimap6_lyr = L.layerGroup().addTo(minimap6);
 
 var minimap7 = L.map('map-suomi-1121', mini_map_option);
-L.GIBSLayer('VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1', modis_option).addTo(minimap7);
-minimap7.dragging.disable();
+//minimap7.dragging.disable();
 map.sync(minimap7);
+var minimap7_lyr = L.layerGroup().addTo(minimap7);
 
 var minimap8 = L.map('map-suomi-3311', mini_map_option);
-L.GIBSLayer('VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11', modis_option).addTo(minimap8);
-minimap8.dragging.disable();
+//minimap8.dragging.disable();
 map.sync(minimap8);
+var minimap8_lyr = L.layerGroup().addTo(minimap8);
 
 $("#earthquake-checkbox").change(function () {
     "use strict";
@@ -321,7 +323,45 @@ function changeOverlay(lyr_name) {
     $("#right-id").text("Right: " + avail_basemap[scope.right_data]);
 }
 
+function updateminimap() {
+    'use strict';
+    var modis_option = {date: scope.current_date, transparent: scope.transparent_modis};
+    minimap1_lyr.clearLayers();
+    minimap2_lyr.clearLayers();
+    minimap3_lyr.clearLayers();
+    minimap4_lyr.clearLayers();
+    minimap5_lyr.clearLayers();
+    minimap6_lyr.clearLayers();
+    minimap7_lyr.clearLayers();
+    minimap8_lyr.clearLayers();
+    minimap1_lyr.addLayer(L.GIBSLayer('MODIS_Terra_CorrectedReflectance_TrueColor', modis_option));
+    minimap2_lyr.addLayer(L.GIBSLayer('MODIS_Terra_CorrectedReflectance_Bands721', modis_option));
+    minimap3_lyr.addLayer(L.GIBSLayer('MODIS_Terra_CorrectedReflectance_Bands367', modis_option));
+    minimap4_lyr.addLayer(L.GIBSLayer('MODIS_Aqua_CorrectedReflectance_TrueColor', modis_option));
+    minimap5_lyr.addLayer(L.GIBSLayer('MODIS_Aqua_CorrectedReflectance_Bands721', modis_option));
+    minimap6_lyr.addLayer(L.GIBSLayer('VIIRS_SNPP_CorrectedReflectance_TrueColor', modis_option));
+    minimap7_lyr.addLayer(L.GIBSLayer('VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1', modis_option));
+    minimap8_lyr.addLayer(L.GIBSLayer('VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11', modis_option));
+}
+
 $(document).ready(function () {
     "use strict";
     getSeismes();
+
+    $(".date-button").text(scope.current_date);
+    updateminimap();
+
+    $(".date-button").datepicker({
+        format : 'mm/dd/yyyy',
+        autoclose : true,
+        todayHighlight : true,
+        startDate : new Date('2012-05-08'),
+        endDate : utcDate
+    }).on('changeDate', function (e) {
+        scope.current_date = moment(e.date).format('YYYY-MM-DD');
+        $(".date-button").text(scope.current_date);
+        changeOverlay(scope.basemap);
+        updateminimap();
+    });
+
 });
