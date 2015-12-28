@@ -14,7 +14,7 @@ contact me @ contact@remotepixel.ca
 What
 -------
 
-Aim of this project is to ease access to satelite imagery where we need the most.
+Aim of this project is to ease access to satelite imagery where we need it the most.
 
 The project is based on two things: 
 * A database of disaster (type, area/position, date, ...).
