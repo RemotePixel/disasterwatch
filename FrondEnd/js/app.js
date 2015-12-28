@@ -342,6 +342,11 @@ function updateminimap() {
     minimap8_lyr.addLayer(L.GIBSLayer('VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11', modis_option));
 }
 
+$(window).load(function () {
+    "use strict";
+    $(".handle_spin").addClass('opa');
+});
+
 $(document).ready(function () {
     "use strict";
     getSeismes();
