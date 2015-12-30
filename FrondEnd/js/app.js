@@ -172,7 +172,6 @@ var mini_map_option = {
         scrollWheelZoom: false,
         doubleClickZoom: false,
         boxZoom: false,
-        dragging: false,
         tap: false,
         attributionControl: false,
         zoomControl: false,
@@ -183,8 +182,6 @@ var mini_map_option = {
     };
 
 var minimap0 = L.map('map-default', mini_map_option);
-minimap0.dragging.disable();
-
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     id: 'vincentsarago.3a6fdab2',
     accessToken: 'pk.eyJ1IjoidmluY2VudHNhcmFnbyIsImEiOiJjaWlleG1vdmowMWhydGtrc2xqcmQzNmhlIn0.80HAFLCQ6yUWCk4mwm6zbw'
@@ -192,44 +189,36 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 map.sync(minimap0);
 
 var minimap1 = L.map('map-terra-true', mini_map_option);
-//minimap1.dragging.disable();
-map.sync(minimap1);
 var minimap1_lyr = L.layerGroup().addTo(minimap1);
+map.sync(minimap1);
 
 var minimap2 = L.map('map-terra-721', mini_map_option);
-//minimap2.dragging.disable();
-map.sync(minimap2);
 var minimap2_lyr = L.layerGroup().addTo(minimap2);
+map.sync(minimap2);
 
 var minimap3 =  L.map('map-terra-367', mini_map_option);
-//minimap3.dragging.disable();
-map.sync(minimap3);
 var minimap3_lyr = L.layerGroup().addTo(minimap3);
+map.sync(minimap3);
 
 var minimap4 = L.map('map-aqua-true', mini_map_option);
-//minimap4.dragging.disable();
-map.sync(minimap4);
 var minimap4_lyr = L.layerGroup().addTo(minimap4);
+map.sync(minimap4);
 
 var minimap5 = L.map('map-aqua-721', mini_map_option);
-//minimap5.dragging.disable();
-map.sync(minimap5);
 var minimap5_lyr = L.layerGroup().addTo(minimap5);
+map.sync(minimap5);
 
 var minimap6 = L.map('map-suomi-true', mini_map_option);
-//minimap6.dragging.disable();
-map.sync(minimap6);
 var minimap6_lyr = L.layerGroup().addTo(minimap6);
+map.sync(minimap6);
 
 var minimap7 = L.map('map-suomi-1121', mini_map_option);
-//minimap7.dragging.disable();
-map.sync(minimap7);
 var minimap7_lyr = L.layerGroup().addTo(minimap7);
+map.sync(minimap7);
 
 var minimap8 = L.map('map-suomi-3311', mini_map_option);
-//minimap8.dragging.disable();
-map.sync(minimap8);
 var minimap8_lyr = L.layerGroup().addTo(minimap8);
+map.sync(minimap8);
 
 $("#earthquake-checkbox").change(function () {
     "use strict";
@@ -311,6 +300,12 @@ function toggleParam(setting) {
 
 function changeOverlay(lyr_name) {
     'use strict';
+
+    $("#basemaps-panel .side-view-content .side-element .link-on").each(function (index, element) {
+        $(element).removeClass('on');
+    });
+
+    $("#" + lyr_name + " .link-on").addClass('on');
 
     scope.basemap = lyr_name;
     lyrGr.clearLayers();
