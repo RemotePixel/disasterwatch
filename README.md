@@ -1,6 +1,6 @@
 
 
-[disasterwatch](http://disasterwatch.remotepixel.ca) is the new RemotePixel.ca project (blog [post](http://remotepixel.ca/blog/disasterwatch-20151231.html)).
+[disasterwatch](http://disasterwatch.remotepixel.ca) is the new RemotePixel.ca project.
 
 For this new project, I (RemotePixel) am looking for people to help me so please 
 contact me @ contact@remotepixel.ca
