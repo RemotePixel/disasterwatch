@@ -2,7 +2,7 @@
 
 [disasterwatch](http://disasterwatch.remotepixel.ca) is the new RemotePixel.ca project (blog [post](http://remotepixel.ca/blog/disasterwatch-20151231.html)).
 
-For this new project, I (RemotePixel) am looking for people to help me so please
+For this new project, I (RemotePixel) am looking for people to help me so please 
 contact me @ contact@remotepixel.ca
 
 ####Project Status : Phase 1
@@ -16,7 +16,7 @@ What
 
 Aim of this project is to ease access to satelite imagery where we need it the most.
 
-The project is based on two things:
+The project is based on two things: 
 * A database of disaster (type, area/position, date, ...).
 * A simple and elegant interface to visualize latest imagery available on each area.
 
@@ -24,7 +24,7 @@ Why
 -------
 
 With more and more free satellite imagery (Sentinel, Lansdat, ...) available
-and low cost imagery service (UrtheCast, PlanetLab, ...), I believe it could
+and low cost imagery service (UrtheCast, PlanetLab, ...), I believe it could 
 help if we build a platform that ease the access to all the available
 imagery ressources.
 
@@ -37,7 +37,7 @@ To Do
 - [ ] Create a database (ElasticSearch or MongoDB)
 - [ ] Build a REST like service to add disaster to a database (GET, PUT)
 - [ ] Build a REST like service to get imagery available (GET)
-
+  
 #####Front End:
 - [ ] Interface to visualize imagery quicklook and metadata.
 - [ ] Interface to add disaster to the database (login required ?).
