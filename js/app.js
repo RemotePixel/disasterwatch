@@ -30,24 +30,22 @@ map.on('mousemove', function(e) {
                 map.getCanvas().style.cursor = 'inherit';
             }
         }
-
-    // highlightFeature(feature)
-})
-.on('click', function(e){
-    var mouseRadius = 1;
-    if (document.getElementById("earthquake-checkbox").checked) {
-        var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["earthquakes-point"]})[0];
-        if (feature) {
-            console.log(feature)
-        }
-    }
-})
+});
+// .on('click', function(e){
+//     var mouseRadius = 1;
+//     if (document.getElementById("earthquake-checkbox").checked) {
+//         var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["earthquakes-point"]})[0];
+//         if (feature) {
+//             console.log(feature)
+//         }
+//     }
+// })
 
 map.on('style.load', function () {
     map.addSource('fire', {
         'type': 'raster',
         'tiles': [
-            'https://firms.modaps.eosdis.nasa.gov/wms/viirs/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=fires48&width=512&height=512&SRS=EPSG:3857&BBOX={bbox-epsg-3857}'        ],
+            'https://firms.modaps.eosdis.nasa.gov/wms/viirs/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=fires48&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&width=512&height=512'],
         'tileSize': 512
     });
 
