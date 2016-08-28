@@ -155,10 +155,16 @@ $("#fire-checkbox").change(function () {
 function getEarthquake() {
     "use strict";
     var urlusgs = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson'
-    $.getJSON(urlusgs, function (data) {
-        map.getSource('earthquakes').setData(data);
-    });
+    // $.getJSON(urlusgs, function (data) {
+    //     map.getSource('earthquakes').setData(data);
+    // });
+
+    $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url" + urlusgs)
+        .done(function (data) {
+             map.getSource('earthquakes').setData(data);
+        });
 }
+
 
 function toggleParam(setting) {
     "use strict";
