@@ -4,104 +4,163 @@
 /*global moment, moment, alert*/
 /*global console, console, alert*/
 
-// var map = new mapboxgl.Map({
-//         container: 'map',
-//         center: [0, 10],
-//         zoom: 1,
-//         attributionControl: true,
-//         minZoom: 0,
-//         maxZoom: 8
-//     });
-//
-// map.addControl(new mapboxgl.Navigation());
-// mapboxgl.accessToken = 'pk.eyJ1IjoidmluY2VudHNhcmFnbyIsImEiOiJjaWlleG1vdmowMWhydGtrc2xqcmQzNmhlIn0.80HAFLCQ6yUWCk4mwm6zbw';
+var map = new mapboxgl.Map({
+        container: 'map',
+        center: [0, 10],
+        zoom: 1,
+        attributionControl: true,
+        minZoom: 0,
+        maxZoom: 8
+    });
 
-// function getVolcanoes() {
-//     'use strict';
-//     volcanoesGroup.clearLayers();
-//
-//     var option;
-//
-//     $.getJSON('https://api.remotepixel.ca/volcanoes?', function (data) {
-//         data.results.forEach(function (e) {
-//             switch (e.vw.status) {
-//             case 'inactive':
-//                 option =  {icon: icon_inactive, title: e.Name};
-//                 break;
-//
-//             case 'warning':
-//                 option =  {icon: icon_warning, title: e.Name};
-//                 break;
-//
-//             case 'active':
-//                 option =  {icon: icon_active, title: e.Name};
-//                 break;
-//
-//             case null:
-//                 option =  {icon: icon_inactive, title: e.Name};
-//                 break;
-//             }
-//
-//             var vol = L.marker([e.Lat, e.Lon], option);
-//             vol.properties = e;
-//             volcanoesGroup.addLayer(vol);
-//         });
-//     });
-// }
-//var option;
+map.dragRotate.disable();
+map.touchZoomRotate.disableRotation();
 
-//map.setView([0, 0], 2);
+map.addControl(new mapboxgl.Navigation());
+mapboxgl.accessToken = 'pk.eyJ1IjoidmluY2VudHNhcmFnbyIsImEiOiJjaWlleG1vdmowMWhydGtrc2xqcmQzNmhlIn0.80HAFLCQ6yUWCk4mwm6zbw';
+
+map.on('mousemove', function(e) {
+    var mouseRadius = 1;
+        if (document.getElementById("earthquake-checkbox").checked) {
+            var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["earthquakes-point"]})[0];
+            if (feature) {
+                map.getCanvas().style.cursor = 'pointer';
+
+            } else {
+                map.getCanvas().style.cursor = 'inherit';
+            }
+        }
+
+    // highlightFeature(feature)
+})
+.on('click', function(e){
+    var mouseRadius = 1;
+    if (document.getElementById("earthquake-checkbox").checked) {
+        var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["earthquakes-point"]})[0];
+        if (feature) {
+            console.log(feature)
+        }
+    }
+})
+
+map.on('style.load', function () {
+    map.addSource('fire', {
+        'type': 'raster',
+        'tiles': [
+            'https://firms.modaps.eosdis.nasa.gov/wms/viirs/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=fires48&width=512&height=512&SRS=EPSG:3857&BBOX={bbox-epsg-3857}'        ],
+        'tileSize': 512
+    });
+
+    var geojson = {
+      "type": "FeatureCollection",
+      "features": []
+    };
+
+    map.addSource('earthquakes', {
+        'type': 'geojson',
+        'data': geojson
+    });
+    getEarthquake();
+
+    var quakeColour = 'hsl(26, 89%, 44%)';
+    map.addLayer({
+        "id": "earthquakes-blur",
+        "type": "circle",
+        "source": "earthquakes",
+        "maxzoom":9,
+        "layout": {'visibility' : 'none'},
+        "paint": {
+            "circle-color": quakeColour,
+            "circle-opacity": 0.5,
+            'circle-radius': {
+                'property': 'mag',
+                "base": 1.8,
+                'stops': [
+                    [{zoom: 0,  value: 2}, 0.25],
+                    [{zoom: 0,  value: 8}, 16],
+                    [{zoom: 9, value: 2}, 10],
+                    [{zoom: 9, value: 8}, 100]
+                ]
+            },
+            'circle-color': {
+                property: 'mag',
+                stops: [
+                    ['4.5', '#fff'],
+                    ['8', '#f00']
+                ]
+            }
+        }
+    });
+
+    map.addLayer({
+       "id": "earthquakes-point",
+       "type": "circle",
+       "source": "earthquakes",
+       "layout": {'visibility' : 'none'},
+       "paint": {
+           "circle-color": 'rgb(23, 14, 3)',
+           'circle-radius': {
+               "base": 1.1,
+               "stops": [
+                 [0, 0.5],
+                 [8, 3]
+               ]
+           }
+       },
+    });
+
+    map.addLayer({
+        'id': 'fire',
+        'type': 'raster',
+        "layout": {'visibility' : 'none'},
+        'source': 'fire',
+        'paint': {}
+    });
+
+    if (document.getElementById("fire-checkbox").checked) {
+        map.setLayoutProperty('fire', 'visibility', 'visible');
+    } else {
+        map.setLayoutProperty('fire', 'visibility', 'none');
+    }
+
+    if (document.getElementById("earthquake-checkbox").checked) {
+        map.setLayoutProperty('earthquakes-point', 'visibility', 'visible');
+        map.setLayoutProperty('earthquakes-blur', 'visibility', 'visible');
+    } else {
+        map.setLayoutProperty('earthquakes-point', 'visibility', 'none');
+        map.setLayoutProperty('earthquakes-blur', 'visibility', 'none');
+    }
+})
+
 $("#earthquake-checkbox").change(function () {
     "use strict";
     $("#earthquake-checkbox").parent().toggleClass('green');
-    // update_basemaps();
+    if (document.getElementById("earthquake-checkbox").checked) {
+        map.setLayoutProperty('earthquakes-point', 'visibility', 'visible');
+        map.setLayoutProperty('earthquakes-blur', 'visibility', 'visible');
+    } else {
+        map.setLayoutProperty('earthquakes-point', 'visibility', 'none');
+        map.setLayoutProperty('earthquakes-blur', 'visibility', 'none');
+    }
 });
 
 $("#fire-checkbox").change(function () {
     "use strict";
     $("#fire-checkbox").parent().toggleClass('green');
-    // update_basemaps();
+    if (document.getElementById("fire-checkbox").checked) {
+        map.setLayoutProperty('fire', 'visibility', 'visible');
+    } else {
+        map.setLayoutProperty('fire', 'visibility', 'none');
+    }
 });
 
 function getEarthquake() {
     "use strict";
-
-    var dateValue = document.getElementsByClassName('date-button')[0].textContent,
-        urlusgs = 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=' + dateValue + '&endtime=' + moment(dateValue, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
-    // $.getJSON(urlusgs, function (data) {
-        // data.features.forEach(function (e) {
-            // var feat = L.circleMarker([e.geometry.coordinates[1], e.geometry.coordinates[0]], {
-            //     "color": "#3b74f2",
-            //     "radius": e.properties.mag * 2,
-            //     "weight": 2,
-            //     "opacity": 1,
-            //     "fill": true
-            // });
-            // feat.properties = e.properties;
-            // seismesGroup.addLayer(feat);
-        // });
-    // });
+    var urlusgs = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson'
+    $.getJSON(urlusgs, function (data) {
+        map.getSource('earthquakes').setData(data);
+    });
 }
-//
-// function getFire() {
-//     "use strict";
-//
-//     var dateValue = document.getElementsByClassName('date-button')[0].textContent,
-//         urlusgs = 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=' + dateValue + '&endtime=' + moment(dateValue, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
-//     // $.getJSON(urlusgs, function (data) {
-//         // data.features.forEach(function (e) {
-//             // var feat = L.circleMarker([e.geometry.coordinates[1], e.geometry.coordinates[0]], {
-//             //     "color": "#3b74f2",
-//             //     "radius": e.properties.mag * 2,
-//             //     "weight": 2,
-//             //     "opacity": 1,
-//             //     "fill": true
-//             // });
-//             // feat.properties = e.properties;
-//             // seismesGroup.addLayer(feat);
-//         // });
-//     // });
-// }
 
 function toggleParam(setting) {
     "use strict";
@@ -216,14 +275,13 @@ function changeOverlay(lyr_name) {
 
 function update_basemaps() {
     "use strict";
-    var dateValue = document.getElementsByClassName('date-button')[0].textContent
-    map.setStyle(getStyle(dateValue));
+    var overlay = document.getElementsByClassName('link-on on')[0].parentElement.getAttribute('id');
+    map.setStyle(getStyle(overlay));
 }
 
 
 $(document).ready(function () {
     "use strict";
-    // getEarthquake();
 
     $(".date-button").datepicker({
         format : 'yyyy-mm-dd',
@@ -243,11 +301,10 @@ $(document).ready(function () {
                 changeOverlay('MODIS_Terra_CorrectedReflectance_TrueColor');
             }
         }
-        // update_basemaps();
+        update_basemaps();
     });
 
-    // update_basemaps();
-
     $(".date-button").datepicker('setDate', moment.utc().subtract(1, 'days').format('YYYY-MM-DD'));
-    //$('#modalUnderConstruction').modal();
+
+    // $('#modalUnderConstruction').modal();
 });

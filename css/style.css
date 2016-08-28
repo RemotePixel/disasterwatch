@@ -542,6 +542,25 @@ body {
     pointer-events: none;
 }
 
+
+/*.disasterForm {
+    float: right;
+    position: absolute;
+    top: 0;
+    right: -300px;
+    height: 100%;
+    width: 300px;
+    background-color: #FFF;
+    z-index: 2;
+}
+
+.disasterForm.on {
+    float: right;
+    position: relative;
+    height: 100%;
+    width: 300px;
+}*/
+
 @media(max-width: 767px) {
     .home-butt {
         height: 30px;
