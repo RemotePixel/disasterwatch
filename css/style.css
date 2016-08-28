@@ -44,6 +44,11 @@ body {
     z-index: 0;
     overflow: hidden;
     background-color: #dde3f2;
+    -webkit-touch-callout: none;
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
 }
 
 
@@ -51,14 +56,13 @@ body {
     font-weight: 100;
     display: block;
     letter-spacing: 0;
-    font-size: 10px;
+    font-size: 8px;
 }
 
 .NavButtonGroup {
     width: 100%;
     height: 100%;
     margin-top: 0;
-    /*border-top: 1px solid #c7c7c7;*/
 }
 
 .home-butt{
@@ -70,12 +74,10 @@ body {
     padding: 10px;
 }
 
-.home-butt img{
+.home-butt img {
     text-align: center;
-    vertical-align: middle;
-    height: 40px;
-    width: 40px;
-    line-height: 40px;
+    max-height: 40px;
+    max-width: 40px;
     border-radius: 50%;
 }
 
@@ -194,7 +196,12 @@ body {
     display: block;
 }
 
-.side-view button:hover{
+.side-view button:hover:active {
+    color: black;
+    background-color: rgb(173, 173, 173);
+}
+
+.side-view button:hover {
     color: black;
     background-color: white;
 }
@@ -214,32 +221,53 @@ body {
     overflow-x: hidden;
 }
 
-.side-element {
-	display: block;
-	width: 100%;
-	background-color: transparent;
+.side-element{
+    display: block;
+    width: 100%;
+    background-color: transparent;
+    cursor: pointer;
     text-align: center;
-    padding-bottom: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .side-element .link{
-	height: auto;
-    width: 100%;
+    position: relative;
+    height: auto;
     cursor: pointer;
-    font-size: 12px;
-    color: #777;
+    font-size: 14px;
+    color: #FFF;
     font-weight: 100;
+    opacity: 1;
 }
 
-.side-element .link:hover {
-    font-weight: 300;
-    color: #1a1a1a;
-}
-
-.side-element .mini-map{
+.side-element .link img {
+    position: relative;
     width: 100%;
-    padding-bottom: 56.25%;
-    border: none;
+    height: auto;
+    padding: 5px;
+    border: 0;
+    cursor: pointer;
+}
+
+.side-element .link:hover{
+    font-weight: 300;
+    color: #FFF;
+}
+
+.side-element .link .link-hover{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 2;
+    background-color: rgb(200, 200, 200);
+    background-color: rgba(200, 200, 200, 0.5);
+    -o-transition: all .5s ease;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -ms-transition: all .5s ease;
+    transition: all ease .5s;
 }
 
 .side-element .link .link-on{
@@ -252,12 +280,44 @@ body {
     text-align: left;
 }
 
+.side-element  span{
+    font-size: 14px;
+    font-weight: 400;
+    color: #000;
+}
+
 .side-element .link .link-on span{
     font-size: 20px;
-    color: #FFF;
+    font-weight: 400;
     position: absolute;
-    left: 4px;
-    bottom: 2px;
+    top: 5px;
+    left: 5px;
+    padding: 2px;
+    color: #FFF;
+    background-color: #000;
+}
+
+.side-element .link .link-on.on{
+    opacity: 1;
+}
+
+.side-element .link .link-hover:hover{
+    opacity: 1;
+}
+
+.side-element .link .link-hover .link-hover-content{
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 20px;
+    margin-top: -12px;
+    text-align: center;
+    font-size: 20px;
+    color: #FFF;
+}
+
+.side-element .link .link-hover .link-hover-content i{
+    margin-top: -12px;
 }
 
 .side-element .link .link-on.on{
@@ -394,63 +454,118 @@ body {
     border-color: #7eff97;
 }
 
-.nom-eq{
-    font-size: 15px;
-    font-weight: 700;
+.button-add {
+    font-size: 25px;
+    text-align: center;
+    vertical-align: middle;
 }
 
-.linetab{
-    font-size: 12px;
-    color: #201f1f;
+.button-add .fa {
+    border: 1px solid rgb(82, 83, 81);
+    padding: 10px;
+    margin: 10px;
 }
 
-.handle_spin{
-    position: fixed;
+.close-modal {
+    position: absolute;;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    z-index: 1052;
+}
+
+.close-modal:hover {
+    opacity: .3;
+}
+
+.close-modal .lr {
+    height: 20px;
+    width: 3px;
+    margin-left: 10px;
+    background-color: #000;
+    -ms-transform: rotate(45deg);
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    z-index: 1051;
+}
+
+.close-modal .lr .rl {
+    height: 20px;
+    width: 3px;
+    background-color: #000;
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.drawsel {
+    height: auto;
+    margin: 10px;
+    text-align: center;
+}
+.drawsel i {
+    vertical-align: middle;
+    line-height: 40px;
+    font-size: 40px;
+    padding: 10px;
+    border: solid 1px #000;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.drawsel i:hover{
+    background-color: #000;
+    color: #FFF;
+}
+.drawsel span {
+    padding-top: 5px;
+}
+.drawsel * {
+    display: block;
+}
+
+.block-control .date-button[disabled],
+.drawsel[disabled] {
+    background-color: #fff;
+    border-color: #ccc;
+    cursor: not-allowed;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    opacity: .65;
+    pointer-events: none;
+}
+
+
+/*.disasterForm {
+    float: right;
+    position: absolute;
     top: 0;
-    left: 0;
-    z-index: 1000;
-    width: 100%;
+    right: -300px;
     height: 100%;
-    background-color: rgb(149, 149, 149);
+    width: 300px;
+    background-color: #FFF;
+    z-index: 2;
 }
 
-.handle_spin.opa {
-    -o-transition: all 1s ease;
-    -webkit-transition: all 1s ease;
-    -moz-transition: all 1s ease;
-    -ms-transition: all 1s ease;
-    transition: all ease 1s;
-    opacity: 0;
-    visibility:hidden;
-}
-
-.spin {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 200px;
-  height: 200px;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-}
-
-.spin .orbit {
-    margin: 0 auto;
-    -webkit-animation:spin 3.5s linear infinite;
-    -moz-animation:spin 3.5s linear infinite;
-    animation:spin 3.5s linear infinite;
-}
-
-@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+.disasterForm.on {
+    float: right;
+    position: relative;
+    height: 100%;
+    width: 300px;
+}*/
 
 @media(max-width: 767px) {
     .home-butt {
         height: 30px;
         padding: 5px;
     }
-
     .home-butt img {
         height: 20px;
         width: 20px;

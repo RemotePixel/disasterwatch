@@ -17,13 +17,13 @@
 	<link href="/js/bootstrap-datepicker/bootstrap-datepicker3.css" rel="stylesheet">
 
 	<link href="/css/checkbox-slider.css" rel="stylesheet">
-	<link href='/js/leaflet/leaflet.css' rel='stylesheet' />
     <link href="/css/style.min.css" rel="stylesheet">
+	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.css' rel='stylesheet' />
 
 	<!-- Custom Fonts -->
 	<link href="/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-	<link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-	<link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
 
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -48,7 +48,7 @@
         <div class="menu-bar-left">
             <div class="NavButtonGroup">
 
-				<a class="home-butt" href="/">
+				<a class="home-butt" href="/index.html">
 					<img src="img/dw.png" class="img-responsive">
 				</a>
 
@@ -65,7 +65,7 @@
                 </button>
 
                 <!-- Add Volcano Activty Button -->
-                <button id="add-btn" type="button" class="btn btn-default">
+                <button id="add-btn" type="button" class="btn btn-default" data-toggle="modal" data-target="#modalDraw">
                     <i class="fa fa-plus fa-2x"></i>
                     <span class="buttonTitle">Add</span>
                 </button>
@@ -83,104 +83,76 @@
             <!-- <h4 id="data-date" class="data-date"></h4> -->
 
             <div id="SideViewCtrl" class="side-view">
-                <div id="basemaps-panel" class="navpanel side-view-container">
+				<div id="basemaps-panel" class="navpanel side-view-container">
 
-                    <button class="side-view-close btn btn-lg btn-primary" onclick="toggleParam('basemaps')">
+                    <button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('basemaps')">
                         <span class="glyphicon glyphicon-chevron-left"></span>
                     </button>
                     <div class="title">Basemaps</div>
 
                     <div class="side-view-content">
 						<div class="side-element">
-							<div id="mapbox" class="link" onclick="changeOverlay('mapbox')">
+							<div id="Mapbox" class="link" onclick="changeOverlay('Mapbox')">
+								<div class="link-hover">
+									<div class="link-hover-content">
+										<i class="fa fa-plus fa-3x"></i>
+									</div>
+								</div>
 								<div class="link-on on">
 									<span>On View</span>
 								</div>
-								<div id="map-default" class="mini-map"></div>
-								<span>Default</span>
+								<img id="mapbox" src="/img/mapbox.jpg"></img>
 							</div>
+							<span>Mapbox Satellite</span>
 						</div>
-
 						<div class="side-element">
 							<div id="VIIRS_SNPP_CorrectedReflectance_TrueColor" class="link" onclick="changeOverlay('VIIRS_SNPP_CorrectedReflectance_TrueColor')">
+								<div class="link-hover">
+									<div class="link-hover-content">
+										<i class="fa fa-plus fa-3x"></i>
+									</div>
+								</div>
 								<div class="link-on">
 									<span>On View</span>
 								</div>
-								<div id="map-suomi-true" class="mini-map"></div>
-								<span>SUOMI NPP True Color (CR)</span>
+								<img id="map-suomi-true" src="/img/Suomi_true.jpg"></img>
 							</div>
+							<span>SUOMI NPP True Color (CR)</span>
 						</div>
 						<div class="side-element">
 							<div id="MODIS_Terra_CorrectedReflectance_TrueColor" class="link" onclick="changeOverlay('MODIS_Terra_CorrectedReflectance_TrueColor')">
+								<div class="link-hover">
+									<div class="link-hover-content">
+										<i class="fa fa-plus fa-3x"></i>
+									</div>
+								</div>
 								<div class="link-on">
 									<span>On View</span>
 								</div>
-								<div id="map-terra-true" class="mini-map"></div>
-								<span>Terra True Color (CR)</span>
+								<img id="map-terra-true" src="/img/Terra_true.jpg"></img>
 							</div>
+							<span>Terra True Color (CR)</span>
 						</div>
 						<div class="side-element">
 							<div id="MODIS_Aqua_CorrectedReflectance_TrueColor" class="link" onclick="changeOverlay('MODIS_Aqua_CorrectedReflectance_TrueColor')">
+								<div class="link-hover">
+									<div class="link-hover-content">
+										<i class="fa fa-plus fa-3x"></i>
+									</div>
+								</div>
 								<div class="link-on">
 									<span>On View</span>
 								</div>
-								<div id="map-aqua-true" class="mini-map"></div>
-								<span></span>Aqua True Color (CR)<span></span>
+								<img id="map-aqua-true" src="/img/Aqua_true.jpg"></img>
 							</div>
+							<span>Aqua True Color (CR)</span>
 						</div>
-						<div class="side-element">
-							<div id="VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1" class="link" onclick="changeOverlay('VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1')">
-								<div class="link-on">
-									<span>On View</span>
-								</div>
-								<div id="map-suomi-1121" class="mini-map"></div>
-								<span>SUOMI NPP Bands M11-I2-I1 (CR)</span>
-							</div>
-						</div>
-						<div class="side-element">
-							<div id="MODIS_Terra_CorrectedReflectance_Bands721" class="link" onclick="changeOverlay('MODIS_Terra_CorrectedReflectance_Bands721')">
-								<div class="link-on">
-									<span>On View</span>
-								</div>
-								<div id="map-terra-721" class="mini-map"></div>
-								<span>Terra Bands 7-2-1 (CR)</span>
-							</div>
-						</div>
-						<div class="side-element">
-							<div id="MODIS_Aqua_CorrectedReflectance_Bands721" class="link" onclick="changeOverlay('MODIS_Aqua_CorrectedReflectance_Bands721')">
-								<div class="link-on">
-									<span>On View</span>
-								</div>
-								<div id="map-aqua-721" class="mini-map"></div>
-								<span>Aqua Bands 7-2-1 (CR)</span>
-							</div>
-						</div>
-
-						<div class="side-element">
-							<div id="VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11" class="link" onclick="changeOverlay('VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11')">
-								<div class="link-on">
-									<span>On View</span>
-								</div>
-								<div id="map-suomi-3311" class="mini-map"></div>
-								<span>SUOMI NPP Bands M3-I3-I11 (CR)</span>
-							</div>
-						</div>
-
-						<div class="side-element">
-							<div id="MODIS_Terra_CorrectedReflectance_Bands367" class="link" onclick="changeOverlay('MODIS_Terra_CorrectedReflectance_Bands367')">
-								<div class="link-on">
-									<span>On View</span>
-								</div>
-								<div id="map-terra-367" class="mini-map"></div>
-								<span>Terra Bands 3-6-7 (CR)</span>
-							</div>
-						</div>
-                    </div>
+					</div>
                 </div>
 
                 <div id="settings-panel" class="navpanel side-view-container">
 
-                    <button class="side-view-close btn btn-lg btn-primary" onclick="toggleParam('settings')">
+                    <button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('settings')">
                         <span class="glyphicon glyphicon-chevron-left"></span>
                     </button>
                     <div class="title">Settings</div>
@@ -193,9 +165,9 @@
                         </div>
 
 						<div class="block-control">
-                            <div class="text-align-left">Earthquake Locations:</div>
-							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary green" >
-                                <input id="earthquake-checkbox" type="checkbox" checked/><span></span>
+                            <div class="text-align-left">Earthquake Locations (>4.5m):</div>
+							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary" >
+                                <input id="earthquake-checkbox" type="checkbox"/><span></span>
                             </label>
                         </div>
 
@@ -205,28 +177,60 @@
                                 <input id="fire-checkbox" type="checkbox"/><span></span>
                             </label>
                         </div>
-
-						<div class="block-control">
-                            <div class="text-align-left">Volcanoes Locations:</div>
-							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary green" >
-                                <input id="volcanoes-checkbox" type="checkbox" checked/><span></span>
-                            </label>
-                        </div>
-
                     </div>
                 </div>
             </div>
+
+			<!-- <div class="disasterForm">
+
+
+
+			</div> -->
 
         </div>
 
 	</div>
 
-    <!-- Spinner -->
-	<div class="handle_spin">
-		<div class="spin">
-			<img src="img/satellite.png" class="img-responsive orbit">
+	<!-- Modal -->
+    <div class="modal fade" id="modalDraw" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+				<div class="modal-body">
+					<div class="drawchoice row">
+
+						<div class="close-modal" data-dismiss="modal">
+							<div class="lr">
+								<div class="rl">
+								</div>
+							</div>
+						</div>
+
+						<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4 drawbox">
+							<div class="drawsel">
+								<i class="fa fa-map-marker fa-4x"></i>
+								<span>Add a marker</span>
+							</div>
+						</div>
+						<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4 drawbox">
+							<div class="drawsel">
+								<i class="fa fa-crop fa-4x"></i>
+								<span>Draw shape</span>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 drawbox">
+							<div class="drawsel" disabled="disabled">
+								<i class="fa fa-file fa-4x"></i>
+								<span>Upload a file</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
+    </div>
+
+
 
     <!-- Modal -->
     <div class="modal fade" id="modalAbout" tabindex="-1" role="dialog"
@@ -291,13 +295,8 @@
     <script src="/js/bootstrap/js/bootstrap.min.js"></script>
 	<script src="/js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 
-    <!--  Leaflet JavaScript -->
-    <script src='/js/leaflet/leaflet.js'></script>
-	<script src="/js/GIBSMetadata.min.js"></script>
-	<script src="/js/GIBSLayer.min.js"></script>
-    <script src="/js/L.Map.Sync.js"></script>
-
-	<script src='/data/ActiveVolcanoes.js'></script>
+    <!--  mapbox-->
+	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.js'></script>
 
 	<script src='/js/app.min.js'></script>
 </body>
