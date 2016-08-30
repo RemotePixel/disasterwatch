@@ -42,12 +42,13 @@ map.on('mousemove', function(e) {
 // })
 
 map.on('style.load', function () {
-    map.addSource('fire', {
-        'type': 'raster',
-        'tiles': [
-            'https://firms.modaps.eosdis.nasa.gov/wms/viirs/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=fires48&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&width=512&height=512'],
-        'tileSize': 512
-    });
+    // map.addSource('fire', {
+    //     'type': 'raster',
+    //     'tiles': [
+    //         "https://firms.modaps.eosdis.nasa.gov/wms/viirs/?bbox={bbox-epsg-3857}&ormat=image/png&version=1.1.1&service=WMS&request=GetMap&request=GetMap&&srs=EPSG:3857&width=256&height=256&layers=fires48"
+    //     ],
+    //     'tileSize': 256
+    // });
 
     var geojson = {
       "type": "FeatureCollection",
@@ -107,19 +108,19 @@ map.on('style.load', function () {
        },
     });
 
-    map.addLayer({
-        'id': 'fire',
-        'type': 'raster',
-        "layout": {'visibility' : 'none'},
-        'source': 'fire',
-        'paint': {}
-    });
+    // map.addLayer({
+    //     'id': 'fire',
+    //     'type': 'raster',
+    //     "layout": {'visibility' : 'none'},
+    //     'source': 'fire',
+    //     'paint': {}
+    // });
 
-    if (document.getElementById("fire-checkbox").checked) {
-        map.setLayoutProperty('fire', 'visibility', 'visible');
-    } else {
-        map.setLayoutProperty('fire', 'visibility', 'none');
-    }
+    // if (document.getElementById("fire-checkbox").checked) {
+    //     map.setLayoutProperty('fire', 'visibility', 'visible');
+    // } else {
+    //     map.setLayoutProperty('fire', 'visibility', 'none');
+    // }
 
     if (document.getElementById("earthquake-checkbox").checked) {
         map.setLayoutProperty('earthquakes-point', 'visibility', 'visible');
@@ -142,15 +143,15 @@ $("#earthquake-checkbox").change(function () {
     }
 });
 
-$("#fire-checkbox").change(function () {
-    "use strict";
-    $("#fire-checkbox").parent().toggleClass('green');
-    if (document.getElementById("fire-checkbox").checked) {
-        map.setLayoutProperty('fire', 'visibility', 'visible');
-    } else {
-        map.setLayoutProperty('fire', 'visibility', 'none');
-    }
-});
+// $("#fire-checkbox").change(function () {
+//     "use strict";
+//     $("#fire-checkbox").parent().toggleClass('green');
+//     if (document.getElementById("fire-checkbox").checked) {
+//         map.setLayoutProperty('fire', 'visibility', 'visible');
+//     } else {
+//         map.setLayoutProperty('fire', 'visibility', 'none');
+//     }
+// });
 
 function getEarthquake() {
     "use strict";
