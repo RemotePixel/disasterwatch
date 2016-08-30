@@ -542,6 +542,10 @@ body {
     pointer-events: none;
 }
 
+.linetab {
+    font-size: 12px;
+    color: #201f1f;
+}
 
 /*.disasterForm {
     float: right;

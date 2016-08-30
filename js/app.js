@@ -30,16 +30,24 @@ map.on('mousemove', function(e) {
                 map.getCanvas().style.cursor = 'inherit';
             }
         }
-});
-// .on('click', function(e){
-//     var mouseRadius = 1;
-//     if (document.getElementById("earthquake-checkbox").checked) {
-//         var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["earthquakes-point"]})[0];
-//         if (feature) {
-//             console.log(feature)
-//         }
-//     }
-// })
+}).on('click', function(e){
+    var mouseRadius = 1;
+    if (document.getElementById("earthquake-checkbox").checked) {
+        var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["earthquakes-point"]})[0];
+        if (feature) {
+            var popup = new mapboxgl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML('<div class="nom-eq">Name: ' + feature.properties.title + '</div>' +
+                            '<div class="linetab">Date: ' + moment(feature.properties.time).utc().format('YYYY-MM-DD HH:mm:ss') + '(UTC)</div>' +
+                            '<div class="linetab">Magnitude: ' + feature.properties.mag + '</div>' +
+                            '<div class="linetab">Felt: ' + ((feature.properties.felt === null) ? 'No' : 'Yes') + '</div>' +
+                            '<div class="linetab">Duration (min): ' + feature.properties.dmin + '</div>' +
+                            '<div class="linetab">Tsunami: ' + ((feature.properties.tsunami === 0) ? 'No' : 'Yes') + '</div>' +
+                            '<div class="linetab"><a target="_blank" href="' + feature.properties.url + '">Info</a></div>')
+                .addTo(map);
+        }
+    }
+})
 
 map.on('style.load', function () {
     // map.addSource('fire', {
