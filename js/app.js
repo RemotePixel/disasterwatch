@@ -11,11 +11,15 @@ var map = new mapboxgl.Map({
         attributionControl: true,
         minZoom: 0,
         maxZoom: 8
+    }),
+    draw = mapboxgl.Draw({
+        displayControlsDefault: false,
     });
 
 map.dragRotate.disable();
 map.touchZoomRotate.disableRotation();
 
+map.addControl(draw);
 map.addControl(new mapboxgl.Navigation());
 mapboxgl.accessToken = 'pk.eyJ1IjoidmluY2VudHNhcmFnbyIsImEiOiJjaWlleG1vdmowMWhydGtrc2xqcmQzNmhlIn0.80HAFLCQ6yUWCk4mwm6zbw';
 
@@ -139,6 +143,15 @@ map.on('style.load', function () {
     }
 })
 
+map.on('draw.create', function(e){
+    console.log(e);
+
+    //Open INFO Form
+
+
+
+})
+
 $("#earthquake-checkbox").change(function () {
     "use strict";
     $("#earthquake-checkbox").parent().toggleClass('green');
@@ -169,6 +182,26 @@ function getEarthquake() {
              map.getSource('earthquakes').setData(data);
         });
 }
+
+function drawOnMap(type) {
+    "use strict";
+
+    draw.deleteAll();
+
+    switch (type) {
+    case 'point':
+        draw.changeMode('draw_point');
+        break;
+
+    case 'polygon':
+        draw.changeMode('draw_polygon');
+        break;
+
+    case null:
+        break;
+    }
+}
+
 
 function toggleParam(setting) {
     "use strict";

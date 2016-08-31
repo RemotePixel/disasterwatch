@@ -19,6 +19,7 @@
 	<link href="/css/checkbox-slider.css" rel="stylesheet">
     <link href="/css/style.min.css" rel="stylesheet">
 	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.css' rel='stylesheet' />
+	<link rel="stylesheet" type="text/css" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.11.15/mapbox-gl-draw.css" />
 
 	<!-- Custom Fonts -->
 	<link href="/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -207,13 +208,13 @@
 						</div>
 
 						<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4 drawbox">
-							<div class="drawsel">
+							<div class="drawsel" onclick="drawOnMap('point')" data-dismiss="modal">
 								<i class="fa fa-map-marker fa-4x"></i>
 								<span>Add a marker</span>
 							</div>
 						</div>
 						<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4 drawbox">
-							<div class="drawsel">
+							<div class="drawsel" onclick="drawOnMap('polygon')" data-dismiss="modal">
 								<i class="fa fa-crop fa-4x"></i>
 								<span>Draw shape</span>
 							</div>
@@ -297,6 +298,7 @@
 
     <!--  mapbox-->
 	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.js'></script>
+	<script type="text/javascript" src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.11.15/mapbox-gl-draw.js"></script>
 
 	<script src='/js/app.min.js'></script>
 </body>
