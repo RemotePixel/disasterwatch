@@ -23,49 +23,7 @@ map.addControl(draw);
 map.addControl(new mapboxgl.Navigation());
 mapboxgl.accessToken = 'pk.eyJ1IjoidmluY2VudHNhcmFnbyIsImEiOiJjaWlleG1vdmowMWhydGtrc2xqcmQzNmhlIn0.80HAFLCQ6yUWCk4mwm6zbw';
 
-// map.on('load', function(){
-//
-//     map.on('mousemove', function(e) {
-//         var mouseRadius = 1;
-//             if (map.getLayer("earthquakes-point").getLayoutProperty('visibility') !== 'none') {
-//             // if (document.getElementById("earthquake-checkbox").checked) {
-//                 var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["earthquakes-point"]})[0];
-//                 if (feature) {
-//                     map.getCanvas().style.cursor = 'pointer';
-//
-//                 } else {
-//                     map.getCanvas().style.cursor = 'inherit';
-//                 }
-//             }
-//     }).on('click', function(e){
-//         var mouseRadius = 1;
-//         if (map.getLayer("earthquakes-point").getLayoutProperty('visibility') !== 'none') {
-//             var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["earthquakes-point"]})[0];
-//             if (feature) {
-//                 var popup = new mapboxgl.Popup()
-//                     .setLngLat(e.lngLat)
-//                     .setHTML('<div class="nom-eq">Name: ' + feature.properties.title + '</div>' +
-//                                 '<div class="linetab">Date: ' + moment(feature.properties.time).utc().format('YYYY-MM-DD HH:mm:ss') + '(UTC)</div>' +
-//                                 '<div class="linetab">Magnitude: ' + feature.properties.mag + '</div>' +
-//                                 '<div class="linetab">Felt: ' + ((feature.properties.felt === null) ? 'No' : 'Yes') + '</div>' +
-//                                 '<div class="linetab">Duration (min): ' + feature.properties.dmin + '</div>' +
-//                                 '<div class="linetab">Tsunami: ' + ((feature.properties.tsunami === 0) ? 'No' : 'Yes') + '</div>' +
-//                                 '<div class="linetab"><a target="_blank" href="' + feature.properties.url + '">Info</a></div>')
-//                     .addTo(map);
-//             }
-//         }
-//     })
-// })
-
-
 map.on('style.load', function () {
-    // map.addSource('fire', {
-    //     'type': 'raster',
-    //     'tiles': [
-    //         "https://firms.modaps.eosdis.nasa.gov/wms/viirs/?bbox={bbox-epsg-3857}&ormat=image/png&version=1.1.1&service=WMS&request=GetMap&request=GetMap&&srs=EPSG:3857&width=256&height=256&layers=fires48"
-    //     ],
-    //     'tileSize': 256
-    // });
 
     var geojson = {
       "type": "FeatureCollection",
@@ -125,20 +83,6 @@ map.on('style.load', function () {
        },
     });
 
-    // map.addLayer({
-    //     'id': 'fire',
-    //     'type': 'raster',
-    //     "layout": {'visibility' : 'none'},
-    //     'source': 'fire',
-    //     'paint': {}
-    // });
-
-    // if (document.getElementById("fire-checkbox").checked) {
-    //     map.setLayoutProperty('fire', 'visibility', 'visible');
-    // } else {
-    //     map.setLayoutProperty('fire', 'visibility', 'none');
-    // }
-
     if (document.getElementById("earthquake-checkbox").checked) {
         map.setLayoutProperty('earthquakes-point', 'visibility', 'visible');
         map.setLayoutProperty('earthquakes-blur', 'visibility', 'visible');
@@ -150,7 +94,6 @@ map.on('style.load', function () {
     map.on('mousemove', function(e) {
         var mouseRadius = 1;
             if (map.getLayer("earthquakes-point").getLayoutProperty('visibility') !== 'none') {
-            // if (document.getElementById("earthquake-checkbox").checked) {
                 var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["earthquakes-point"]})[0];
                 if (feature) {
                     map.getCanvas().style.cursor = 'pointer';
@@ -177,6 +120,28 @@ map.on('style.load', function () {
             }
         }
     })
+
+    // map.addSource('fire', {
+    //     'type': 'raster',
+    //     'tiles': [
+    //         "https://firms.modaps.eosdis.nasa.gov/wms/viirs/?bbox={bbox-epsg-3857}&ormat=image/png&version=1.1.1&service=WMS&request=GetMap&request=GetMap&&srs=EPSG:3857&width=256&height=256&layers=fires48"
+    //     ],
+    //     'tileSize': 256
+    // });
+
+    // map.addLayer({
+    //     'id': 'fire',
+    //     'type': 'raster',
+    //     "layout": {'visibility' : 'none'},
+    //     'source': 'fire',
+    //     'paint': {}
+    // });
+
+    // if (document.getElementById("fire-checkbox").checked) {
+    //     map.setLayoutProperty('fire', 'visibility', 'visible');
+    // } else {
+    //     map.setLayoutProperty('fire', 'visibility', 'none');
+    // }
 
 })
 
