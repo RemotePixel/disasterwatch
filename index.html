@@ -91,9 +91,9 @@
                     </button>
                     <div class="title">Basemaps</div>
 
-                    <div class="side-view-content">
+					<div class="side-view-content">
 						<div class="side-element">
-							<div id="Mapbox" class="link" onclick="changeOverlay('Mapbox')">
+							<div id="MapboxMap" class="link" onclick="changeOverlay('MapboxMap')">
 								<div class="link-hover">
 									<div class="link-hover-content">
 										<i class="fa fa-plus fa-3x"></i>
@@ -102,10 +102,26 @@
 								<div class="link-on on">
 									<span>On View</span>
 								</div>
-								<img id="mapbox" src="/img/mapbox.jpg"></img>
+								<img src="/img/mapboxmap.jpg"></img>
+							</div>
+							<span>Mapbox Map</span>
+						</div>
+
+						<div class="side-element">
+							<div id="MapboxSat" class="link" onclick="changeOverlay('MapboxSat')">
+								<div class="link-hover">
+									<div class="link-hover-content">
+										<i class="fa fa-plus fa-3x"></i>
+									</div>
+								</div>
+								<div class="link-on">
+									<span>On View</span>
+								</div>
+								<img src="/img/mapbox.jpg"></img>
 							</div>
 							<span>Mapbox Satellite</span>
 						</div>
+
 						<div class="side-element">
 							<div id="VIIRS_SNPP_CorrectedReflectance_TrueColor" class="link" onclick="changeOverlay('VIIRS_SNPP_CorrectedReflectance_TrueColor')">
 								<div class="link-hover">
@@ -116,10 +132,11 @@
 								<div class="link-on">
 									<span>On View</span>
 								</div>
-								<img id="map-suomi-true" src="/img/Suomi_true.jpg"></img>
+								<img src="/img/Suomi_true.jpg"></img>
 							</div>
 							<span>SUOMI NPP True Color (CR)</span>
 						</div>
+
 						<div class="side-element">
 							<div id="MODIS_Terra_CorrectedReflectance_TrueColor" class="link" onclick="changeOverlay('MODIS_Terra_CorrectedReflectance_TrueColor')">
 								<div class="link-hover">
@@ -130,10 +147,11 @@
 								<div class="link-on">
 									<span>On View</span>
 								</div>
-								<img id="map-terra-true" src="/img/Terra_true.jpg"></img>
+								<img src="/img/Terra_true.jpg"></img>
 							</div>
 							<span>Terra True Color (CR)</span>
 						</div>
+
 						<div class="side-element">
 							<div id="MODIS_Aqua_CorrectedReflectance_TrueColor" class="link" onclick="changeOverlay('MODIS_Aqua_CorrectedReflectance_TrueColor')">
 								<div class="link-hover">
@@ -144,7 +162,7 @@
 								<div class="link-on">
 									<span>On View</span>
 								</div>
-								<img id="map-aqua-true" src="/img/Aqua_true.jpg"></img>
+								<img src="/img/Aqua_true.jpg"></img>
 							</div>
 							<span>Aqua True Color (CR)</span>
 						</div>
