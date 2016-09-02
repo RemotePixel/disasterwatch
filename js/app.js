@@ -11,10 +11,11 @@ var map = new mapboxgl.Map({
         attributionControl: true,
         minZoom: 0,
         maxZoom: 8
-    }),
-    draw = mapboxgl.Draw({
-        displayControlsDefault: false,
     });
+
+var draw = mapboxgl.Draw({
+    displayControlsDefault: false
+});
 
 map.dragRotate.disable();
 map.touchZoomRotate.disableRotation();
@@ -120,37 +121,12 @@ map.on('style.load', function () {
             }
         }
     })
-
-    // map.addSource('fire', {
-    //     'type': 'raster',
-    //     'tiles': [
-    //         "https://firms.modaps.eosdis.nasa.gov/wms/viirs/?bbox={bbox-epsg-3857}&ormat=image/png&version=1.1.1&service=WMS&request=GetMap&request=GetMap&&srs=EPSG:3857&width=256&height=256&layers=fires48"
-    //     ],
-    //     'tileSize': 256
-    // });
-
-    // map.addLayer({
-    //     'id': 'fire',
-    //     'type': 'raster',
-    //     "layout": {'visibility' : 'none'},
-    //     'source': 'fire',
-    //     'paint': {}
-    // });
-
-    // if (document.getElementById("fire-checkbox").checked) {
-    //     map.setLayoutProperty('fire', 'visibility', 'visible');
-    // } else {
-    //     map.setLayoutProperty('fire', 'visibility', 'none');
-    // }
-
 })
 
 map.on('draw.create', function(e){
     console.log(e);
-
+    
     //Open INFO Form
-
-
 
 })
 
@@ -165,16 +141,6 @@ $("#earthquake-checkbox").change(function () {
         map.setLayoutProperty('earthquakes-blur', 'visibility', 'none');
     }
 });
-
-// $("#fire-checkbox").change(function () {
-//     "use strict";
-//     $("#fire-checkbox").parent().toggleClass('green');
-//     if (document.getElementById("fire-checkbox").checked) {
-//         map.setLayoutProperty('fire', 'visibility', 'visible');
-//     } else {
-//         map.setLayoutProperty('fire', 'visibility', 'none');
-//     }
-// });
 
 function getEarthquake() {
     "use strict";
@@ -203,7 +169,6 @@ function drawOnMap(type) {
         break;
     }
 }
-
 
 function toggleParam(setting) {
     "use strict";
@@ -237,23 +202,21 @@ function toggleParam(setting) {
 function getStyle(basename) {
     "use strict";
 
-    var dateValue = document.getElementsByClassName('date-button')[0].textContent;
+    $(".date-button").attr('disabled', 'disabled');
 
     switch (basename) {
-
     case 'MapboxMap':
-        $(".date-button").attr('disabled', 'disabled');
         var style = 'mapbox://styles/mapbox/light-v9';
         break;
 
     case 'MapboxSat':
-        $(".date-button").attr('disabled', 'disabled');
         var style = 'mapbox://styles/mapbox/satellite-streets-v9';
         break;
 
     default:
         $(".date-button").attr('disabled', false);
-        var basemaps_url = "https://map1.vis.earthdata.nasa.gov/wmts-webmerc/" + basename + "/default/" + dateValue + "/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg",
+        var dateValue = document.getElementsByClassName('date-button')[0].textContent,
+            basemaps_url = "https://map1.vis.earthdata.nasa.gov/wmts-webmerc/" + basename + "/default/" + dateValue + "/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg",
             style = {
                 "version": 8,
                 "sources": {
