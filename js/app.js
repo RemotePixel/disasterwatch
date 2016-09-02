@@ -124,11 +124,40 @@ map.on('style.load', function () {
 })
 
 map.on('draw.create', function(e){
-    console.log(e);
+    "use strict";
+    $(".disaster-img").addClass('in');
 
-    //Open INFO Form
+    $("button[dwmenu]").each(function () {
+        $(this).attr('disabled', true);
+    });
 
+    map.resize();
+
+    if (e.features[0].geometry.type === "Polygon") {
+        var bbox = turf.extent(e.features[0].geometry);
+        map.fitBounds(bbox, {padding: 20});
+    }
+
+    if (e.features[0].geometry.type === "Point") {
+        var round = turf.buffer(e.features[0], 100, 'kilometers'),
+            bbox = turf.extent(round);
+        map.fitBounds(bbox, {padding: 20});
+    }
 })
+
+function addDisast() {
+    "use strict";
+    console.log('halo');
+}
+
+function cancelAdd() {
+    "use strict";
+    $("button[dwmenu]").each(function () {
+        $(this).attr('disabled', false);
+    });
+    $(".disaster-img").removeClass('in');
+    map.resize();
+}
 
 $("#earthquake-checkbox").change(function () {
     "use strict";

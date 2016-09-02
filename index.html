@@ -17,7 +17,7 @@
 	<link href="/js/bootstrap-datepicker/bootstrap-datepicker3.css" rel="stylesheet">
 
 	<link href="/css/checkbox-slider.css" rel="stylesheet">
-    <link href="/css/style.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
 	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.css' rel='stylesheet' />
 	<link rel="stylesheet" type="text/css" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.11.15/mapbox-gl-draw.css" />
 
@@ -54,19 +54,19 @@
 				</a>
 
                 <!-- Basemaps Button -->
-                <button id="basemaps-btn" type="button" class="btn btn-default" onclick="toggleParam('basemaps')">
+                <button id="basemaps-btn" type="button" dwmenu="basemap" class="btn btn-default" onclick="toggleParam('basemaps')">
                     <i class="fa fa-globe fa-2x"></i>
                     <span class="buttonTitle">Basemaps</span>
                 </button>
 
                 <!-- Setting Button -->
-                <button id="settings-btn" type="button" class="btn btn-default" onclick="toggleParam('settings')">
+                <button id="settings-btn" type="button" dwmenu="settings" class="btn btn-default" onclick="toggleParam('settings')">
                     <i class="fa fa-cog fa-2x"></i>
                     <span class="buttonTitle">Settings</span>
                 </button>
 
-                <!-- Add Volcano Activty Button -->
-                <button id="add-btn" type="button" class="btn btn-default" data-toggle="modal" data-target="#modalDraw">
+                <!-- Add Disaster Button -->
+                <button id="add-btn" type="button" dwmenu="add" class="btn btn-default" data-toggle="modal" data-target="#modalDraw">
                     <i class="fa fa-plus fa-2x"></i>
                     <span class="buttonTitle">Add</span>
                 </button>
@@ -76,12 +76,35 @@
                     <i class="fa fa-info fa-2x"></i>
                 </div>
             </div>
-        </div>
-
-        <div class="main-container">
-
-            <div id="map" class="map"></div>
-            <!-- <h4 id="data-date" class="data-date"></h4> -->
+        </div><!--
+			@whitespace
+        --><div class="main-container">
+			<div id="disaster-img" class="disaster-img">
+				<form>
+				  <div class="form-group">
+				    <label for="exampleInputEmail1">Email address</label>
+				    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+				  </div>
+				  <div class="form-group">
+				    <label for="exampleInputPassword1">Password</label>
+				    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+				  </div>
+				  <div class="form-group">
+				    <label for="exampleInputFile">File input</label>
+				    <input type="file" id="exampleInputFile">
+				    <p class="help-block">Example block-level help text here.</p>
+				  </div>
+				  <div class="checkbox">
+				    <label>
+				      <input type="checkbox"> Check me out
+				    </label>
+				  </div>
+				  <div type="submit" class="btn btn-default" onclick="addDisast()">Submit</div>
+				  <div type="cancel" class="btn btn-default" onclick="cancelAdd()">Cancel</div>
+				</form>
+			</div><!--
+				@whitespace
+	        --><div id="map" class="map"></div>
 
             <div id="SideViewCtrl" class="side-view">
 				<div id="basemaps-panel" class="navpanel side-view-container">
@@ -315,6 +338,7 @@
 	<script src="/js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 
     <!--  mapbox-->
+	<script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
 	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.js'></script>
 	<script type="text/javascript" src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.11.15/mapbox-gl-draw.js"></script>
 
