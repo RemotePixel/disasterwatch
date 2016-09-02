@@ -125,7 +125,7 @@ map.on('style.load', function () {
 
 map.on('draw.create', function(e){
     console.log(e);
-    
+
     //Open INFO Form
 
 })
