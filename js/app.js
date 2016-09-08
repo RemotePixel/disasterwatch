@@ -4,10 +4,12 @@
 /*global moment, moment, alert*/
 /*global console, console, alert*/
 
+mapboxgl.accessToken = 'pk.eyJ1IjoidmluY2VudHNhcmFnbyIsImEiOiJjaWlleG1vdmowMWhydGtrc2xqcmQzNmhlIn0.80HAFLCQ6yUWCk4mwm6zbw';
 var map = new mapboxgl.Map({
         container: 'map',
         center: [0, 10],
         zoom: 1,
+        style: 'mapbox://styles/mapbox/light-v9',
         attributionControl: true,
         minZoom: 0,
         maxZoom: 8
@@ -22,7 +24,6 @@ map.touchZoomRotate.disableRotation();
 
 map.addControl(draw);
 map.addControl(new mapboxgl.Navigation());
-mapboxgl.accessToken = 'pk.eyJ1IjoidmluY2VudHNhcmFnbyIsImEiOiJjaWlleG1vdmowMWhydGtrc2xqcmQzNmhlIn0.80HAFLCQ6yUWCk4mwm6zbw';
 
 map.on('style.load', function () {
 
@@ -281,6 +282,19 @@ $("#earthquake-checkbox").change(function () {
     }
 });
 
+$("#eonet-checkbox").change(function () {
+    "use strict";
+    $("#eonet-checkbox").parent().toggleClass('green');
+    // if (document.getElementById("eonet-checkbox").checked) {
+    //     map.setLayoutProperty('earthquakes-point', 'visibility', 'visible');
+    //     map.setLayoutProperty('earthquakes-blur', 'visibility', 'visible');
+    // } else {
+    //     map.setLayoutProperty('earthquakes-point', 'visibility', 'none');
+    //     map.setLayoutProperty('earthquakes-blur', 'visibility', 'none');
+    // }
+});
+
+
 ////////////////////////////////////////////////////////////////////////////////
 
 function getEarthquake() {
@@ -290,6 +304,19 @@ function getEarthquake() {
         .done(function (data) {
              map.getSource('earthquakes').setData(data);
         });
+}
+
+function getEONETEvents(){
+    "use strict";
+    var eoneturl = 'http://eonet.sci.gsfc.nasa.gov/api/v2.1/events';
+    $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + eoneturl)
+        .done(function (data) {
+            console.log(data);
+            //parse data
+
+            //  map.getSource('events').setData(data);
+        });
+
 }
 
 function drawOnMap(type) {
@@ -340,94 +367,59 @@ function toggleParam(setting) {
     }
 }
 
-function getStyle(basename) {
+function setStyle(basename) {
     "use strict";
 
     $(".date-button").attr('disabled', 'disabled');
+    if (map.getSource("gibs-tiles")) {
+        map.removeLayer("gibs-tiles");
+        map.removeSource("gibs-tiles");
+    }
 
     switch (basename) {
     case 'MapboxMap':
-        var style = 'mapbox://styles/mapbox/light-v9';
-        break;
-
-    case 'MapboxSat':
-        var style = 'mapbox://styles/mapbox/satellite-streets-v9';
-        break;
-
+        return;
     default:
         $(".date-button").attr('disabled', false);
         var dateValue = document.getElementsByClassName('date-button')[0].textContent,
-            basemaps_url = "https://map1.vis.earthdata.nasa.gov/wmts-webmerc/" + basename + "/default/" + dateValue + "/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg",
-            style = {
-                "version": 8,
-                "sources": {
-                    "gibs-tiles": {
-                        "type": "raster",
-                        "tiles": [
-                            basemaps_url
-                        ],
-                        "attribution" : [
-                            ' <a href="http://openstreetmap.com">&copy; OpenStreetMap</a> ' +
-                            ' <a href="https://earthdata.nasa.gov/about/science-system-description/eosdis-components/global-imagery-browse-services-gibs" >NASA EOSDIS GIBS</a>'
-                        ],
-                        "tileSize": 256
-                    }
-                },
-                "layers": [{
-                    "id": "gibs-tiles",
-                    "type": "raster",
-                    "source": 'gibs-tiles',
-                    "minZoom": 1,
-                    "maxZoom": 9
-                }]
-            };
-            style.sources["coast"] = {
-                "type": "raster",
-                "tiles": [
-                    "https://map1.vis.earthdata.nasa.gov/wmts-webmerc/Reference_Features/default/0/GoogleMapsCompatible_Level9/{z}/{y}/{x}.png",
-                ],
-                "tileSize": 256
-            };
-            style.sources["places"] = {
-                "type": "raster",
-                "tiles": [
-                    "https://map1.vis.earthdata.nasa.gov/wmts-webmerc/Reference_Labels/default/0/GoogleMapsCompatible_Level9/{z}/{y}/{x}.png",
-                ],
-                "tileSize": 256
-            };
-            style.layers.push({
-                "id": "coast",
-                "type": "raster",
-                "source": 'coast',
-                "minZoom": 1,
-                "maxZoom": 8
-            });
-            style.layers.push({
-                "id": "places",
-                "type": "raster",
-                "source": 'places',
-                "minZoom": 1,
-                "maxZoom": 8
-            });
-    }
+            basemaps_url = "https://map1.vis.earthdata.nasa.gov/wmts-webmerc/" + basename + "/default/" + dateValue + "/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg";
 
-    return style
+        map.addSource('gibs-tiles', {
+            'type': 'raster',
+            'tiles': [
+                basemaps_url
+            ],
+            'attribution' : [
+                '<a href="https://earthdata.nasa.gov/about/science-system-description/eosdis-components/global-imagery-browse-services-gibs" >NASA EOSDIS GIBS</a>'
+            ],
+            'tileSize': 256
+        });
+
+        map.addLayer({
+            'id': 'gibs-tiles',
+            'type': 'raster',
+            'source': 'gibs-tiles',
+            "minzoom": 1,
+            "maxzoom": 9,
+            'paint': {"raster-opacity": 0.5}
+        }, "earthquakes-blur");
+    }
 }
 
-function changeOverlay(lyr_name) {
+function changeOverlay(overlay) {
     "use strict";
     $("#basemaps-panel .side-view-content .side-element .link-on").each(function () {
         $(this).removeClass('on');
     });
 
-    $("#" + lyr_name + " .link-on").addClass('on');
-    map.setStyle(getStyle(lyr_name));
+    $("#" + overlay + " .link-on").addClass('on');
+    setStyle(overlay)
 }
 
 function update_basemaps() {
     "use strict";
     var overlay = document.getElementsByClassName('link-on on')[0].parentElement.getAttribute('id');
-    map.setStyle(getStyle(overlay));
+    setStyle(overlay)
 }
 
 $(document).ready(function () {
