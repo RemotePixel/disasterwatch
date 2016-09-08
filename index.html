@@ -78,31 +78,82 @@
             </div>
         </div><!--
 			@whitespace
-        --><div class="main-container">
-			<div id="disaster-img" class="disaster-img">
-				<form>
-				  <div class="form-group">
-				    <label for="exampleInputEmail1">Email address</label>
-				    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
-				  </div>
-				  <div class="form-group">
-				    <label for="exampleInputPassword1">Password</label>
-				    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-				  </div>
-				  <div class="form-group">
-				    <label for="exampleInputFile">File input</label>
-				    <input type="file" id="exampleInputFile">
-				    <p class="help-block">Example block-level help text here.</p>
-				  </div>
-				  <div class="checkbox">
-				    <label>
-				      <input type="checkbox"> Check me out
-				    </label>
-				  </div>
-				  <div type="submit" class="btn btn-default" onclick="addDisast()">Submit</div>
-				  <div type="cancel" class="btn btn-default" onclick="cancelAdd()">Cancel</div>
-				</form>
-			</div><!--
+         --><div class="main-container">
+		 		<div id="disaster-images" class="disaster-images">
+				</div>
+				<div id="disaster-info" class="disaster-info">
+					<form>
+						<div class="form-group">
+						  	<label>Disaster Type</label>
+							<div class="dropdown">
+								<span class="form-control dropdown-toggle disasterType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></span>
+							  	<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							    	<li><a onclick="addType(this)"><span class="fire">Fire</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+								    <li><a onclick="addType(this)"><span class="earthquake">EarthQuake</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+								    <li><a onclick="addType(this)"><span class="tsunami">Tsunami</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+								    <li><a onclick="addType(this)"><span class="weather">Weather</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+									<li><a onclick="addType(this)"><span class="tornado">Tornado</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+									<li><a onclick="addType(this)"><span class="volcano">Volcano</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+									<li><a onclick="addType(this)"><span class="floods">Floods</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+									<li><a onclick="addType(this)"><span class="sandstorm">Sand Storm</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+									<li><a onclick="addType(this)"><span class="other">Other</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+							  	</ul>
+							</div>
+						</div>
+
+						<div class="form-group">
+						  	<label for="disasterName">Name</label>
+						  	<input type="name" class="form-control" id="disasterName" placeholder="Name">
+						</div>
+
+						<div class="form-group">
+						  	<label for="disasterPlace">Place</label>
+						  	<input type="place" class="form-control" id="disasterPlace" placeholder="Place">
+						</div>
+
+						<label>Date</label>
+						<div class="row">
+							<div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+							  	<span>Start</span>
+							  	<input id="disasterStartDate" type="text" class="form-control date-input" value="">
+							  	<div class="checkbox">
+				  				  	<label>
+				  						<input id="dateCheckbox" type="checkbox"> Ongoing Event
+				  				  	</label>
+				  				</div>
+							</div>
+							<div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+							  	<span>End</span>
+							  	<input id="disasterEndDate" type="text" class="form-control date-input" value="">
+							</div>
+						</div>
+
+					  	<div class="checkbox">
+					    	<label>
+					      		<input id="mailCheckbox" type="checkbox"> Keep Me Posted
+					    	</label>
+							<span>Receive notification when a new image is available</span>
+							<input type="email" class="form-control" id="InputEmail" placeholder="Email" disabled>
+					  	</div>
+
+					  	<div class="form-group">
+		  				  	<label for="disasterDate">Comments</label>
+		  				  	<textarea type="comment" class="form-control" id="disasterComment" placeholder="Comments"></textarea>
+		  				</div>
+
+						<div class="comments">
+							<!-- Info ??? -->
+							<label>Notes</label>
+							<p>bla bla bla</p>
+							<p>bla bla bla</p>
+
+						</div>
+
+					  	<div type="submit" class="btn btn-default" onclick="addDisast()">Add</div>
+					  	<div type="cancel" class="btn btn-default" onclick="cancelAdd()">Cancel</div>
+					  	<div type="skip" class="btn btn-default" onclick="goToImage()">Skip</div>
+					</form>
+				</div><!--
 				@whitespace
 	        --><div id="map" class="map"></div>
 

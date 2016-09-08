@@ -116,19 +116,36 @@ map.on('style.load', function () {
                                 '<div class="linetab">Felt: ' + ((feature.properties.felt === null) ? 'No' : 'Yes') + '</div>' +
                                 '<div class="linetab">Duration (min): ' + feature.properties.dmin + '</div>' +
                                 '<div class="linetab">Tsunami: ' + ((feature.properties.tsunami === 0) ? 'No' : 'Yes') + '</div>' +
-                                '<div class="linetab"><a target="_blank" href="' + feature.properties.url + '">Info</a></div>')
+                                '<div class="linetab"><a target="_blank" href="' + feature.properties.url + '">Info</a></div>' +
+                                '<div class="linetab"><a data-url="' + feature.properties.detail + '"class="link" onclick="addEQ(this)">Add To db</a></div>')
                     .addTo(map);
             }
         }
     })
 })
 
+////////////////////////////////////////////////////////////////////////////////
+//from http://jsfiddle.net/briguy37/2MVFd/
+function generateUUID() {
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c=='x' ? r : (r&0x3 | 0x8)).toString(16);
+    });
+    return uuid;
+}
+
 map.on('draw.create', function(e){
     "use strict";
-    $(".disaster-img").addClass('in');
+    $(".disaster-info").addClass('in');
 
     $("button[dwmenu]").each(function () {
         $(this).attr('disabled', true);
+    });
+
+    ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn'].forEach(function(e){
+        $(e).removeClass('on');
     });
 
     map.resize();
@@ -145,9 +162,67 @@ map.on('draw.create', function(e){
     }
 })
 
+function addEQ(elem){
+    draw.deleteAll();
+    $.get(elem.getAttribute('data-url'))
+        .done(function (data) {
+            var feature = data.geometry,
+                featureId = draw.add(feature),
+                features = draw.getAll();
+
+            if (features.features[0].geometry.type === "Polygon") {
+                var bbox = turf.extent(features.features[0].geometry);
+                map.fitBounds(bbox, {padding: 20});
+            }
+
+            if (features.features[0].geometry.type === "Point") {
+                var round = turf.buffer(features.features[0], 100, 'kilometers'),
+                    bbox = turf.extent(round);
+                map.fitBounds(bbox, {padding: 20});
+            }
+
+            //Pre-fill Information
+
+
+
+
+
+            //
+            $(".disaster-info").addClass('in');
+            $("button[dwmenu]").each(function () {
+                $(this).attr('disabled', true);
+            });
+            ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn'].forEach(function(e){
+                $(e).removeClass('on');
+            });
+            map.resize();
+        });
+
+}
+
 function addDisast() {
     "use strict";
-    console.log('halo');
+
+    //Check for info validity ??N
+    //parse form
+    var features = draw.getAll();
+
+
+    // Add a way to update mapbox dataset ??
+    // lambda function or mapbox api ??
+}
+
+function goToImage(){
+    "use strict";
+    //Get Image over Disaster and Display
+    //Reset Form
+
+    // $("button[dwmenu]").each(function () {
+    //     $(this).attr('disabled', false);
+    // });
+    // $(".disaster-info").removeClass('in');
+    //
+    // map.resize();
 }
 
 function cancelAdd() {
@@ -155,9 +230,44 @@ function cancelAdd() {
     $("button[dwmenu]").each(function () {
         $(this).attr('disabled', false);
     });
-    $(".disaster-img").removeClass('in');
+    $(".disaster-info").removeClass('in');
     map.resize();
+    draw.deleteAll();
+    //Reset disaster-info Form to init point
 }
+
+function addType(elem) {
+    "use strict";
+    var type = elem.childNodes[0],
+        dTypelist = document.getElementsByClassName("disasterType")[0];
+
+    if (dTypelist.getElementsByClassName(type.className).length !== 0) {
+        var onList = dTypelist.getElementsByClassName(type.className);
+        dTypelist.removeChild(onList[0]);
+        elem.childNodes[1].className = "fa fa-check right-block";
+    } else {
+        elem.childNodes[1].className = "fa fa-check right-block-in";
+        dTypelist.appendChild(type.cloneNode(true));
+    }
+}
+
+$("#dateCheckbox").change(function () {
+    "use strict";
+    if (this.checked) {
+        $("#disasterEndDate").attr('disabled', 'disabled');
+    } else {
+        $("#disasterEndDate").attr('disabled', false);
+    }
+});
+
+$("#mailCheckbox").change(function () {
+    "use strict";
+    if (this.checked) {
+        $("#InputEmail").attr('disabled', false);
+    } else {
+        $("#InputEmail").attr('disabled', 'disabled');
+    }
+});
 
 $("#earthquake-checkbox").change(function () {
     "use strict";
@@ -170,6 +280,8 @@ $("#earthquake-checkbox").change(function () {
         map.setLayoutProperty('earthquakes-blur', 'visibility', 'none');
     }
 });
+
+////////////////////////////////////////////////////////////////////////////////
 
 function getEarthquake() {
     "use strict";
@@ -320,6 +432,30 @@ function update_basemaps() {
 
 $(document).ready(function () {
     "use strict";
+
+    $("#disasterStartDate").datepicker({
+        format : 'yyyy-mm-dd',
+        autoclose : true,
+        todayHighlight : true,
+        startDate : '2016-01-01',
+        endDate : moment.utc().format('YYYY-MM-DD')
+    }).on("changeDate", function(e){
+        var dateValue = moment(e.date).format('YYYY-MM-DD');
+        $("#disasterEndDate").datepicker("setStartDate", dateValue);
+        $("#disasterEndDate").datepicker("setDate", dateValue);
+        if (! $("#mailCheckbox").checked) $("#disasterEndDate").attr('disabled', false);
+    });
+
+    //Check for daterange ???
+    $("#disasterEndDate").datepicker({
+        format : 'yyyy-mm-dd',
+        autoclose : true,
+        todayHighlight : true,
+        startDate : '2016-01-01',
+        endDate : moment.utc().format('YYYY-MM-DD')
+    });
+
+    $("#disasterEndDate").attr('disabled', 'disabled');
 
     $(".date-button").datepicker({
         format : 'yyyy-mm-dd',
