@@ -27,6 +27,7 @@ map.addControl(new mapboxgl.Navigation());
 
 map.on('style.load', function () {
 
+    // USGS Latest EarthQuakes
     var geojson = {
       "type": "FeatureCollection",
       "features": []
@@ -47,7 +48,7 @@ map.on('style.load', function () {
         "layout": {'visibility' : 'none'},
         "paint": {
             "circle-color": quakeColour,
-            "circle-opacity": 0.5,
+            "circle-opacity": 0.8,
             'circle-radius': {
                 'property': 'mag',
                 "base": 1.8,
@@ -85,13 +86,39 @@ map.on('style.load', function () {
        },
     });
 
-    if (document.getElementById("earthquake-checkbox").checked) {
-        map.setLayoutProperty('earthquakes-point', 'visibility', 'visible');
-        map.setLayoutProperty('earthquakes-blur', 'visibility', 'visible');
-    } else {
-        map.setLayoutProperty('earthquakes-point', 'visibility', 'none');
-        map.setLayoutProperty('earthquakes-blur', 'visibility', 'none');
-    }
+    // EONET Events
+    var geojson = {
+      "type": "FeatureCollection",
+      "features": []
+    };
+    map.addSource('eonet', {
+        'type': 'geojson',
+        'data': geojson
+    });
+    getEONETEvents();
+
+    map.addLayer({
+       "id": "eonet-point",
+       "type": "circle",
+       "source": "eonet",
+       "layout": {'visibility' : 'none'},
+       "paint": {
+           'circle-color': {
+               property: 'code',
+               stops: [
+                   ['1', '#ff0505'],
+                   ['10', '#ffffff']
+               ]
+           },
+           'circle-radius': {
+               "base": 4,
+               "stops": [
+                 [0, 4],
+                 [8, 4]
+               ]
+           }
+       },
+    });
 
     map.on('mousemove', function(e) {
         var mouseRadius = 1;
@@ -104,6 +131,17 @@ map.on('style.load', function () {
                     map.getCanvas().style.cursor = 'inherit';
                 }
             }
+
+            if (map.getLayer("eonet-point").getLayoutProperty('visibility') !== 'none') {
+                var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["eonet-point"]})[0];
+                if (feature) {
+                    map.getCanvas().style.cursor = 'pointer';
+
+                } else {
+                    map.getCanvas().style.cursor = 'inherit';
+                }
+            }
+
     }).on('click', function(e){
         var mouseRadius = 1;
         if (map.getLayer("earthquakes-point").getLayoutProperty('visibility') !== 'none') {
@@ -122,7 +160,34 @@ map.on('style.load', function () {
                     .addTo(map);
             }
         }
+
+        if (map.getLayer("eonet-point").getLayoutProperty('visibility') !== 'none') {
+            var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["eonet-point"]})[0];
+            if (feature) {
+                var popup = new mapboxgl.Popup()
+                    .setLngLat(e.lngLat)
+                    .setHTML('<div class="nom-eq">Name: ' + feature.properties.title + '</div>' +
+                                '<div class="linetab">Date: ' + moment(feature.properties.date).utc().format('YYYY-MM-DD HH:mm:ss') + '(UTC)</div>' +
+                                '<div class="linetab">Type: ' + feature.properties.type + '</div>' +
+                                '<div class="linetab">Description: ' + feature.properties.description + '</div>' +
+                                // add Sources (handle multiple sources)
+                                // '<div class="linetab"><a target="_blank" href="' + feature.properties.link + '">Info</a></div>' +
+                                '<div class="linetab"><a data-id="' + feature.id + '"class="link" onclick="addEvt(this)">Add To db</a></div>')
+                    .addTo(map);
+            }
+        }
     })
+
+    var slider = document.getElementById('slider'),
+        sliderValue = document.getElementById('slider-value');
+
+    slider.addEventListener('input', function(e) {
+        if (map.getSource("gibs-tiles")) {
+            map.setPaintProperty('gibs-tiles', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+        }
+        sliderValue.textContent = e.target.value + '%';
+    });
+
 })
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +230,9 @@ map.on('draw.create', function(e){
 
 function addEQ(elem){
     draw.deleteAll();
-    $.get(elem.getAttribute('data-url'))
+
+    var urlusgs = elem.getAttribute('data-url');
+    $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + urlusgs)
         .done(function (data) {
             var feature = data.geometry,
                 featureId = draw.add(feature),
@@ -183,12 +250,51 @@ function addEQ(elem){
             }
 
             //Pre-fill Information
-
-
-
-
-
             //
+
+            $(".disaster-info").addClass('in');
+            $("button[dwmenu]").each(function () {
+                $(this).attr('disabled', true);
+            });
+            ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn'].forEach(function(e){
+                $(e).removeClass('on');
+            });
+            map.resize();
+        });
+
+}
+
+function addEvt(elem){
+    draw.deleteAll();
+
+    var id = elem.getAttribute('data-id');
+        url = 'http://eonet.sci.gsfc.nasa.gov/api/v2.1/events/' + id;
+
+    $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + url)
+        .done(function (data) {
+
+
+            //handle multi Point ???
+
+
+            // var feature = data.geometry,
+            //     featureId = draw.add(feature),
+            //     features = draw.getAll();
+            //
+            // if (features.features[0].geometry.type === "Polygon") {
+            //     var bbox = turf.extent(features.features[0].geometry);
+            //     map.fitBounds(bbox, {padding: 20});
+            // }
+            //
+            // if (features.features[0].geometry.type === "Point") {
+            //     var round = turf.buffer(features.features[0], 100, 'kilometers'),
+            //         bbox = turf.extent(round);
+            //     map.fitBounds(bbox, {padding: 20});
+            // }
+
+            //Pre-fill Information
+            //
+
             $(".disaster-info").addClass('in');
             $("button[dwmenu]").each(function () {
                 $(this).attr('disabled', true);
@@ -235,6 +341,7 @@ function cancelAdd() {
     map.resize();
     draw.deleteAll();
     //Reset disaster-info Form to init point
+
 }
 
 function addType(elem) {
@@ -285,15 +392,12 @@ $("#earthquake-checkbox").change(function () {
 $("#eonet-checkbox").change(function () {
     "use strict";
     $("#eonet-checkbox").parent().toggleClass('green');
-    // if (document.getElementById("eonet-checkbox").checked) {
-    //     map.setLayoutProperty('earthquakes-point', 'visibility', 'visible');
-    //     map.setLayoutProperty('earthquakes-blur', 'visibility', 'visible');
-    // } else {
-    //     map.setLayoutProperty('earthquakes-point', 'visibility', 'none');
-    //     map.setLayoutProperty('earthquakes-blur', 'visibility', 'none');
-    // }
+    if (document.getElementById("eonet-checkbox").checked) {
+        map.setLayoutProperty('eonet-point', 'visibility', 'visible');
+    } else {
+        map.setLayoutProperty('eonet-point', 'visibility', 'none');
+    }
 });
-
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -302,21 +406,62 @@ function getEarthquake() {
     var urlusgs = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson';
     $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + urlusgs)
         .done(function (data) {
-             map.getSource('earthquakes').setData(data);
+            map.getSource('earthquakes').setData(data);
         });
 }
 
-function getEONETEvents(){
+function getEONETEvents() {
     "use strict";
     var eoneturl = 'http://eonet.sci.gsfc.nasa.gov/api/v2.1/events';
     $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + eoneturl)
         .done(function (data) {
-            console.log(data);
-            //parse data
 
-            //  map.getSource('events').setData(data);
+            var geojson = {
+              "type": "FeatureCollection",
+              "features": []
+            };
+
+            for(var i = 0; i < data.events.length; i++) {
+                var e = data.events[i];
+
+                if (e.geometries.length > 1) {
+                    for(var j = 0; j < e.geometries.length; j++) {
+                        var feature = {};
+                        feature.id = e.id;
+                        feature.properties = {
+                            'type': e.categories[0].title,
+                            'description': e.description,
+                            'code' : e.categories[0].id,
+                            'link': e.link,
+                            'sources' : e.sources,
+                            'title' : e.title
+                        };
+
+                        feature.properties.date =  e.geometries[j].date;
+                        feature.geometry = {'type': "Point", 'coordinates': e.geometries[j].coordinates};
+                        geojson.features.push(feature);
+                    }
+                } else {
+                    var feature = {};
+
+                    feature.id = e.id;
+                    feature.properties = {
+                        'type': e.categories[0].title,
+                        'description': e.description,
+                        'code' : e.categories[0].id,
+                        'link': e.link,
+                        'sources' : e.sources,
+                        'title' : e.title
+                    };
+
+                    feature.properties.dates = e.geometries[0].date;
+                    feature.geometry = {'type': "Point", 'coordinates': e.geometries[0].coordinates};
+                    geojson.features.push(feature);
+                }
+            }
+
+            map.getSource('eonet').setData(geojson);
         });
-
 }
 
 function drawOnMap(type) {
@@ -371,6 +516,8 @@ function setStyle(basename) {
     "use strict";
 
     $(".date-button").attr('disabled', 'disabled');
+    $("#slider").attr('disabled', 'disabled');
+
     if (map.getSource("gibs-tiles")) {
         map.removeLayer("gibs-tiles");
         map.removeSource("gibs-tiles");
@@ -381,6 +528,7 @@ function setStyle(basename) {
         return;
     default:
         $(".date-button").attr('disabled', false);
+        $("#slider").attr('disabled', false);
         var dateValue = document.getElementsByClassName('date-button')[0].textContent,
             basemaps_url = "https://map1.vis.earthdata.nasa.gov/wmts-webmerc/" + basename + "/default/" + dateValue + "/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg";
 
@@ -395,14 +543,17 @@ function setStyle(basename) {
             'tileSize': 256
         });
 
+        var slider = document.getElementById('slider'),
+            opa = (parseInt(slider.getAttribute('value'), 10) / 100);
+
         map.addLayer({
             'id': 'gibs-tiles',
             'type': 'raster',
             'source': 'gibs-tiles',
             "minzoom": 1,
             "maxzoom": 9,
-            'paint': {"raster-opacity": 0.5}
-        }, "earthquakes-blur");
+            'paint': {"raster-opacity": opa}
+        }, "admin-2-boundaries-bg");
     }
 }
 
@@ -447,8 +598,6 @@ $(document).ready(function () {
         endDate : moment.utc().format('YYYY-MM-DD')
     });
 
-    $("#disasterEndDate").attr('disabled', 'disabled');
-
     $(".date-button").datepicker({
         format : 'yyyy-mm-dd',
         autoclose : true,
@@ -472,5 +621,7 @@ $(document).ready(function () {
 
     $(".date-button").datepicker('setDate', moment.utc().subtract(1, 'days').format('YYYY-MM-DD'));
 
+    $("#disasterEndDate").attr('disabled', 'disabled');
+    $("#slider").attr('disabled', 'disabled');
     // $('#modalUnderConstruction').modal();
 });

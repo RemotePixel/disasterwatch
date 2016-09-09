@@ -361,6 +361,33 @@ body {
     background-color: #000;
     border: 1px solid #000;
 }
+
+.block-control .slider label {
+    display: block;
+    margin: 0 0 10px;
+}
+
+.block-control .slider input {
+    background-color: transparent;
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    margin: 0;
+    cursor: ew-resize;
+}
+
+.block-control .date-button[disabled],
+.block-control .slider input[disabled]  {
+    background-color: #fff;
+    border-color: #ccc;
+    cursor: not-allowed;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    opacity: .65;
+    pointer-events: none;
+}
+
 /* End Side View */
 
 .map {
@@ -536,7 +563,6 @@ body {
     display: block;
 }
 
-.block-control .date-button[disabled],
 .drawsel[disabled] {
     background-color: #fff;
     border-color: #ccc;
@@ -551,6 +577,8 @@ body {
 .linetab {
     font-size: 12px;
     color: #201f1f;
+    max-width: 200px;
+    text-align: justify;
 }
 
 /* ----------- DISASTER FORM ----------- */
