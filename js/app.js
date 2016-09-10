@@ -164,15 +164,20 @@ map.on('style.load', function () {
         if (map.getLayer("eonet-point").getLayoutProperty('visibility') !== 'none') {
             var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["eonet-point"]})[0];
             if (feature) {
+                var links = '',
+                    sources = JSON.parse(feature.properties.sources);
+                for(var j = 0; j < sources.length; j++) {
+                    links += '<a target="_blank" href="' + sources[j].url + '">' + sources[j].id + '</a> '
+                }
+
                 var popup = new mapboxgl.Popup()
                     .setLngLat(e.lngLat)
                     .setHTML('<div class="nom-eq">Name: ' + feature.properties.title + '</div>' +
-                                '<div class="linetab">Date: ' + moment(feature.properties.date).utc().format('YYYY-MM-DD HH:mm:ss') + '(UTC)</div>' +
+                                '<div class="linetab">Date: ' + moment(feature.properties.date).format('YYYY-MM-DD HH:mm:ss') + '(UTC)</div>' +
                                 '<div class="linetab">Type: ' + feature.properties.type + '</div>' +
                                 '<div class="linetab">Description: ' + feature.properties.description + '</div>' +
-                                // add Sources (handle multiple sources)
-                                // '<div class="linetab"><a target="_blank" href="' + feature.properties.link + '">Info</a></div>' +
-                                '<div class="linetab"><a data-id="' + feature.id + '"class="link" onclick="addEvt(this)">Add To db</a></div>')
+                                '<div class="linetab">Links: ' + links + '</div>' +
+                                '<div class="linetab"><a data-id="' + feature.properties.id + '" class="link" onclick="addEvt(this)">Add To db</a></div>')
                     .addTo(map);
             }
         }
@@ -250,7 +255,16 @@ function addEQ(elem){
             }
 
             //Pre-fill Information
+            // Type
+            // Name
+            // Place
+            // Date (DONE)
+            // Comments
             //
+
+            var dateValue = moment(data.properties.time).format('YYYY-MM-DD');
+            $("#disasterStartDate").datepicker("setDate", dateValue);
+            $("#disasterEndDate").datepicker("setDate", dateValue);
 
             $(".disaster-info").addClass('in');
             $("button[dwmenu]").each(function () {
@@ -273,26 +287,45 @@ function addEvt(elem){
     $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + url)
         .done(function (data) {
 
+            if (data.geometries.length > 1) {
+                var feature = { "type": 'LineString', "coordinates": []};
+                for(var j = 0; j < data.geometries.length; j++) {
+                    feature.coordinates.push(data.geometries[j].coordinates)
+                }
+                var dateStartValue = moment(data.geometries[0].date).format('YYYY-MM-DD'),
+                    dateEndValue = moment(data.geometries[data.geometries.length-1].date).format('YYYY-MM-DD');
 
-            //handle multi Point ???
+                $("#disasterStartDate").datepicker("setDate", dateStartValue);
+                $("#disasterEndDate").datepicker("setDate", dateEndValue);
 
+            } else {
+                var feature = { "type": 'Point', "coordinates": data.geometries[0].coordinates},
+                    dateValue = moment(data.geometries[0].date).format('YYYY-MM-DD');
 
-            // var feature = data.geometry,
-            //     featureId = draw.add(feature),
-            //     features = draw.getAll();
-            //
-            // if (features.features[0].geometry.type === "Polygon") {
-            //     var bbox = turf.extent(features.features[0].geometry);
-            //     map.fitBounds(bbox, {padding: 20});
-            // }
-            //
-            // if (features.features[0].geometry.type === "Point") {
-            //     var round = turf.buffer(features.features[0], 100, 'kilometers'),
-            //         bbox = turf.extent(round);
-            //     map.fitBounds(bbox, {padding: 20});
-            // }
+                $("#disasterStartDate").datepicker("setDate", dateValue);
+                $("#disasterEndDate").datepicker("setDate", dateValue);
+            }
+
+            var featureId = draw.add(feature),
+                features = draw.getAll();
+
+            if (features.features[0].geometry.type === "LineString") {
+                var bbox = turf.extent(features.features[0].geometry);
+                map.fitBounds(bbox, {padding: 20});
+            }
+
+            if (features.features[0].geometry.type === "Point") {
+                var round = turf.buffer(features.features[0], 100, 'kilometers'),
+                    bbox = turf.extent(round);
+                map.fitBounds(bbox, {padding: 20});
+            }
 
             //Pre-fill Information
+            // Type
+            // Name
+            // Place
+            // Date (DONE)
+            // Comments
             //
 
             $(".disaster-info").addClass('in');
@@ -423,34 +456,31 @@ function getEONETEvents() {
 
             for(var i = 0; i < data.events.length; i++) {
                 var e = data.events[i];
-
                 if (e.geometries.length > 1) {
                     for(var j = 0; j < e.geometries.length; j++) {
                         var feature = {};
-                        feature.id = e.id;
                         feature.properties = {
                             'type': e.categories[0].title,
+                            'id': e.id,
                             'description': e.description,
                             'code' : e.categories[0].id,
                             'link': e.link,
-                            'sources' : e.sources,
+                            'sources' : JSON.stringify(e.sources),
                             'title' : e.title
                         };
-
                         feature.properties.date =  e.geometries[j].date;
                         feature.geometry = {'type': "Point", 'coordinates': e.geometries[j].coordinates};
                         geojson.features.push(feature);
                     }
                 } else {
                     var feature = {};
-
-                    feature.id = e.id;
                     feature.properties = {
                         'type': e.categories[0].title,
+                        'id': e.id,
                         'description': e.description,
                         'code' : e.categories[0].id,
                         'link': e.link,
-                        'sources' : e.sources,
+                        'sources' : JSON.stringify(e.sources),
                         'title' : e.title
                     };
 

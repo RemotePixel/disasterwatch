@@ -88,14 +88,16 @@
 							<div class="dropdown">
 								<span class="form-control dropdown-toggle disasterType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></span>
 							  	<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-							    	<li><a onclick="addType(this)"><span class="fire">Fire</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-								    <li><a onclick="addType(this)"><span class="earthquake">EarthQuake</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+							    	<li><a onclick="addType(this)"><span class="fire">WildFires</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+								    <li><a onclick="addType(this)"><span class="earthquake">EarthQuakes</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 								    <li><a onclick="addType(this)"><span class="tsunami">Tsunami</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 								    <li><a onclick="addType(this)"><span class="weather">Weather</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 									<li><a onclick="addType(this)"><span class="tornado">Tornado</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-									<li><a onclick="addType(this)"><span class="volcano">Volcano</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+									<li><a onclick="addType(this)"><span class="volcano">Volcanoes</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 									<li><a onclick="addType(this)"><span class="floods">Floods</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+									<li><a onclick="addType(this)"><span class="landslides">Landslides</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 									<li><a onclick="addType(this)"><span class="sandstorm">Sand Storm</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+									<li><a onclick="addType(this)"><span class="manmade">ManMade</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 									<li><a onclick="addType(this)"><span class="other">Other</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 							  	</ul>
 							</div>
@@ -253,12 +255,12 @@
                     <div class="side-view-content">
 
 						<div class="block-control">
-                            <div class="text-align-left">Basemap Imagery Date:</div>
+                            <div class="text-align-left">Satellite Imagery Date:</div>
 							<span class="date-button">date</span>
                         </div>
 
 						<div class="block-control slider">
-							<div class="text-align-left">Layer opacity: <span id='slider-value'>100%</span></div>
+							<div class="text-align-left">Satellite Imagery opacity: <span id='slider-value'>100%</span></div>
 							<input id='slider' type='range' min='0' max='100' step='0' value='100' />
 						</div>
 
