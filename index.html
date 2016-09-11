@@ -79,82 +79,97 @@
         </div><!--
 			@whitespace
          --><div class="main-container">
-		 		<div id="disaster-images" class="disaster-images">
-				</div>
-				<div id="disaster-info" class="disaster-info">
-					<form>
-						<div class="form-group">
-						  	<label>Disaster Type</label>
-							<div class="dropdown">
-								<span class="form-control dropdown-toggle disasterType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></span>
-							  	<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-							    	<li><a onclick="addType(this)"><span class="fire">WildFires</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-								    <li><a onclick="addType(this)"><span class="earthquake">EarthQuakes</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-								    <li><a onclick="addType(this)"><span class="tsunami">Tsunami</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-								    <li><a onclick="addType(this)"><span class="weather">Weather</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-									<li><a onclick="addType(this)"><span class="tornado">Tornado</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-									<li><a onclick="addType(this)"><span class="volcano">Volcanoes</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-									<li><a onclick="addType(this)"><span class="floods">Floods</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-									<li><a onclick="addType(this)"><span class="landslides">Landslides</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-									<li><a onclick="addType(this)"><span class="sandstorm">Sand Storm</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-									<li><a onclick="addType(this)"><span class="manmade">ManMade</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-									<li><a onclick="addType(this)"><span class="other">Other</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-							  	</ul>
+				<div class="leftblock">
+					<!-- Disaster Info Form  -->
+					<div id="disaster-info" class="disaster-info">
+						<form>
+							<div class="form-group">
+							  	<label>Disaster Type</label>
+								<div class="dropdown">
+									<span class="form-control dropdown-toggle disasterType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></span>
+								  	<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+								    	<li><a onclick="addType(this)"><span class="fire">WildFires</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+									    <li><a onclick="addType(this)"><span class="earthquake">EarthQuakes</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+									    <li><a onclick="addType(this)"><span class="tsunami">Tsunami</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+									    <li><a onclick="addType(this)"><span class="weather">Weather</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="tornado">Tornado</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="volcano">Volcanoes</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="floods">Floods</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="landslides">Landslides</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="sandstorm">Sand Storm</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="manmade">ManMade</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="other">Other</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+								  	</ul>
+								</div>
+							</div>
+
+							<div class="form-group">
+							  	<label for="disasterName">Name</label>
+							  	<input type="name" class="form-control" id="disasterName" placeholder="Name">
+							</div>
+
+							<div class="form-group">
+							  	<label for="disasterPlace">Place</label>
+							  	<input type="place" class="form-control" id="disasterPlace" placeholder="Place">
+							</div>
+
+							<label>Date</label>
+							<div class="row">
+								<div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+								  	<span>Start</span>
+								  	<input id="disasterStartDate" type="text" class="form-control date-input" value="">
+								  	<div class="checkbox">
+					  				  	<label>
+					  						<input id="dateCheckbox" type="checkbox"> Ongoing Event
+					  				  	</label>
+					  				</div>
+								</div>
+								<div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
+								  	<span>End</span>
+								  	<input id="disasterEndDate" type="text" class="form-control date-input" value="">
+								</div>
+							</div>
+
+						  	<div class="checkbox">
+						    	<label>
+						      		<input id="mailCheckbox" type="checkbox"> Keep Me Posted
+						    	</label>
+								<span>Receive notification when a new image is available</span>
+								<input type="email" class="form-control" id="InputEmail" placeholder="Email" disabled>
+						  	</div>
+
+						  	<div class="form-group">
+			  				  	<label for="disasterDate">Comments</label>
+			  				  	<textarea type="comment" class="form-control" id="disasterComment" placeholder="Comments"></textarea>
+			  				</div>
+
+							<div class="comments">
+								<label>Notes</label>
+								<p>bla bla bla</p>
+
+								<p>if you think another disaster type could be
+									added please contact me or open a ticket on <a href="https://github.com/RemotePixel/disasterwatch/issues" target="_blank">Github</a></p>
+
+							</div>
+
+						  	<div type="submit" class="btn btn-default" onclick="addDisastTodb()">Add</div>
+						  	<div type="cancel" class="btn btn-default" onclick="cancelForm()">Cancel</div>
+						  	<div type="skip" class="btn btn-default" onclick="skipForm()">Skip</div>
+						</form>
+					</div>
+
+					<!--  Images Block -->
+					<div id="disaster-images" class="disaster-images display-none">
+						<div class="close-cross" onclick="closeImages()">
+							<div class="lr">
+								<div class="rl">
+								</div>
 							</div>
 						</div>
 
-						<div class="form-group">
-						  	<label for="disasterName">Name</label>
-						  	<input type="name" class="form-control" id="disasterName" placeholder="Name">
-						</div>
-
-						<div class="form-group">
-						  	<label for="disasterPlace">Place</label>
-						  	<input type="place" class="form-control" id="disasterPlace" placeholder="Place">
-						</div>
-
-						<label>Date</label>
-						<div class="row">
-							<div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
-							  	<span>Start</span>
-							  	<input id="disasterStartDate" type="text" class="form-control date-input" value="">
-							  	<div class="checkbox">
-				  				  	<label>
-				  						<input id="dateCheckbox" type="checkbox"> Ongoing Event
-				  				  	</label>
-				  				</div>
-							</div>
-							<div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
-							  	<span>End</span>
-							  	<input id="disasterEndDate" type="text" class="form-control date-input" value="">
-							</div>
-						</div>
-
-					  	<div class="checkbox">
-					    	<label>
-					      		<input id="mailCheckbox" type="checkbox"> Keep Me Posted
-					    	</label>
-							<span>Receive notification when a new image is available</span>
-							<input type="email" class="form-control" id="InputEmail" placeholder="Email" disabled>
-					  	</div>
-
-					  	<div class="form-group">
-		  				  	<label for="disasterDate">Comments</label>
-		  				  	<textarea type="comment" class="form-control" id="disasterComment" placeholder="Comments"></textarea>
-		  				</div>
-
-						<div class="comments">
-							<!-- Info ??? -->
-							<label>Notes</label>
-							<p>bla bla bla</p>
-							<p>bla bla bla</p>
-
-						</div>
-
-					  	<div type="submit" class="btn btn-default" onclick="addDisast()">Add</div>
-					  	<div type="cancel" class="btn btn-default" onclick="cancelAdd()">Cancel</div>
-					  	<div type="skip" class="btn btn-default" onclick="goToImage()">Skip</div>
-					</form>
+						<div class="img-preview"></div>
+						<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
+					</div>
 				</div><!--
 				@whitespace
 	        --><div id="map" class="map"></div>
@@ -182,21 +197,6 @@
 							</div>
 							<span>Mapbox Map</span>
 						</div>
-
-						<!-- <div class="side-element">
-							<div id="MapboxSat" class="link" onclick="changeOverlay('MapboxSat')">
-								<div class="link-hover">
-									<div class="link-hover-content">
-										<i class="fa fa-plus fa-3x"></i>
-									</div>
-								</div>
-								<div class="link-on">
-									<span>On View</span>
-								</div>
-								<img src="/img/mapbox.jpg"></img>
-							</div>
-							<span>Mapbox Satellite</span>
-						</div> -->
 
 						<div class="side-element">
 							<div id="VIIRS_SNPP_CorrectedReflectance_TrueColor" class="link" onclick="changeOverlay('VIIRS_SNPP_CorrectedReflectance_TrueColor')">
@@ -277,23 +277,9 @@
 								<input id="eonet-checkbox" type="checkbox"/><span></span>
 							</label>
 						</div>
-
-						<!-- <div class="block-control">
-                            <div class="text-align-left">Fire Locations (Thermal Anomalies):</div>
-							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary" >
-                                <input id="fire-checkbox" type="checkbox"/><span></span>
-                            </label>
-                        </div> -->
                     </div>
                 </div>
             </div>
-
-			<!-- <div class="disasterForm">
-
-
-
-			</div> -->
-
         </div>
 
 	</div>
@@ -306,7 +292,7 @@
 				<div class="modal-body">
 					<div class="drawchoice row">
 
-						<div class="close-modal" data-dismiss="modal">
+						<div class="close-cross" data-dismiss="modal">
 							<div class="lr">
 								<div class="rl">
 								</div>
@@ -326,7 +312,7 @@
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 drawbox">
-							<div class="drawsel" disabled="disabled">
+							<div class="drawsel" disabled="disabled" data-dismiss="modal">
 								<i class="fa fa-file fa-4x"></i>
 								<span>Upload a file</span>
 							</div>
@@ -337,7 +323,110 @@
 		</div>
     </div>
 
+	<!-- Modal -->
+    <div class="modal fade" id="modalQuestion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
+        <div class="modal-dialog">
+            <div class="modal-content">
+				<div class="modal-body">
+					<div class="drawchoice row">
+
+						<div class="close-cross" data-dismiss="modal">
+							<div class="lr">
+								<div class="rl">
+								</div>
+							</div>
+						</div>
+
+						<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 drawbox">
+							<div class="drawsel" onclick="showForm()" data-dismiss="modal">
+								<i class="fa fa-database fa-4x"></i>
+								<span>Add to Disaster Database</span>
+							</div>
+						</div>
+						<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 drawbox">
+							<div class="drawsel" onclick="showImages()" data-dismiss="modal">
+								<i class="fa fa-picture-o fa-4x"></i>
+								<span>See images</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+
+	<div class="modal" id="modalDownloadL8" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body row">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-12 dwn-bands"></div>
+					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-12 img-ovr">
+
+						<div class="dropdown">
+						  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							Natural Color (4,3,2)
+							<span class="caret"></span>
+						  </button>
+						  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							<li data-bands="[4,3,2]"><a class="on">Natural Color (4,3,2)</a></li>
+							<li data-bands="[7,6,4]"><a>False Color Urban (7,6,4)</a></li>
+							<li data-bands="[5,4,3]"><a>Color Infrared Vegetation (5,4,3)</a></li>
+							<li data-bands="[6,5,2]"><a>Agriculture (6,5,2)</a></li>
+							<li data-bands="[7,6,5]"><a>Atmospheric Penetration (7,6,5)</a></li>
+							<li data-bands="[5,6,2]"><a>Healthy Vegetation (5,6,2)</a></li>
+							<li data-bands="[5,6,4]"><a>Land/Water (5,6,4)</a></li>
+							<li data-bands="[7,5,3]"><a>Natural With Atmo Removal (7,5,3)</a></li>
+							<li data-bands="[7,5,4]"><a>Shortwave Infrared (7,5,4)</a></li>
+							<li data-bands="[7,5,4]"><a>Vegetation Analysis (6,5,4)</a></li>
+						  </ul>
+						</div>
+
+						<div data-id="" class="overview">
+							<span><i class="fa fa-spinner fa-spin"></i></span>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal" id="modalDownloadS2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body row">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 dwn-bands"></div>
+
+					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-12 img-ovr">
+
+						<div class="dropdown">
+						  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							Natural Color (4,3,2)
+							<span class="caret"></span>
+						  </button>
+						  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							<li data-bands="[4,3,2]"><a class="on">Natural Color (4,3,2)</a></li>
+							<li data-bands="[8,4,3]"><a>Color Infrared Vegetation (8,4,3)</a></li>
+							<li data-bands="[12,11,5]"><a>False Color Urban (12,11,5) 20m</a></li>
+						  </ul>
+						</div>
+
+						<div data-id="" class="overview">
+							<span><i class="fa fa-spinner fa-spin"></i></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
 
     <!-- Modal -->
     <div class="modal fade" id="modalAbout" tabindex="-1" role="dialog"
@@ -401,6 +490,15 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="/js/bootstrap/js/bootstrap.min.js"></script>
 	<script src="/js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+
+	<script>
+        window.lazySizesConfig = window.lazySizesConfig || {};
+        window.lazySizesConfig.lazyClass = 'img-item';
+		window.lazySizesConfig.expand = 500;
+        window.lazySizesConfig.loadMode = 2;
+    </script>
+
+	<script src="/js/lazysizes.min.js" async=""></script>
 
     <!--  mapbox-->
 	<script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
