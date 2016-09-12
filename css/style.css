@@ -48,7 +48,7 @@ body {
     width: calc(100% - 60px);
     z-index: 0;
     overflow: hidden;
-    background-color: #dde3f2;
+    background-color: #c8c8c8;
     -webkit-touch-callout: none;
       -webkit-user-select: none;
          -moz-user-select: none;
@@ -590,24 +590,16 @@ body {
     vertical-align: top;
     width: 0;
     font-size: 2rem;
-    overflow-y: scroll;
-}
-
-.leftblock {
-    display: none;
-    vertical-align: top;
-    width: 0;
-    font-size: 2rem;
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
 }
 
 .leftblock.in {
     display: inline-block;
     width: 50%;
     height: 100%;
-    background-color: #d2cece;
+    background-color: #c8c8c8;
     margin: 0;
-    padding: 10px;
+    /*padding: 10px;*/
 }
 
 .leftblock.in ~ .map {
@@ -619,10 +611,143 @@ body {
     font-size: 2rem
 }
 
-.disaster-info,
-.disaster-images {
+.leftblock .main-section{
     position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    /*overflow-y: : hidden;*/
 }
+
+.leftblock .main-section .disaster-info,
+.leftblock .main-section .disaster-images {
+    position: absolute;
+	top: 50px;
+	left: 0;
+	height: calc(100% - 50px);
+    width: 100%;
+    z-index: 1;
+    opacity: 0;
+    display: inline-block;
+    overflow: scroll;
+    /*transition: all linear 0.1s;*/
+    background-color: #c8c8c8;
+}
+
+.leftblock .main-section .disaster-info{
+    padding: 10px;
+}
+
+.leftblock .close-block {
+    position: absolute;
+    top: 0;
+    right: -40px;
+    width: 40px;
+    height: 50px;
+    color: #FFF;
+    background-color: #000;
+    text-align: center;
+    line-height: 50px;
+    font-size: 15px;
+    z-index: 10000;
+    cursor: pointer;
+}
+.leftblock .close-block i {
+    vertical-align: middle;
+}
+
+.leftblock .close-block:hover{
+    color: #000;
+    background-color: #FFF;
+}
+
+.leftblock .main-section .tab-selector {
+    display: none;
+}
+
+.leftblock .main-section .tab-label {
+	height: 50px;
+    line-height: 50px;
+	background: #FFF;
+	text-align: center;
+	font-size: 18px;
+	color: #000;
+    cursor: pointer;
+}
+
+.leftblock .main-section .tab-label:after {
+	content: "";
+	border-top: 25px solid transparent;
+	border-bottom: 25px solid transparent;
+	border-left: 25px solid #FFF;
+	position: absolute;
+    right: -22px;
+    top: 0;
+	z-index: 1;
+}
+
+.leftblock .main-section .tab-label:before {
+	content: "";
+	border-top: 25px solid transparent;
+	border-bottom: 25px solid transparent;
+	border-left: 25px solid #000;
+	position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.leftblock .main-section .tab-label:first-of-type {
+	border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+.leftblock .main-section .tab-label:first-of-type:before {
+	display: none;
+}
+
+.leftblock .main-section .tab-label:last-of-type {
+	border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+.leftblock .main-section .tab-label:last-of-type:after {
+	display: none;
+}
+
+.leftblock .main-section .tab-label:hover {
+	background: #000;
+    color: #FFF;
+}
+
+.leftblock .main-section .tab-label:hover:after {
+	border-left-color: #000;
+}
+
+.leftblock .main-section input.tab-selector-1[disabled=disabled] ~ .images-label,
+.leftblock .main-section input.tab-selector-2[disabled=disabled] ~ .info-label {
+    background: #c8c5c5;
+    color: #8c8b8b;
+    cursor: not-allowed;
+}
+
+.leftblock .main-section input.tab-selector-1:checked ~ .images-label,
+.leftblock .main-section input.tab-selector-2:checked ~ .info-label {
+    background: #000;
+    color: #FFF;
+}
+
+.leftblock .main-section input.tab-selector-1:checked ~ .images-label:after,
+.leftblock .main-section input.tab-selector-2:checked ~ .info-label:after {
+    border-left-color: #000;
+}
+
+/* End - Sub Menu */
+
+.leftblock .main-section input.tab-selector-1:checked ~ .disaster-images,
+.leftblock .main-section input.tab-selector-2:checked ~ .disaster-info {
+    z-index: 100;
+    opacity: 1;
+    /*transition: all ease-out 0.2s 0.1s;*/
+}
+
 
 .disaster-info .disasterType span {
     padding: 2px;
@@ -655,7 +780,7 @@ body {
     padding-bottom: 5px;
 }
 
-.disaster-info  .comments{
+.disaster-info .comments{
     margin: 0 0 10px;
 }
 
@@ -833,16 +958,6 @@ body {
 /* ----------- DISASTER FORM ----------- */
 
 /* ----------- DISASTER IMAGES ----------- */
-.disaster-images{
-    width: 100%;
-    height: 100%;
-}
-.disaster-images .close-cross .lr,
-.disaster-images .close-cross .lr .rl {
-    position: fixed;
-    background-color: #FFF;
-}
-
 .spin,
 .serv-error,
 .nodata-error {
@@ -851,7 +966,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
-    font-size: 14px;
+    font-size: 20px;
     text-align: center;
     color: #FFF;
 }
@@ -865,8 +980,7 @@ body {
     overflow-y: scroll;
     overflow-x: hidden;
     display: block;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,1);
+    background-color: #000;
 }
 
 .img-preview .item{
@@ -1083,7 +1197,6 @@ body {
         height: 100%;
         background-color: #d2cece;
         margin: 0;
-        padding: 10px;
     }
 
     .leftblock.in ~ .map {
@@ -1093,5 +1206,16 @@ body {
         padding: 0;
         vertical-align: top;
         font-size: 2rem
+    }
+
+    .leftblock .close-block {
+        right: 0;
+        width: 20px;
+        height: 50px;
+        font-size: 10px;
+    }
+
+    .leftblock .main-section .tab-label {
+    	font-size: 12px;
     }
 }

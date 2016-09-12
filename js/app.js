@@ -156,25 +156,14 @@ map.on('style.load', function () {
 
     map.on('mousemove', function (e) {
         var mouseRadius = 1;
-        if (map.getLayer("earthquakes-point").getLayoutProperty('visibility') !== 'none') {
-            var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["earthquakes-point"]})[0];
-            if (feature) {
-                map.getCanvas().style.cursor = 'pointer';
+        var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["eonet-point", "earthquakes-point"]})[0];
+        if (feature) {
+            map.getCanvas().style.cursor = 'pointer';
 
-            } else {
-                map.getCanvas().style.cursor = 'inherit';
-            }
+        } else {
+            map.getCanvas().style.cursor = 'inherit';
         }
 
-        if (map.getLayer("eonet-point").getLayoutProperty('visibility') !== 'none') {
-            var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["eonet-point"]})[0];
-            if (feature) {
-                map.getCanvas().style.cursor = 'pointer';
-
-            } else {
-                map.getCanvas().style.cursor = 'inherit';
-            }
-        }
     }).on('click', function (e) {
         var mouseRadius = 1;
         if (map.getLayer("earthquakes-point").getLayoutProperty('visibility') !== 'none') {
@@ -189,8 +178,7 @@ map.on('style.load', function () {
                                 '<div class="linetab">Duration (min): ' + feature.properties.dmin + '</div>' +
                                 '<div class="linetab">Tsunami: ' + ((feature.properties.tsunami === 0) ? 'No' : 'Yes') + '</div>' +
                                 '<div class="linetab"><a target="_blank" href="' + feature.properties.url + '">Info</a></div>' +
-                                '<div class="linetab"><a data-url="' + feature.properties.detail + '"class="link" onclick="seeEQimages(this)">See Images</a></div>' +
-                                '<div class="linetab"><a data-url="' + feature.properties.detail + '"class="link" onclick="addEQ(this)">Add To db</a></div>')
+                                '<div class="linetab"><a data-url="' + feature.properties.detail + '"class="link" onclick="seeEQimages(this)">See Images</a></div>')
                     .addTo(map);
             }
         }
@@ -211,8 +199,7 @@ map.on('style.load', function () {
                                 '<div class="linetab">Type: ' + feature.properties.dtype + '</div>' +
                                 '<div class="linetab">Description: ' + feature.properties.description + '</div>' +
                                 '<div class="linetab">Links: ' + links + '</div>') //+
-                                // '<div class="linetab"><a data-id="' + feature.properties.id + '" class="link" onclick="seeEvtimages(this)">See Images</a></div>' +
-                                // '<div class="linetab"><a data-id="' + feature.properties.id + '" class="link" onclick="addEvt(this)">Add To db</a></div>')
+                                // '<div class="linetab"><a data-id="' + feature.properties.id + '" class="link" onclick="seeEvtimages(this)">See Images</a></div>')
                     .addTo(map);
             }
         }
@@ -247,7 +234,9 @@ map.on('draw.create', function(e){
     // limit draw Polygons size ??
 
 
-    $("#modalQuestion").modal()
+    // $("#modalQuestion").modal()
+
+    openleftBlock()
 
     if (e.features[0].geometry.type === "Polygon") {
         var bbox = turf.extent(e.features[0].geometry);
@@ -411,28 +400,8 @@ function seeEQimages(elem){
         .done(function (data) {
             var feature = data.geometry,
                 featureId = draw.add(feature),
-                features = draw.getAll();
-
-            var round = turf.buffer(features.features[0], 100, 'kilometers'),
-                bbox = turf.extent(round);
-            map.fitBounds(bbox, {padding: 20});
-            showImages()
-        });
-}
-
-function addEQ(elem){
-    draw.deleteAll();
-
-    var urlusgs = elem.getAttribute('data-url');
-    $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + urlusgs)
-        .done(function (data) {
-            var feature = data.geometry,
-                featureId = draw.add(feature),
-                features = draw.getAll();
-
-            var round = turf.buffer(features.features[0], 100, 'kilometers'),
-                bbox = turf.extent(round);
-            map.fitBounds(bbox, {padding: 20});
+                features = draw.getAll(),
+                dateValue = moment(data.properties.time).format('YYYY-MM-DD');
 
             //Pre-fill Information
             // Type
@@ -442,60 +411,17 @@ function addEQ(elem){
             // Comments
             //
 
-            var dateValue = moment(data.properties.time).format('YYYY-MM-DD');
             $("#disasterStartDate").datepicker("setDate", dateValue);
             $("#disasterEndDate").datepicker("setDate", dateValue);
 
-            //$(".disaster-info").addClass('in');
-            $(".leftblock").addClass('in');
-            $("button[dwmenu]").each(function () {
-                $(this).attr('disabled', true);
-            });
-            ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn', '#disasters-panel', '#disasters-btn'].forEach(function(e){
-                $(e).removeClass('on');
-            });
-            map.resize();
+            var round = turf.buffer(features.features[0], 100, 'kilometers'),
+                bbox = turf.extent(round);
+            map.fitBounds(bbox, {padding: 20});
+            openleftBlock()
         });
-
 }
 
 function seeEvtimages(elem){
-    draw.deleteAll();
-
-    var id = elem.getAttribute('data-id');
-        url = 'http://eonet.sci.gsfc.nasa.gov/api/v2.1/events/' + id;
-
-    $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + url)
-        .done(function (data) {
-
-            if (data.geometries.length > 1) {
-                var feature = { "type": 'LineString', "coordinates": []};
-                for(var j = 0; j < data.geometries.length; j++) {
-                    feature.coordinates.push(data.geometries[j].coordinates);
-                }
-            } else {
-                var feature = { "type": 'Point', "coordinates": data.geometries[0].coordinates};
-            }
-
-            var featureId = draw.add(feature),
-                features = draw.getAll();
-
-            if (features.features[0].geometry.type === "LineString") {
-                var bbox = turf.extent(features.features[0].geometry);
-                map.fitBounds(bbox, {padding: 20});
-            }
-
-            if (features.features[0].geometry.type === "Point") {
-                var round = turf.buffer(features.features[0], 100, 'kilometers'),
-                    bbox = turf.extent(round);
-                map.fitBounds(bbox, {padding: 20});
-            }
-
-            showImages()
-        });
-}
-
-function addEvt(elem){
     draw.deleteAll();
 
     var id = elem.getAttribute('data-id');
@@ -523,6 +449,14 @@ function addEvt(elem){
                 $("#disasterEndDate").datepicker("setDate", dateValue);
             }
 
+            //Pre-fill Information
+            // Type
+            // Name
+            // Place
+            // Date (DONE)
+            // Comments
+            //
+
             var featureId = draw.add(feature),
                 features = draw.getAll();
 
@@ -537,26 +471,11 @@ function addEvt(elem){
                 map.fitBounds(bbox, {padding: 20});
             }
 
-            //Pre-fill Information
-            // Type
-            // Name
-            // Place
-            // Date (DONE)
-            // Comments
-            //
-
-            // $(".disaster-info").addClass('in');
-            $(".leftblock").addClass('in');
-            $("button[dwmenu]").each(function () {
-                $(this).attr('disabled', true);
-            });
-            ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn', '#disasters-panel', '#disasters-btn'].forEach(function(e){
-                $(e).removeClass('on');
-            });
-            map.resize();
+            openleftBlock()
         });
-
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 function addDisastTodb() {
     "use strict";
@@ -572,29 +491,10 @@ function addDisastTodb() {
     //Get Image over Disaster and Display
     //Reset Form
     resetForm();
-    $(".disaster-info").toggleClass('display-none');
-    $(".disaster-images").toggleClass('display-none');
-
-    getImages();
-}
-function showForm() {
-
-    $(".leftblock").addClass('in');
-    $(".disaster-images").addClass('display-none');
-    $(".disaster-info").removeClass('display-none');
-
-    $("button[dwmenu]").each(function () {
-        $(this).attr('disabled', true);
-    });
-
-    ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn', '#disasters-panel', '#disasters-btn'].forEach(function(e){
-        $(e).removeClass('on');
-    });
-    map.resize();
 }
 
 function resetForm() {
-
+    "use strict";
     $(".disasterType").empty();
     $(".disaster-info .dropdown-menu i").each(function(){
         $(this).removeClass('right-block-in');
@@ -615,13 +515,11 @@ function resetForm() {
     $("#disasterEndDate").datepicker('clearDates')
 }
 
-function showImages() {
+function openleftBlock() {
     "use strict";
 
     $(".leftblock").addClass('in');
-    $(".disaster-info").addClass('display-none');
-    $(".disaster-images").removeClass('display-none');
-
+    $(".tab-selector-1").prop( "checked", true );
     $("button[dwmenu]").each(function () {
         $(this).attr('disabled', true);
     });
@@ -634,38 +532,71 @@ function showImages() {
     getImages();
 }
 
-function skipForm(){
-    $(".disaster-info").toggleClass('display-none');
-    $(".disaster-images").toggleClass('display-none');
-    resetForm();
-    getImages();
+function closeleftblock() {
+        $(".leftblock").removeClass('in');
+        $("button[dwmenu]").each(function () {
+            $(this).attr('disabled', false);
+        });
+        $(".tab-selector-1").prop( "checked", true );
+        $('.img-preview').empty();
+        resetForm();
+        map.resize();
+        draw.deleteAll();
 }
 
-function cancelForm() {
-    "use strict";
-    $("button[dwmenu]").each(function () {
-        $(this).attr('disabled', false);
-    });
-    // $(".disaster-info").removeClass('in');
-    $(".leftblock").removeClass('in');
-    map.resize();
-    draw.deleteAll();
 
-    //Reset disaster-info Form
-    resetForm();
-}
 
-function closeImages() {
-    $("button[dwmenu]").each(function () {
-        $(this).attr('disabled', false);
-    });
-    $(".disaster-info").toggleClass('display-none');
-    $(".disaster-images").toggleClass('display-none');
-    $('.img-preview').empty();
-    $(".leftblock").removeClass('in');
-    map.resize();
-    draw.deleteAll();
-}
+
+
+
+// function showForm() {
+//     $(".leftblock").addClass('in');
+//     $(".disaster-images").addClass('display-none');
+//     $(".disaster-info").removeClass('display-none');
+//
+//     $("button[dwmenu]").each(function () {
+//         $(this).attr('disabled', true);
+//     });
+//
+//     ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn', '#disasters-panel', '#disasters-btn'].forEach(function(e){
+//         $(e).removeClass('on');
+//     });
+//     map.resize();
+// }
+//
+//
+// function skipForm(){
+//     $(".disaster-info").toggleClass('display-none');
+//     $(".disaster-images").toggleClass('display-none');
+//     resetForm();
+//     getImages();
+// }
+//
+// function cancelForm() {
+//     "use strict";
+//     $("button[dwmenu]").each(function () {
+//         $(this).attr('disabled', false);
+//     });
+//     // $(".disaster-info").removeClass('in');
+//     $(".leftblock").removeClass('in');
+//     map.resize();
+//     draw.deleteAll();
+//
+//     //Reset disaster-info Form
+//     resetForm();
+// }
+//
+// function closeImages() {
+//     $("button[dwmenu]").each(function () {
+//         $(this).attr('disabled', false);
+//     });
+//     $(".disaster-info").toggleClass('display-none');
+//     $(".disaster-images").toggleClass('display-none');
+//     $('.img-preview').empty();
+//     $(".leftblock").removeClass('in');
+//     map.resize();
+//     draw.deleteAll();
+// }
 
 ////////////////////////////////////////////////////////////////////////////////
 function addType(elem) {
@@ -1135,5 +1066,5 @@ $(document).ready(function () {
     $("#disasterEndDate").attr('disabled', 'disabled');
     $("#slider").attr('disabled', 'disabled');
 
-    $('#modalUnderConstruction').modal();
+    // $('#modalUnderConstruction').modal();
 });

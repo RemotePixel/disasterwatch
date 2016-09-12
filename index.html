@@ -46,7 +46,8 @@
 
 <body>
 	<div class="content">
-        <div class="menu-bar-left">
+
+		<div class="menu-bar-left">
             <div class="NavButtonGroup">
 
 				<a class="home-butt" href="/index.html">
@@ -82,21 +83,36 @@
                 </div>
             </div>
         </div><!--
-			@whitespace
-         --><div class="main-container">
-				<div class="leftblock">
-					<!-- Disaster Info Form  -->
-					<div id="disaster-info" class="disaster-info">
+		@whitespace
+     --><div class="main-container">
+
+			<div class="leftblock">
+				<div class="main-section">
+
+					<input id="tab-1" type="radio" name="radio-set" class="tab-selector tab-selector-1" checked="checked" />
+					<label for="tab-1" class="tab-label col-xs-6 col-sm-6 col-md-6 col-lg-6 images-label">Images</label>
+
+					<input id="tab-2" type="radio" name="radio-set" class="tab-selector tab-selector-2" />
+					<label for="tab-2" class="tab-label col-xs-6 col-sm-6 col-md-6 col-lg-6 info-label">Add To Database</label>
+
+					<div class="close-block" onclick="closeleftblock()"><i class="fa fa-times fa-2x"></i></div>
+
+					<section class="disaster-images">
+						<div class="img-preview"></div>
+						<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
+					</section>
+
+					<section class="disaster-info">
 						<form>
 							<div class="form-group">
-							  	<label>Disaster Type</label>
+								<label>Disaster Type</label>
 								<div class="dropdown">
 									<span class="form-control dropdown-toggle disasterType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></span>
-								  	<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-								    	<li><a onclick="addType(this)"><span class="fire">WildFires</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-									    <li><a onclick="addType(this)"><span class="earthquake">EarthQuakes</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-									    <li><a onclick="addType(this)"><span class="tsunami">Tsunami</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-									    <li><a onclick="addType(this)"><span class="weather">Weather</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+										<li><a onclick="addType(this)"><span class="fire">WildFires</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="earthquake">EarthQuakes</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="tsunami">Tsunami</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="weather">Weather</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span class="tornado">Tornado</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span class="volcano">Volcanoes</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span class="floods">Floods</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
@@ -104,49 +120,49 @@
 										<li><a onclick="addType(this)"><span class="sandstorm">Sand Storm</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span class="manmade">ManMade</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span class="other">Other</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-								  	</ul>
+									</ul>
 								</div>
 							</div>
 
 							<div class="form-group">
-							  	<label for="disasterName">Name</label>
-							  	<input type="name" class="form-control" id="disasterName" placeholder="Name">
+								<label for="disasterName">Name</label>
+								<input type="name" class="form-control" id="disasterName" placeholder="Name">
 							</div>
 
 							<div class="form-group">
-							  	<label for="disasterPlace">Place</label>
-							  	<input type="place" class="form-control" id="disasterPlace" placeholder="Place">
+								<label for="disasterPlace">Place</label>
+								<input type="place" class="form-control" id="disasterPlace" placeholder="Place">
 							</div>
 
 							<label>Date</label>
 							<div class="row">
 								<div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
-								  	<span>Start</span>
-								  	<input id="disasterStartDate" type="text" class="form-control date-input" value="">
-								  	<div class="checkbox">
-					  				  	<label>
-					  						<input id="dateCheckbox" type="checkbox"> Ongoing Event
-					  				  	</label>
-					  				</div>
+									<span>Start</span>
+									<input id="disasterStartDate" type="text" class="form-control date-input" value="">
+									<div class="checkbox">
+										<label>
+											<input id="dateCheckbox" type="checkbox"> Ongoing Event
+										</label>
+									</div>
 								</div>
 								<div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
-								  	<span>End</span>
-								  	<input id="disasterEndDate" type="text" class="form-control date-input" value="">
+									<span>End</span>
+									<input id="disasterEndDate" type="text" class="form-control date-input" value="">
 								</div>
 							</div>
 
-						  	<div class="checkbox">
-						    	<label>
-						      		<input id="mailCheckbox" type="checkbox"> Keep Me Posted
-						    	</label>
+							<div class="checkbox">
+								<label>
+									<input id="mailCheckbox" type="checkbox"> Keep Me Posted
+								</label>
 								<span>Receive notification when a new image is available</span>
 								<input type="email" class="form-control" id="InputEmail" placeholder="Email" disabled>
-						  	</div>
+							</div>
 
-						  	<div class="form-group">
-			  				  	<label for="disasterDate">Comments</label>
-			  				  	<textarea type="comment" class="form-control" id="disasterComment" placeholder="Comments"></textarea>
-			  				</div>
+							<div class="form-group">
+								<label for="disasterDate">Comments</label>
+								<textarea type="comment" class="form-control" id="disasterComment" placeholder="Comments"></textarea>
+							</div>
 
 							<div class="comments">
 								<label>Notes</label>
@@ -157,27 +173,14 @@
 
 							</div>
 
-						  	<div type="submit" class="btn btn-default" onclick="addDisastTodb()">Add</div>
-						  	<div type="cancel" class="btn btn-default" onclick="cancelForm()">Cancel</div>
-						  	<div type="skip" class="btn btn-default" onclick="skipForm()">Skip</div>
+							<div type="submit" class="btn btn-default" onclick="addDisastTodb()">Add</div>
 						</form>
-					</div>
 
-					<!--  Images Block -->
-					<div id="disaster-images" class="disaster-images display-none">
-						<div class="close-cross" onclick="closeImages()">
-							<div class="lr">
-								<div class="rl">
-								</div>
-							</div>
-						</div>
-
-						<div class="img-preview"></div>
-						<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
-					</div>
-				</div><!--
-				@whitespace
-	        --><div id="map" class="map"></div>
+					</section>
+				</div>
+			</div><!--
+			WhiteSpace
+		--><div id="map" class="map"></div>
 
             <div id="SideViewCtrl" class="side-view">
 				<div id="basemaps-panel" class="navpanel side-view-container">
@@ -343,7 +346,7 @@
     </div>
 
 	<!-- Modal -->
-    <div class="modal fade" id="modalQuestion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <!-- <div class="modal fade" id="modalQuestion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
         <div class="modal-dialog">
             <div class="modal-content">
@@ -373,7 +376,7 @@
 				</div>
 			</div>
 		</div>
-    </div>
+    </div> -->
 
 	<div class="modal" id="modalDownloadL8" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
