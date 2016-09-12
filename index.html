@@ -65,6 +65,11 @@
                     <span class="buttonTitle">Settings</span>
                 </button>
 
+				<button id="disasters-btn" type="button" dwmenu="disasterslist" class="btn btn-default" onclick="toggleParam('disasterslist')">
+                    <i class="fa fa-list fa-2x"></i>
+                    <span class="buttonTitle">list</span>
+                </button>
+
                 <!-- Add Disaster Button -->
                 <button id="add-btn" type="button" dwmenu="add" class="btn btn-default" data-toggle="modal" data-target="#modalDraw">
                     <i class="fa fa-plus fa-2x"></i>
@@ -279,6 +284,20 @@
 						</div>
                     </div>
                 </div>
+
+				<div id="disasters-panel" class="navpanel side-view-container">
+
+					<button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('disasterslist')">
+						<span class="glyphicon glyphicon-chevron-left"></span>
+					</button>
+					<div class="title">Disasters</div>
+
+					<div class="side-view-content">
+
+					</div>
+				</div>
+
+
             </div>
         </div>
 

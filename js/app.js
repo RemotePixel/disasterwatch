@@ -13,11 +13,10 @@ var map = new mapboxgl.Map({
         attributionControl: true,
         minZoom: 0,
         maxZoom: 8
+    }),
+    draw = mapboxgl.Draw({
+        displayControlsDefault: false
     });
-
-var draw = mapboxgl.Draw({
-    displayControlsDefault: false
-});
 
 map.dragRotate.disable();
 map.touchZoomRotate.disableRotation();
@@ -245,6 +244,9 @@ map.on('draw.selectionchange', function(e){
 map.on('draw.create', function(e){
     "use strict";
 
+    // limit draw Polygons size ??
+
+
     $("#modalQuestion").modal()
 
     if (e.features[0].geometry.type === "Polygon") {
@@ -449,7 +451,7 @@ function addEQ(elem){
             $("button[dwmenu]").each(function () {
                 $(this).attr('disabled', true);
             });
-            ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn'].forEach(function(e){
+            ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn', '#disasters-panel', '#disasters-btn'].forEach(function(e){
                 $(e).removeClass('on');
             });
             map.resize();
@@ -548,7 +550,7 @@ function addEvt(elem){
             $("button[dwmenu]").each(function () {
                 $(this).attr('disabled', true);
             });
-            ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn'].forEach(function(e){
+            ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn', '#disasters-panel', '#disasters-btn'].forEach(function(e){
                 $(e).removeClass('on');
             });
             map.resize();
@@ -585,7 +587,7 @@ function showForm() {
         $(this).attr('disabled', true);
     });
 
-    ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn'].forEach(function(e){
+    ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn', '#disasters-panel', '#disasters-btn'].forEach(function(e){
         $(e).removeClass('on');
     });
     map.resize();
@@ -624,13 +626,11 @@ function showImages() {
         $(this).attr('disabled', true);
     });
 
-    ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn'].forEach(function(e){
+    ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn', '#disasters-panel', '#disasters-btn'].forEach(function(e){
         $(e).removeClass('on');
     });
 
     map.resize();
-
-    //Get Image over Disaster and Display
     getImages();
 }
 
@@ -981,8 +981,11 @@ function toggleParam(setting) {
     "use strict";
     switch (setting) {
     case 'basemaps':
+        $("#basemaps-panel .side-view-content").scrollTop(0);
         $('#settings-panel').removeClass('on');
         $('#settings-btn').removeClass('on');
+        $('#disasters-panel').removeClass('on');
+        $('#disasters-btn').removeClass('on');
         $('#basemaps-panel').toggleClass('on');
         $('#basemaps-btn').toggleClass('on');
         break;
@@ -990,8 +993,20 @@ function toggleParam(setting) {
     case 'settings':
         $('#basemaps-panel').removeClass('on');
         $('#basemaps-btn').removeClass('on');
+        $('#disasters-panel').removeClass('on');
+        $('#disasters-btn').removeClass('on');
         $('#settings-panel').toggleClass('on');
         $('#settings-btn').toggleClass('on');
+        break;
+
+    case 'disasterslist':
+        $("#disasters-panel .side-view-content").scrollTop(0);
+        $('#basemaps-panel').removeClass('on');
+        $('#basemaps-btn').removeClass('on');
+        $('#settings-panel').removeClass('on');
+        $('#settings-btn').removeClass('on');
+        $('#disasters-panel').toggleClass('on');
+        $('#disasters-btn').toggleClass('on');
         break;
 
     case 'add':
@@ -999,6 +1014,8 @@ function toggleParam(setting) {
         $('#settings-btn').removeClass('on');
         $('#basemaps-panel').removeClass('on');
         $('#basemaps-btn').removeClass('on');
+        $('#disasters-panel').removeClass('on');
+        $('#disasters-btn').removeClass('on');
         break;
 
     case null:
