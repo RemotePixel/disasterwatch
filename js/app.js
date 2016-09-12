@@ -544,60 +544,6 @@ function closeleftblock() {
         draw.deleteAll();
 }
 
-
-
-
-
-
-// function showForm() {
-//     $(".leftblock").addClass('in');
-//     $(".disaster-images").addClass('display-none');
-//     $(".disaster-info").removeClass('display-none');
-//
-//     $("button[dwmenu]").each(function () {
-//         $(this).attr('disabled', true);
-//     });
-//
-//     ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn', '#disasters-panel', '#disasters-btn'].forEach(function(e){
-//         $(e).removeClass('on');
-//     });
-//     map.resize();
-// }
-//
-//
-// function skipForm(){
-//     $(".disaster-info").toggleClass('display-none');
-//     $(".disaster-images").toggleClass('display-none');
-//     resetForm();
-//     getImages();
-// }
-//
-// function cancelForm() {
-//     "use strict";
-//     $("button[dwmenu]").each(function () {
-//         $(this).attr('disabled', false);
-//     });
-//     // $(".disaster-info").removeClass('in');
-//     $(".leftblock").removeClass('in');
-//     map.resize();
-//     draw.deleteAll();
-//
-//     //Reset disaster-info Form
-//     resetForm();
-// }
-//
-// function closeImages() {
-//     $("button[dwmenu]").each(function () {
-//         $(this).attr('disabled', false);
-//     });
-//     $(".disaster-info").toggleClass('display-none');
-//     $(".disaster-images").toggleClass('display-none');
-//     $('.img-preview').empty();
-//     $(".leftblock").removeClass('in');
-//     map.resize();
-//     draw.deleteAll();
-// }
-
 ////////////////////////////////////////////////////////////////////////////////
 function addType(elem) {
     "use strict";
@@ -1066,5 +1012,5 @@ $(document).ready(function () {
     $("#disasterEndDate").attr('disabled', 'disabled');
     $("#slider").attr('disabled', 'disabled');
 
-    // $('#modalUnderConstruction').modal();
+    $('#modalUnderConstruction').modal();
 });
