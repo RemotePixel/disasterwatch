@@ -1,51 +1,54 @@
 
+master branch is live on [http://disasterwatch.remotepixel.ca](http://disasterwatch.remotepixel.ca)
 
 [disasterwatch](http://disasterwatch.remotepixel.ca) is the new RemotePixel.ca project ( [post](http://remotepixel.ca/blog/disasterwatch-20151231.html)).
 
-For this new project, I (RemotePixel) am looking for people to help me so please 
+For this new project, I (RemotePixel) am looking for people to help me so please
 contact me @ contact@remotepixel.ca
 
-####Project Status : Phase 1
-
-- Phase 1: Defining structure and to do list
-- Phase 2: Building BackEnd and FrontEnd
-- Phase 3: Public Release
 
 What
 -------
 
 Aim of this project is to ease access to satelite imagery where we need it the most.
 
-The project is based on two things: 
+The project is based on three things:
 * A database of disaster (type, area/position, date, ...).
 * A simple and elegant interface to visualize latest imagery available on each area.
+* Email based notifications to get information when a new image is available over a disaster area
 
 Why
 -------
 
 With more and more free satellite imagery (Sentinel, Lansdat, ...) available
-and low cost imagery service (UrtheCast, PlanetLab, ...), I believe it could 
+and low cost imagery service (UrtheCast, Planet...), I believe it could
 help if we build a platform that ease the access to all the available
 imagery ressources.
 
+TimeFrame
+-------
+
+- V1 will show only Landsat-8 and Sentinel-2 image
+
+###### UI Preview
+![preview](https://cloud.githubusercontent.com/assets/10407788/18424407/409061fe-787d-11e6-950c-5615274a3222.gif)
 
 To Do
 -------
 
-#####Back End:
-- [ ] Create a nodejs server
-- [ ] Create a database (ElasticSearch or MongoDB)
-- [ ] Build a REST like service to add disaster to a database (GET, PUT)
-- [ ] Build a REST like service to get imagery available (GET)
-  
-#####Front End:
-- [ ] Interface to visualize imagery quicklook and metadata.
-- [ ] Interface to add disaster to the database (login required ?).
-- [ ] Connect to other services like [OpenArialMap](http://openaerialmap.org).
-- [ ] Add time.
+##### Front End:
+- [ ] UI to visualize imagery quicklook and metadata.
+- [ ] UI to add disaster to the database.
 
-Ressources
--------
+##### Back End (AWS Lambda based):
+- [ ] Create a database (Geojson) read/write/update functions
+- [ ] Mailing function
+
+##### Things to be added after V1:
+- editing disaster
+- other imagery sources (UrtheCast, Planet, ...)
+
+##### Ressources
 - [Global Disaster Alert and Coordination System](http://www.gdacs.org)
 - [globaldisasterwatch.blogspot.com](http://globaldisasterwatch.blogspot.ca)
 - [Earth Report | Global Disaster Watch](https://elispiritweaver.wordpress.com)

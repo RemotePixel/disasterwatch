@@ -17,6 +17,8 @@ body {
 .content {
     height:100%;
     width: 100%;
+    font-size: 0;
+
 }
 
 .row {
@@ -29,26 +31,30 @@ body {
     position: relative;
     height: 100%;
     width: 60px;
-    float: left;
+    display: inline-block;
     padding: 0;
     margin: 0;
     z-index: 2;
     background-color: #FFF;
+    vertical-align: top;
+    font-size: 2rem
 }
 
 .main-container {
-    display: inline-block;
     position: relative;
+    display: inline-block;
+    vertical-align: top;
 	height: 100%;
     width: calc(100% - 60px);
     z-index: 0;
     overflow: hidden;
-    background-color: #dde3f2;
+    background-color: #c8c8c8;
     -webkit-touch-callout: none;
       -webkit-user-select: none;
          -moz-user-select: none;
           -ms-user-select: none;
               user-select: none;
+    font-size: 2rem
 }
 
 
@@ -355,6 +361,33 @@ body {
     background-color: #000;
     border: 1px solid #000;
 }
+
+.block-control .slider label {
+    display: block;
+    margin: 0 0 10px;
+}
+
+.block-control .slider input {
+    background-color: transparent;
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    margin: 0;
+    cursor: ew-resize;
+}
+
+.block-control .date-button[disabled],
+.block-control input[type="range"]:disabled {
+    background-color: #fff;
+    border-color: #ccc;
+    cursor: not-allowed;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    opacity: .65;
+    pointer-events: none;
+}
+
 /* End Side View */
 
 .map {
@@ -466,8 +499,8 @@ body {
     margin: 10px;
 }
 
-.close-modal {
-    position: absolute;;
+.close-cross {
+    position: absolute;
     width: 20px;
     height: 20px;
     background-color: transparent;
@@ -477,11 +510,11 @@ body {
     z-index: 1052;
 }
 
-.close-modal:hover {
+.close-cross:hover {
     opacity: .3;
 }
 
-.close-modal .lr {
+.close-cross .lr {
     height: 20px;
     width: 3px;
     margin-left: 10px;
@@ -493,7 +526,7 @@ body {
     z-index: 1051;
 }
 
-.close-modal .lr .rl {
+.close-cross .lr .rl {
     height: 20px;
     width: 3px;
     background-color: #000;
@@ -514,6 +547,8 @@ body {
     line-height: 40px;
     font-size: 40px;
     padding: 10px;
+    width: 65px;
+    height: 65px;
     border: solid 1px #000;
     border-radius: 5px;
     cursor: pointer;
@@ -530,7 +565,6 @@ body {
     display: block;
 }
 
-.block-control .date-button[disabled],
 .drawsel[disabled] {
     background-color: #fff;
     border-color: #ccc;
@@ -542,25 +576,566 @@ body {
     pointer-events: none;
 }
 
-
-/*.disasterForm {
-    float: right;
-    position: absolute;
-    top: 0;
-    right: -300px;
-    height: 100%;
-    width: 300px;
-    background-color: #FFF;
-    z-index: 2;
+.linetab {
+    font-size: 12px;
+    color: #201f1f;
+    max-width: 200px;
+    text-align: justify;
 }
 
-.disasterForm.on {
-    float: right;
-    position: relative;
-    height: 100%;
-    width: 300px;
-}*/
+/* ----------- DISASTER FORM ----------- */
 
+.leftblock {
+    display: none;
+    vertical-align: top;
+    width: 0;
+    font-size: 2rem;
+    /*overflow-y: scroll;*/
+}
+
+.leftblock.in {
+    display: inline-block;
+    width: 50%;
+    height: 100%;
+    background-color: #c8c8c8;
+    margin: 0;
+    /*padding: 10px;*/
+}
+
+.leftblock.in ~ .map {
+    width: 50%;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+    font-size: 2rem
+}
+
+.leftblock .main-section{
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    /*overflow-y: : hidden;*/
+}
+
+.leftblock .main-section .disaster-info,
+.leftblock .main-section .disaster-images {
+    position: absolute;
+	top: 50px;
+	left: 0;
+	height: calc(100% - 50px);
+    width: 100%;
+    z-index: 1;
+    opacity: 0;
+    display: inline-block;
+    overflow: scroll;
+    /*transition: all linear 0.1s;*/
+    background-color: #c8c8c8;
+}
+
+.leftblock .main-section .disaster-info{
+    padding: 10px;
+}
+
+.leftblock .close-block {
+    position: absolute;
+    top: 0;
+    right: -40px;
+    width: 40px;
+    height: 50px;
+    color: #FFF;
+    background-color: #000;
+    text-align: center;
+    line-height: 50px;
+    font-size: 15px;
+    z-index: 10000;
+    cursor: pointer;
+}
+.leftblock .close-block i {
+    vertical-align: middle;
+}
+
+.leftblock .close-block:hover{
+    color: #000;
+    background-color: #FFF;
+}
+
+.leftblock .main-section .tab-selector {
+    display: none;
+}
+
+.leftblock .main-section .tab-label {
+	height: 50px;
+    line-height: 50px;
+	background: #FFF;
+	text-align: center;
+	font-size: 18px;
+	color: #000;
+    cursor: pointer;
+}
+
+.leftblock .main-section .tab-label:after {
+	content: "";
+	border-top: 25px solid transparent;
+	border-bottom: 25px solid transparent;
+	border-left: 25px solid #FFF;
+	position: absolute;
+    right: -22px;
+    top: 0;
+	z-index: 1;
+}
+
+.leftblock .main-section .tab-label:before {
+	content: "";
+	border-top: 25px solid transparent;
+	border-bottom: 25px solid transparent;
+	border-left: 25px solid #000;
+	position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.leftblock .main-section .tab-label:first-of-type {
+	border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+.leftblock .main-section .tab-label:first-of-type:before {
+	display: none;
+}
+
+.leftblock .main-section .tab-label:last-of-type {
+	border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+.leftblock .main-section .tab-label:last-of-type:after {
+	display: none;
+}
+
+.leftblock .main-section .tab-label:hover {
+	background: #000;
+    color: #FFF;
+}
+
+.leftblock .main-section .tab-label:hover:after {
+	border-left-color: #000;
+}
+
+.leftblock .main-section input.tab-selector-1[disabled=disabled] ~ .images-label,
+.leftblock .main-section input.tab-selector-2[disabled=disabled] ~ .info-label {
+    background: #c8c5c5;
+    color: #8c8b8b;
+    cursor: not-allowed;
+}
+
+.leftblock .main-section input.tab-selector-1:checked ~ .images-label,
+.leftblock .main-section input.tab-selector-2:checked ~ .info-label {
+    background: #000;
+    color: #FFF;
+}
+
+.leftblock .main-section input.tab-selector-1:checked ~ .images-label:after,
+.leftblock .main-section input.tab-selector-2:checked ~ .info-label:after {
+    border-left-color: #000;
+}
+
+/* End - Sub Menu */
+
+.leftblock .main-section input.tab-selector-1:checked ~ .disaster-images,
+.leftblock .main-section input.tab-selector-2:checked ~ .disaster-info {
+    z-index: 100;
+    opacity: 1;
+    /*transition: all ease-out 0.2s 0.1s;*/
+}
+
+
+.disaster-info .disasterType span {
+    padding: 2px;
+    margin-right: 4px;
+}
+
+.disaster-info .dropdown-menu a .right-block {
+    float: none;
+    display: none;
+    text-align: right;
+    width: 30px;
+}
+
+.disaster-info .dropdown-menu a .right-block-in {
+    float:right;
+}
+
+.disaster-info textarea{
+    max-width: 100%;
+}
+
+.disaster-info .date-input {
+    text-align: center;
+}
+
+.disaster-info .checkbox span{
+    display: block;
+    font-size: 10px;
+    padding-left: 3px;
+    padding-bottom: 5px;
+}
+
+.disaster-info .comments{
+    margin: 0 0 10px;
+}
+
+.disaster-info  .comments p {
+    font-size: 10px;
+    margin: 0 0 3px;
+}
+
+/*
+    Styling satellite imagery Opacity
+    https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+*/
+.disaster-info input[type=range] {
+  -webkit-appearance: none;
+  margin: 18px 0;
+  width: 100%;
+}
+
+.disaster-info input[type=range]:focus {
+  outline: none;
+}
+
+.disaster-info input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: #000000;
+  border-radius: 1.3px;
+}
+
+.disaster-info input[type=range]::-webkit-slider-thumb {
+  border: 1px solid #000000;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -9px;
+}
+
+.disaster-info input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: #000000;
+  border-radius: 1.3px;
+}
+
+.disaster-info input[type=range]::-moz-range-thumb {
+  border: 1px solid #000000;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.disaster-info input[type=range]::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  border-width: 8px 0;
+  color: transparent;
+}
+
+.disaster-info input[type=range]::-ms-fill-lower,
+.disaster-info input[type=range]::-ms-fill-upper {
+  background: #000000;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+
+.disaster-info input[type=range]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.disaster-info input[type=range]:focus::-ms-fill-lower,
+.disaster-info input[type=range]:focus::-ms-fill-upper,
+.disaster-info input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #000000;
+}
+
+/*Styling satellite imagery Opacity*/
+
+/* ----------- DISASTER TYPE ----------- */
+.disaster-info .fire {
+    background-color: rgb(255, 40, 40);
+    color: #FFF;
+    padding: 1px;
+    border-radius: 3px;
+}
+
+.disaster-info .earthquake {
+    background-color: rgb(242, 169, 116);
+    color: #000;
+    padding: 1px;
+    border-radius: 3px;
+}
+
+.disaster-info .tsunami {
+    background-color: rgb(84, 86, 255);
+    color: #000;
+    padding: 1px;
+    border-radius: 3px;
+}
+
+.disaster-info .weather {
+    background-color: rgb(116, 174, 242);
+    color: #000;
+    padding: 1px;
+    border-radius: 3px;
+}
+
+.disaster-info .tornado {
+    background-color: rgb(26, 174, 194);
+    color: #000;
+    padding: 1px;
+    border-radius: 3px;
+}
+
+.disaster-info .volcano {
+    background-color: rgb(233, 0, 0);
+    color: #000;
+    padding: 1px;
+    border-radius: 3px;
+}
+
+.disaster-info .floods {
+    background-color: rgb(7, 39, 77);
+    color: #FFF;
+    padding: 1px;
+    border-radius: 3px;
+}
+
+.disaster-info .sandstorm {
+    background-color: rgb(233, 205, 16);
+    color: #000;
+    padding: 1px;
+    border-radius: 3px;
+}
+
+.disaster-info .landslides {
+    background-color: rgb(168, 92, 22);
+    color: #FFF;
+    padding: 1px;
+    border-radius: 3px;
+}
+
+.disaster-info .manmade {
+    background-color: rgb(0, 0, 0);
+    color: #FFF;
+    padding: 1px;
+    border-radius: 3px;
+}
+
+.disaster-info .other {
+    background-color: rgb(195, 193, 180);
+    color: #000;
+    padding: 1px;
+    border-radius: 3px;
+}
+/* ----------- DISASTER TYPE ----------- */
+/* ----------- DISASTER FORM ----------- */
+
+/* ----------- DISASTER IMAGES ----------- */
+.spin,
+.serv-error,
+.nodata-error {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    font-size: 20px;
+    text-align: center;
+    color: #FFF;
+}
+
+.img-preview {
+    position: relative;
+    min-height: 100%;
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: block;
+    background-color: #000;
+}
+
+.img-preview .item{
+	position: relative;
+	width: 50%;
+    float: left
+}
+
+.img-preview .item:before{
+	content: '';
+	display: block;
+	padding-top: 100%; 	/* initial ratio of 1:1*/
+}
+
+.lazyload {
+    opacity: 0;
+}
+
+.lazyloading {
+    opacity: 1;
+    transition: opacity 300ms;
+    background: #000 url(/img/spinner.gif) no-repeat center;
+}
+
+.lazyloaded {
+    background: none;
+    opacity: 1;
+    transition: opacity 300ms;
+}
+
+.lazy {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+	width: 80%;
+    height: auto;
+}
+
+.lazy2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+	width: 100%;
+    height: auto;
+}
+
+.result-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 5px;
+    width: 100%;
+    color: #FFF;
+    background-color: rgba(0,0,0,0.3);
+    font-size: 14px;
+    font-weight: 400;
+    -o-transition: all .5s ease;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -ms-transition: all .5s ease;
+    transition: all .5s ease;
+}
+
+.result-overlay span {
+    padding-bottom: 5px;
+    display: block;
+}
+
+.result-overlay a,
+.result-overlay div {
+    padding-left: 5px;
+    display: inline-block;
+}
+
+.result-overlay .btnDD{
+    cursor: pointer;
+    padding: 5px;
+}
+/* ----------- DISASTER IMAGES ----------- */
+
+/* ----------- Download Modals ----------- */
+#modalDownloadL8 .modal-body,
+#modalDownloadS2 .modal-body {
+    padding: 15px;
+}
+
+.img-ovr .dropdown{
+    z-index: 10000;
+}
+
+.img-ovr .btn,
+.img-ovr .dropdown .dropdown-menu {
+    font-size: 12px;
+}
+
+.img-ovr .dropdown .dropdown-menu li {
+    cursor: pointer;
+}
+
+.img-ovr .dropdown .dropdown-menu .on {
+    pointer-events: none;
+    cursor: default;
+    color: rgb(217, 26, 26);
+}
+
+.dwn-bands a {
+    display: block;
+    white-space: nowrap;
+    -webkit-touch-callout: none;
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+}
+
+.dwn-bands a:hover{
+    color: #FFF;
+    background-color: #000;
+}
+
+.dwn-bands,
+.img-ovr {
+    padding: 5px;
+}
+
+.img-ovr .overview:before{
+	content: '';
+	display: block;
+	padding-top: 100%; 	/* initial ratio of 1:1*/
+}
+
+.img-ovr .overview img{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: auto;
+}
+
+.img-ovr .overview span{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    color: #000;
+    font-size: 14px;
+    text-align: center;
+}
+/* ----------- Download Modals ----------- */
+
+/* ----------- Responsive ----------- */
 @media(max-width: 767px) {
     .home-butt {
         height: 30px;
@@ -614,5 +1189,33 @@ body {
 
     .text-align-left {
        font-size: 12px;
+    }
+
+    .leftblock.in {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        background-color: #d2cece;
+        margin: 0;
+    }
+
+    .leftblock.in ~ .map {
+        width: 50%;
+        display: none;
+        margin: 0;
+        padding: 0;
+        vertical-align: top;
+        font-size: 2rem
+    }
+
+    .leftblock .close-block {
+        right: 0;
+        width: 20px;
+        height: 50px;
+        font-size: 10px;
+    }
+
+    .leftblock .main-section .tab-label {
+    	font-size: 12px;
     }
 }
