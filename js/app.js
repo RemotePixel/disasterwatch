@@ -321,7 +321,7 @@ function getImages() {
                     scene.row = data.results[i].row.toString();
                     scene.grid = data.results[i].path + '/' + data.results[i].row;
                     scene.usgsURL = data.results[i].cartURL;
-                    scene.browseURL = data.results[i].browseURL;
+                    scene.browseURL = data.results[i].browseURL.replace('http://', "https://");;
                     scene.AWSurl = 'http://landsat-pds.s3.amazonaws.com/L8/' + zeroPad(data.results[i].path, 3) + '/' + zeroPad(data.results[i].row, 3) + '/' + data.results[i].sceneID + '/';
                     results.push(scene);
                 } else {
