@@ -62,18 +62,45 @@ map.on('style.load', function () {
         "filter": ["in", "Name", ""]
     });
 
+    // DisasterDB
+    var geojson = {
+        "type": "FeatureCollection",
+        "features": []
+    };
+    map.addSource('disasterdb', {
+        'type': 'geojson',
+        'data': geojson
+    });
+
+    map.addLayer({
+        "id": "disasterdb-points",
+        "type": "symbol",
+        "source": "disasterdb",
+        "filter": ["==", "$type", "Point"]
+    });
+
+    map.addLayer({
+        "id": "disasterdb-polygon",
+        "type": "fill",
+        "source": "disasterdb",
+        "filter": ["==", "$type", "Polygon"],
+        "paint": {
+            "fill-outline-color": "#da7979",
+            "fill-color": "#ba3e3e",
+            "fill-opacity": 0.4
+        },
+    });
+
+
     // USGS Latest EarthQuakes
     var geojson = {
         "type": "FeatureCollection",
         "features": []
     };
-
     map.addSource('earthquakes', {
         'type': 'geojson',
         'data': geojson
     });
-
-    getEarthquake();
 
     map.addLayer({
         "id": "earthquakes-blur",
@@ -129,7 +156,6 @@ map.on('style.load', function () {
         'type': 'geojson',
         'data': geojson
     });
-    getEONETEvents();
 
     // map.addLayer({
     //     "id": "eonet-point",
@@ -225,6 +251,12 @@ map.on('style.load', function () {
         sliderValue.textContent = e.target.value + '%';
     });
 
+
+    getDisasterdb();
+    getEarthquake();
+    getEONETEvents();
+    //Wrapping in d3-queue - loading app
+
 })
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -287,7 +319,7 @@ function sortScenes(a, b) {
 
 function getImages() {
 
-    $('.spin').removeClass('display-none');
+    $('.disaster-images .spin').removeClass('display-none');
     $('.img-preview').empty();
 
     var features = draw.getAll(),
@@ -389,7 +421,7 @@ function getImages() {
         }
     })
     .always(function () {
-        $('.spin').addClass('display-none');
+        $('.disaster-images .spin').addClass('display-none');
     })
     .fail(function () {
         $('.img-preview').append('<span class="serv-error">Server Error: Please contact <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></span>');
@@ -485,17 +517,45 @@ function seeEvtimages(elem){
 function addDisastTodb() {
     "use strict";
 
+    $('.disaster-info .spin').removeClass('display-none');
+
     //Check for info validity ??N
     //parse form
-    var features = draw.getAll();
+    var features = draw.getAll(),
+        geojson = features.features[0];
 
+    delete geojson['id'];
 
-    // Add a way to update mapbox dataset ??
-    // lambda function or mapbox api ??
+    geojson.properties.uuid = generateUUID();
+    geojson.properties.mailTO = (document.getElementById("mailCheckbox").checked)? document.getElementById("disastermailTo").value : '';
+    geojson.properties.dtype = $('.disasterType').children().map(function(){
+        return this.className
+    }).toArray();
+    geojson.properties.name = document.getElementById("disasterName").value;
+    geojson.properties.place = document.getElementById("disasterPlace").value;
+    geojson.properties.dateStart = document.getElementById("disasterStartDate").value;
+    geojson.properties.dateEnd = (document.getElementById("dateCheckbox").checked)? '' : document.getElementById("disasterEndDate").value;
+    geojson.properties.comments = document.getElementById("disasterComments").value.replace(/\r?\n/g, '<br/>');
 
-    //Get Image over Disaster and Display
-    //Reset Form
+    $.ajax ({
+        url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/add",
+        type: "POST",
+        data: JSON.stringify(geojson),
+        dataType: "json",
+        contentType: "application/json",
+    })
+    .success(function(data){
+        getDisasterdb();
+    })
+    .always(function () {
+        $('.disaster-info .spin').addClass('display-none');
+    })
+    .fail(function () {
+        console.log('fail');
+        // $('.img-preview').append('<span class="serv-error">Server Error: Please contact <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></span>');
+    });
     resetForm();
+    closeleftblock();
 }
 
 function resetForm() {
@@ -577,9 +637,9 @@ $("#dateCheckbox").change(function () {
 $("#mailCheckbox").change(function () {
     "use strict";
     if (this.checked) {
-        $("#InputEmail").attr('disabled', false);
+        $("#disastermailTo").attr('disabled', false);
     } else {
-        $("#InputEmail").attr('disabled', 'disabled');
+        $("#disastermailTo").attr('disabled', 'disabled');
     }
 });
 
@@ -779,6 +839,17 @@ function generateUUID() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+function getDisasterdb() {
+    "use strict";
+    $.getJSON('https://s3-us-west-2.amazonaws.com/remotepixel/data/disasterwatch/disasterdb.geojson')
+        .done(function (data) {
+            console.log(data);
+            map.getSource('disasterdb').setData(data);
+
+            //update list pannel
+        });
+}
+
 function getEarthquake() {
     "use strict";
     var urlusgs = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson';
@@ -989,10 +1060,8 @@ $(document).ready(function () {
         var dateValue = moment(e.date).format('YYYY-MM-DD');
         $("#disasterEndDate").datepicker("setStartDate", dateValue);
         $("#disasterEndDate").datepicker("setDate", dateValue);
-        if (! $("#mailCheckbox").checked) $("#disasterEndDate").attr('disabled', false);
     });
 
-    //Check for daterange ???
     $("#disasterEndDate").datepicker({
         format : 'yyyy-mm-dd',
         autoclose : true,
@@ -1024,7 +1093,7 @@ $(document).ready(function () {
 
     $(".date-button").datepicker('setDate', moment.utc().subtract(1, 'days').format('YYYY-MM-DD'));
 
-    $("#disasterEndDate").attr('disabled', 'disabled');
+    // $("#disasterEndDate").attr('disabled', 'disabled');
     $("#slider").attr('disabled', 'disabled');
 
     $('#modalUnderConstruction').modal();

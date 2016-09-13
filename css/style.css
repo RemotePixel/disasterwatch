@@ -388,6 +388,95 @@ body {
     pointer-events: none;
 }
 
+
+/*
+    Styling satellite imagery Opacity
+    https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+*/
+.block-control  input[type=range] {
+  -webkit-appearance: none;
+  margin: 18px 0;
+  width: 100%;
+}
+
+.block-control input[type=range]:focus {
+  outline: none;
+}
+
+.block-control input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: #000000;
+  border-radius: 1.3px;
+}
+
+.block-control input[type=range]::-webkit-slider-thumb {
+  border: 1px solid #000000;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -9px;
+}
+
+.block-control input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: #000000;
+  border-radius: 1.3px;
+}
+
+.block-control input[type=range]::-moz-range-thumb {
+  border: 1px solid #000000;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.block-control input[type=range]::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  border-width: 8px 0;
+  color: transparent;
+}
+
+.block-control input[type=range]::-ms-fill-lower,
+.block-control input[type=range]::-ms-fill-upper {
+  background: #000000;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+
+.block-control input[type=range]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.block-control input[type=range]:focus::-ms-fill-lower,
+.block-control input[type=range]:focus::-ms-fill-upper,
+.block-control input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #000000;
+}
+
+/*Styling satellite imagery Opacity*/
+
 /* End Side View */
 
 .map {
@@ -662,6 +751,8 @@ body {
     background-color: #FFF;
 }
 
+/* Top Tab Selector */
+
 .leftblock .main-section .tab-selector {
     display: none;
 }
@@ -740,15 +831,13 @@ body {
     border-left-color: #000;
 }
 
-/* End - Sub Menu */
-
 .leftblock .main-section input.tab-selector-1:checked ~ .disaster-images,
 .leftblock .main-section input.tab-selector-2:checked ~ .disaster-info {
     z-index: 100;
     opacity: 1;
-    /*transition: all ease-out 0.2s 0.1s;*/
+    transition: all ease-out 0.2s 0.1s;
 }
-
+/* End - Top Tab Selector */
 
 .disaster-info .disasterType span {
     padding: 2px;
@@ -766,7 +855,7 @@ body {
     float:right;
 }
 
-.disaster-info textarea{
+.disaster-info textarea {
     max-width: 100%;
 }
 
@@ -774,14 +863,14 @@ body {
     text-align: center;
 }
 
-.disaster-info .checkbox span{
+.disaster-info .checkbox span {
     display: block;
     font-size: 10px;
     padding-left: 3px;
     padding-bottom: 5px;
 }
 
-.disaster-info .comments{
+.disaster-info .comments {
     margin: 0 0 10px;
 }
 
@@ -789,94 +878,6 @@ body {
     font-size: 10px;
     margin: 0 0 3px;
 }
-
-/*
-    Styling satellite imagery Opacity
-    https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
-*/
-.disaster-info input[type=range] {
-  -webkit-appearance: none;
-  margin: 18px 0;
-  width: 100%;
-}
-
-.disaster-info input[type=range]:focus {
-  outline: none;
-}
-
-.disaster-info input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 4px;
-  cursor: pointer;
-  animate: 0.2s;
-  background: #000000;
-  border-radius: 1.3px;
-}
-
-.disaster-info input[type=range]::-webkit-slider-thumb {
-  border: 1px solid #000000;
-  height: 22px;
-  width: 22px;
-  border-radius: 50%;
-  background: #ffffff;
-  cursor: pointer;
-  -webkit-appearance: none;
-  margin-top: -9px;
-}
-
-.disaster-info input[type=range]::-moz-range-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  animate: 0.2s;
-  background: #000000;
-  border-radius: 1.3px;
-}
-
-.disaster-info input[type=range]::-moz-range-thumb {
-  border: 1px solid #000000;
-  height: 22px;
-  width: 22px;
-  border-radius: 50%;
-  background: #ffffff;
-  cursor: pointer;
-}
-
-.disaster-info input[type=range]::-ms-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  animate: 0.2s;
-  background: transparent;
-  border-color: transparent;
-  border-width: 8px 0;
-  color: transparent;
-}
-
-.disaster-info input[type=range]::-ms-fill-lower,
-.disaster-info input[type=range]::-ms-fill-upper {
-  background: #000000;
-  border-radius: 2.6px;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-}
-
-.disaster-info input[type=range]::-ms-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 22px;
-  width: 22px;
-  border-radius: 50%;
-  background: #ffffff;
-  cursor: pointer;
-}
-
-.disaster-info input[type=range]:focus::-ms-fill-lower,
-.disaster-info input[type=range]:focus::-ms-fill-upper,
-.disaster-info input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #000000;
-}
-
-/*Styling satellite imagery Opacity*/
 
 /* ----------- DISASTER TYPE ----------- */
 .disaster-info .fire {
