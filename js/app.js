@@ -131,26 +131,36 @@ map.on('style.load', function () {
     });
     getEONETEvents();
 
+    // map.addLayer({
+    //     "id": "eonet-point",
+    //     "type": "circle",
+    //     "source": "eonet",
+    //     "layout": {'visibility' : 'none'},
+    //     "paint": {
+    //         'circle-color': {
+    //             property: 'code',
+    //             stops: [
+    //                 ['1', '#ff0505'],
+    //                 ['10', '#ffffff']
+    //             ]
+    //         },
+    //         'circle-radius': {
+    //             "base": 4,
+    //             "stops": [
+    //                 [0, 4],
+    //                 [8, 4]
+    //             ]
+    //         }
+    //     }
+    // });
+
     map.addLayer({
         "id": "eonet-point",
-        "type": "circle",
+        "type": "symbol",
         "source": "eonet",
-        "layout": {'visibility' : 'none'},
-        "paint": {
-            'circle-color': {
-                property: 'code',
-                stops: [
-                    ['1', '#ff0505'],
-                    ['10', '#ffffff']
-                ]
-            },
-            'circle-radius': {
-                "base": 4,
-                "stops": [
-                    [0, 4],
-                    [8, 4]
-                ]
-            }
+        "layout": {
+            "visibility" : "none",
+            "icon-image": "{icon}-15"
         }
     });
 
@@ -234,9 +244,7 @@ map.on('draw.create', function(e){
     // limit draw Polygons size ??
 
 
-    // $("#modalQuestion").modal()
-
-    openleftBlock()
+    var left = openleftBlock();
 
     if (e.features[0].geometry.type === "Polygon") {
         var bbox = turf.extent(e.features[0].geometry);
@@ -282,24 +290,21 @@ function getImages() {
     $('.spin').removeClass('display-none');
     $('.img-preview').empty();
 
-    var features = draw.getAll();
+    var features = draw.getAll(),
+        sat_api = 'https://api.developmentseed.org/satellites',
+        jsonObj = {
+            intersects: features.features[0],
+            limit: 2000
+        };
 
-    if (features.features[0].geometry.type === "Polygon") {
-        var queryString = 'intersects=' + features.features[0];
-    }
-    if (features.features[0].geometry.type === "LineString") {
-        var queryString = 'intersects=' + features.features[0];
-    }
-    if (features.features[0].geometry.type === "Point") {
-        var queryString = 'contains=' + features.features[0].geometry.coordinates[0].toString() + ',' + features.features[0].geometry.coordinates[1].toString();
-    }
-
-    var sat_api = 'https://api.developmentseed.org/satellites?',
-        query = sat_api + queryString + '&limit=2000',
-        grid = {'landsat': [], 'sentinel': []},
-        results = [];
-
-    $.getJSON(query, function (data) {
+    $.ajax ({
+        url: sat_api,
+        type: "POST",
+        data: JSON.stringify(jsonObj),
+        dataType: "json",
+        contentType: "application/json",
+    })
+    .success(function(data){
         if (data.hasOwnProperty('errorMessage')){
             $('.img-preview').append('<span class="nodata-error">No image found</span>');
             $('.spin').addClass('display-none');
@@ -307,7 +312,8 @@ function getImages() {
         }
         if (data.meta.found !== 0) {
             var i,
-                scene = {};
+                scene = {},
+                results = [];
 
             for (i = 0; i < data.results.length; i += 1) {
                 scene = {};
@@ -388,7 +394,6 @@ function getImages() {
     .fail(function () {
         $('.img-preview').append('<span class="serv-error">Server Error: Please contact <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></span>');
     });
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -600,8 +605,6 @@ $("#eonet-checkbox").change(function () {
     }
 });
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 
 function feeddownloadS2(elem, preview) {
@@ -798,6 +801,16 @@ function getEONETEvents() {
 
             for(var i = 0; i < data.events.length; i++) {
                 var e = data.events[i];
+
+                var iconName = 'marker';
+                switch (e.categories[0].title) {
+                    case 'Volcanoes':
+                        iconName = 'volcano';
+                        break;
+                    default:
+                        iconName = 'marker';
+                }
+
                 if (e.geometries.length > 1) {
                     for(var j = 0; j < e.geometries.length; j++) {
                         var feature = {};
@@ -808,7 +821,8 @@ function getEONETEvents() {
                             'code' : e.categories[0].id,
                             'link': e.link,
                             'sources' : JSON.stringify(e.sources),
-                            'title' : e.title
+                            'title' : e.title,
+                            'icon' : iconName
                         };
                         feature.properties.date =  e.geometries[j].date;
                         feature.geometry = {'type': "Point", 'coordinates': e.geometries[j].coordinates};
@@ -823,7 +837,8 @@ function getEONETEvents() {
                         'code' : e.categories[0].id,
                         'link': e.link,
                         'sources' : JSON.stringify(e.sources),
-                        'title' : e.title
+                        'title' : e.title,
+                        'icon' : iconName
                     };
                     feature.properties.date = e.geometries[0].date;
                     feature.geometry = {'type': "Point", 'coordinates': e.geometries[0].coordinates};
