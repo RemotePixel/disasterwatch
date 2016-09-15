@@ -74,13 +74,23 @@ map.on('style.load', function () {
 
     map.addLayer({
         "id": "disasterdb-points",
-        "type": "symbol",
+        "type": "circle",
         "source": "disasterdb",
-        "filter": ["==", "$type", "Point"]
+        "filter": ["==", "$type", "Point"],
+        "paint": {
+            "circle-color": '#da7979',
+            'circle-radius': {
+                "base": 1.8,
+                'stops': [
+                    [0, 2],
+                    [9, 10],
+                ]
+            },
+        }
     });
 
     map.addLayer({
-        "id": "disasterdb-polygon",
+        "id": "disasterdb-polygons",
         "type": "fill",
         "source": "disasterdb",
         "filter": ["==", "$type", "Polygon"],
@@ -192,7 +202,7 @@ map.on('style.load', function () {
 
     map.on('mousemove', function (e) {
         var mouseRadius = 1;
-        var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["eonet-point", "earthquakes-point"]})[0];
+        var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["eonet-point", "earthquakes-point", "disasterdb-points", "disasterdb-polygons"]})[0];
         if (feature) {
             map.getCanvas().style.cursor = 'pointer';
 
@@ -224,6 +234,7 @@ map.on('style.load', function () {
             if (feature) {
                 var links = '',
                     sources = JSON.parse(feature.properties.sources);
+
                 for(var j = 0; j < sources.length; j++) {
                     links += '<a target="_blank" href="' + sources[j].url + '">' + sources[j].id + '</a> '
                 }
@@ -238,6 +249,30 @@ map.on('style.load', function () {
                                 // '<div class="linetab"><a data-id="' + feature.properties.id + '" class="link" onclick="seeEvtimages(this)">See Images</a></div>')
                     .addTo(map);
             }
+        }
+
+
+        var feature = map.queryRenderedFeatures([[e.point.x-mouseRadius,e.point.y-mouseRadius],[e.point.x+mouseRadius,e.point.y+mouseRadius]], {layers:["disasterdb-points", "disasterdb-polygons"]})[0];
+        if (feature) {
+            var dtype = '',
+                sources = JSON.parse(feature.properties.dtype);
+
+            for(var j = 0; j < sources.length; j++) {
+                dtype += '<span class="' + sources[j] + '">' + sources[j] + '</span> '
+            }
+
+            var popup = new mapboxgl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML('<div class="nom-eq">Name: ' + feature.properties.name + '</div>' +
+                            '<div class="linetab">Type: ' + dtype + '</div>' +
+                            '<div class="linetab">Location: ' + feature.properties.place + '</div>' +
+                            '<div class="linetab">Start Date: ' + feature.properties.dateStart + '</div>' +
+                            '<div class="linetab">End Date: ' + feature.properties.dateEnd + '</div>' +
+                            '<div class="linetab">Comments: ' + feature.properties.comments + '</div>' +
+                            '<div class="linetab"><a onclick="seeEvtDBimages(\'' + feature.properties.uuid + '\')">See Images</a></div>' +
+                            // '<div class="linetab"><a onclick="subscribeEvt(\'' + feature.properties.uuid + '\')">SubScribe</a></div>' +
+                            '<div class="linetab"><a onclick="removeEvt(\'' + feature.properties.uuid + '\')">Remove Event</a> <a onclick="editEvt(\'' + feature.properties.uuid + '\')">Edit Event</a></div>')
+                .addTo(map);
         }
     })
 
@@ -276,7 +311,8 @@ map.on('draw.create', function(e){
     // limit draw Polygons size ??
 
 
-    var left = openleftBlock();
+    openleftBlock();
+    getImages();
 
     if (e.features[0].geometry.type === "Polygon") {
         var bbox = turf.extent(e.features[0].geometry);
@@ -320,6 +356,7 @@ function sortScenes(a, b) {
 function getImages() {
 
     $('.disaster-images .spin').removeClass('display-none');
+    $('.map .spin').removeClass('display-none');
     $('.img-preview').empty();
 
     var features = draw.getAll(),
@@ -422,6 +459,7 @@ function getImages() {
     })
     .always(function () {
         $('.disaster-images .spin').addClass('display-none');
+        $('.map .spin').addClass('display-none');
     })
     .fail(function () {
         $('.img-preview').append('<span class="serv-error">Server Error: Please contact <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></span>');
@@ -454,7 +492,8 @@ function seeEQimages(elem){
             var round = turf.buffer(features.features[0], 100, 'kilometers'),
                 bbox = turf.extent(round);
             map.fitBounds(bbox, {padding: 20});
-            openleftBlock()
+            openleftBlock();
+            getImages();
         });
 }
 
@@ -508,8 +547,38 @@ function seeEvtimages(elem){
                 map.fitBounds(bbox, {padding: 20});
             }
 
-            openleftBlock()
+            openleftBlock();
+            getImages();
         });
+}
+
+function seeEvtDBimages(id) {
+    "use strict";
+    $(".tab-selector-2").attr('disabled', true);
+    var features = map.getSource("disasterdb")._data.features.filter(function(e){
+        return (e.properties.uuid === id);
+    });
+
+    features[0].geometry.coordinates = features[0].geometry.coordinates.map(function(e){
+    	return parseFloat(e.toFixed(5));
+    });
+
+    var featureId = draw.add(features[0]),
+        features = draw.getAll();
+
+    if (features.features[0].geometry.type === "LineString") {
+        var bbox = turf.extent(features.features[0].geometry);
+        map.fitBounds(bbox, {padding: 20});
+    }
+
+    if (features.features[0].geometry.type === "Point") {
+        var round = turf.buffer(features.features[0], 100, 'kilometers'),
+            bbox = turf.extent(round);
+        map.fitBounds(bbox, {padding: 20});
+    }
+
+    openleftBlock();
+    getImages();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -518,6 +587,7 @@ function addDisastTodb() {
     "use strict";
 
     $('.disaster-info .spin').removeClass('display-none');
+    $('.map .spin').removeClass('display-none');
 
     //Check for info validity ??N
     //parse form
@@ -549,6 +619,7 @@ function addDisastTodb() {
     })
     .always(function () {
         $('.disaster-info .spin').addClass('display-none');
+        $('.map .spin').addClass('display-none');
     })
     .fail(function () {
         console.log('fail');
@@ -594,7 +665,34 @@ function openleftBlock() {
     });
 
     map.resize();
-    getImages();
+    // getImages();
+}
+
+function editEvt(id) {
+    openleftBlock();
+
+    $(".tab-selector-2").prop( "checked", true);
+    $(".tab-selector-1").attr('disabled', true);
+
+    //fill
+    var features = map.getSource("disasterdb")._data.features.filter(function(e){
+        return (e.properties.uuid === id);
+    });
+
+    // geojson.properties.dtype = $('.disasterType').children().map(function(){
+        // return this.className
+    // }).toArray();
+
+    document.getElementById("disasterName").value = features[0].properties.name;
+    document.getElementById("disasterPlace").value = features[0].properties.place;
+    $("#disasterStartDate").datepicker("setDate", features[0].properties.dateStart);
+    if (features[0].properties.dateEnd === ''){
+        document.getElementById("dateCheckbox").checked = true;
+    } else {
+        $("#disasterEndDate").datepicker("setDate", features[0].dateEnd);
+    }
+
+    document.getElementById("disasterComments").value = features[0].properties.comments.replace('<br/>', /\r?\n/g);
 }
 
 function closeleftblock() {
@@ -602,7 +700,11 @@ function closeleftblock() {
         $("button[dwmenu]").each(function () {
             $(this).attr('disabled', false);
         });
+
         $(".tab-selector-1").prop( "checked", true );
+        $(".tab-selector-1").attr('disabled', false);
+        $(".tab-selector-2").attr('disabled', false);
+
         $('.img-preview').empty();
         resetForm();
         map.resize();
@@ -838,15 +940,73 @@ function generateUUID() {
     return uuid;
 }
 
+function mapFlyToDisaster(id) {
+    "use strict";
+
+    // var features = map.querySourceFeatures("disasterdb", {filter: ["==", "uuid", id]});
+    var features = map.getSource("disasterdb")._data.features.filter(function(e){
+        return (e.properties.uuid === id);
+    });
+
+    if (features){
+        if (features[0].geometry.type === "Polygon") {
+            var bbox = turf.extent(features[0].geometry);
+            map.fitBounds(bbox, {padding: 20});
+        }
+
+        if (features[0].geometry.type === "Point") {
+            var round = turf.buffer(features[0], 100, 'kilometers'),
+                bbox = turf.extent(round);
+            map.fitBounds(bbox, {padding: 20});
+        }
+    }
+}
+
+function removeEvt(id) {
+    "use strict";
+
+    $('.map .spin').removeClass('display-none');
+    $.ajax ({
+        url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/remove",
+        type: "POST",
+        data: JSON.stringify({"uuid": id}),
+        dataType: "json",
+        contentType: "application/json",
+    })
+    .success(function(data){
+        getDisasterdb();
+    })
+    .always(function () {
+        $('.map .spin').addClass('display-none');
+    })
+    .fail(function () {
+        console.log('fail');
+        // $('.img-preview').append('<span class="serv-error">Server Error: Please contact <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></span>');
+    });
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 function getDisasterdb() {
     "use strict";
     $.getJSON('https://s3-us-west-2.amazonaws.com/remotepixel/data/disasterwatch/disasterdb.geojson')
         .done(function (data) {
-            console.log(data);
+
             map.getSource('disasterdb').setData(data);
 
-            //update list pannel
+            $('.list-disasters').scrollTop(0);
+            $('.list-disasters').empty();
+            for(var i = 0; i < data.features.length; i++) {
+                $('.list-disasters').append(
+                    '<div class="list-element" target="_blank" onclick="mapFlyToDisaster(\'' + data.features[i].properties.uuid + '\')">'+
+                        '<div class="col">' +
+                            '<div class="disaster-descr"><span class="dtype ' + data.features[i].properties.dtype[0] + '">' + data.features[i].properties.dtype[0].slice(0,1) + '</span></div>' +
+                            '<div class="disaster-descr">'+
+                                '<span class="dtitle">'+ data.features[i].properties.name +'</span>' +
+                                '<span class="dplace">' + data.features[i].properties.place + '</span>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>');
+            }
         });
 }
 

@@ -25,6 +25,9 @@ body {
     margin: 0;
     padding: 0;
 }
+.black {
+    color: #000;
+}
 
 /* NavBar & Buttons */
 .menu-bar-left {
@@ -475,6 +478,58 @@ body {
   background: #000000;
 }
 
+.list-disasters {
+    text-align: left;
+    color: #000;
+}
+
+.list-disasters .list-element .col{
+	border-top: 1px solid #bfbfbf;
+}
+
+.list-disasters .list-element .col {
+    color: #000;
+    cursor: pointer;
+}
+
+.list-disasters .list-element .col:hover {
+	background-color: rgb(88, 84, 84);
+    background-color: rgba(88, 84, 84, 0.2);
+}
+
+.disaster-descr {
+    font-weight: 100;
+    display: inline-block;
+    padding: 3px;
+    vertical-align: middle;
+}
+
+.disaster-descr .dtype{
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    vertical-align: middle;
+    text-transform: capitalize;
+    font-size: 20px;
+	font-weight: 300;
+}
+
+.disaster-descr .dtitle {
+    display: block;
+	color: #636262;
+	line-height: 18px;
+	font-size: 12px;}
+
+.disaster-descr .dplace {
+    display: block;
+    font-size: 8px;
+}
+
+
+
 /*Styling satellite imagery Opacity*/
 
 /* End Side View */
@@ -524,10 +579,6 @@ body {
     font-size: 16px;
 }
 
-.leaflet-control-attribution  a{
-    color: #000;
-}
-
 .checkbox-slider-primary input  ~ span {
     background-color: #000;
     border-color: #000;
@@ -574,6 +625,13 @@ body {
 .green {
     background-color: #7eff97;
     border-color: #7eff97;
+}
+
+.linetab {
+    font-size: 12px;
+    color: #201f1f;
+    max-width: 200px;
+    text-align: justify;
 }
 
 .button-add {
@@ -663,13 +721,6 @@ body {
     box-shadow: none;
     opacity: .65;
     pointer-events: none;
-}
-
-.linetab {
-    font-size: 12px;
-    color: #201f1f;
-    max-width: 200px;
-    text-align: justify;
 }
 
 /* ----------- DISASTER FORM ----------- */
@@ -880,77 +931,62 @@ body {
 }
 
 /* ----------- DISASTER TYPE ----------- */
-.disaster-info .fire {
+.disaster-info .dropdown-menu span {
+    padding: 1px;
+    border-radius: 3px;
+}
+
+.fire {
     background-color: rgb(255, 40, 40);
     color: #FFF;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .earthquake {
+.earthquake {
     background-color: rgb(242, 169, 116);
     color: #000;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .tsunami {
+.tsunami {
     background-color: rgb(84, 86, 255);
     color: #000;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .weather {
+.weather {
     background-color: rgb(116, 174, 242);
     color: #000;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .tornado {
+.tornado {
     background-color: rgb(26, 174, 194);
     color: #000;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .volcano {
+.volcano {
     background-color: rgb(233, 0, 0);
     color: #000;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .floods {
+.floods {
     background-color: rgb(7, 39, 77);
     color: #FFF;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .sandstorm {
+.sandstorm {
     background-color: rgb(233, 205, 16);
     color: #000;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .landslides {
+.landslides {
     background-color: rgb(168, 92, 22);
     color: #FFF;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .manmade {
+.manmade {
     background-color: rgb(0, 0, 0);
     color: #FFF;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .other {
+.other {
     background-color: rgb(195, 193, 180);
     color: #000;
     padding: 1px;
@@ -971,6 +1007,7 @@ body {
     font-size: 20px;
     text-align: center;
     color: #FFF;
+    z-index: 10000;
 }
 
 .img-preview {

@@ -18,8 +18,8 @@
 
 	<link href="/css/checkbox-slider.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
-	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.css' rel='stylesheet' />
-	<link rel="stylesheet" type="text/css" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.11.15/mapbox-gl-draw.css" />
+	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.css' rel='stylesheet' />
+	<link rel="stylesheet" type="text/css" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.11.18/mapbox-gl-draw.css" />
 
 	<!-- Custom Fonts -->
 	<link href="/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -109,17 +109,17 @@
 								<div class="dropdown">
 									<span class="form-control dropdown-toggle disasterType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></span>
 									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-										<li><a onclick="addType(this)"><span class="fire">WildFires</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="earthquake">EarthQuakes</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="tsunami">Tsunami</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="weather">Weather</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="tornado">Tornado</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="volcano">Volcanoes</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="floods">Floods</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="landslides">Landslides</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="sandstorm">Sand Storm</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="manmade">ManMade</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="other">Other</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="fire">fire</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="earthquake">earthquake</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="tsunami">tsunami</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="weather">weather</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="tornado">tornado</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="volcano">volcano</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="floods">floods</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="landslide">landslide</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="sandstorm">sandstorm</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="manmade">manmade</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span class="other">other</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 									</ul>
 								</div>
 							</div>
@@ -180,11 +180,13 @@
 				</div>
 			</div><!--
 			WhiteSpace
-		--><div id="map" class="map"></div>
+		--><div id="map" class="map">
+				<span class="spin display-none"><i class="fa fa-spinner fa-spin black"></i></span>
+			</div>
 
-			<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
 
-            <div id="SideViewCtrl" class="side-view">
+
+			<div id="SideViewCtrl" class="side-view">
 				<div id="basemaps-panel" class="navpanel side-view-container">
 
                     <button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('basemaps')">
@@ -297,7 +299,7 @@
 					</button>
 					<div class="title">Disasters</div>
 
-					<div class="side-view-content">
+					<div class="side-view-content list-disasters">
 
 					</div>
 				</div>
@@ -493,8 +495,8 @@
 
     <!--  mapbox-->
 	<script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
-	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.js'></script>
-	<script type="text/javascript" src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.11.15/mapbox-gl-draw.js"></script>
+	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.js'></script>
+	<script type="text/javascript" src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.11.18/mapbox-gl-draw.js"></script>
 
 	<script src='/js/app.js'></script>
 </body>
