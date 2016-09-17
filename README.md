@@ -37,11 +37,11 @@ To Do
 -------
 
 ##### Front End:
-- [*] UI to visualize imagery quicklook and metadata.
-- [*] UI to add disaster to the database.
+- [x] UI to visualize imagery quicklook and metadata.
+- [x] UI to add disaster to the database.
 
 ##### Back End (AWS Lambda based):
-- [*] Create a database (Geojson) read/write/update functions
+- [x] Create a database (Geojson) read/write/update functions
 - [ ] Mailing function
 
 ##### Things to be added after V1:
