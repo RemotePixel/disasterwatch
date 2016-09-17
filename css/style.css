@@ -25,6 +25,9 @@ body {
     margin: 0;
     padding: 0;
 }
+.black {
+    color: #000;
+}
 
 /* NavBar & Buttons */
 .menu-bar-left {
@@ -388,6 +391,147 @@ body {
     pointer-events: none;
 }
 
+
+/*
+    Styling satellite imagery Opacity
+    https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+*/
+.block-control  input[type=range] {
+  -webkit-appearance: none;
+  margin: 18px 0;
+  width: 100%;
+}
+
+.block-control input[type=range]:focus {
+  outline: none;
+}
+
+.block-control input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: #000000;
+  border-radius: 1.3px;
+}
+
+.block-control input[type=range]::-webkit-slider-thumb {
+  border: 1px solid #000000;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -9px;
+}
+
+.block-control input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: #000000;
+  border-radius: 1.3px;
+}
+
+.block-control input[type=range]::-moz-range-thumb {
+  border: 1px solid #000000;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.block-control input[type=range]::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  border-width: 8px 0;
+  color: transparent;
+}
+
+.block-control input[type=range]::-ms-fill-lower,
+.block-control input[type=range]::-ms-fill-upper {
+  background: #000000;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+
+.block-control input[type=range]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.block-control input[type=range]:focus::-ms-fill-lower,
+.block-control input[type=range]:focus::-ms-fill-upper,
+.block-control input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #000000;
+}
+
+.list-disasters {
+    text-align: left;
+    color: #000;
+}
+
+.list-disasters .list-element .col{
+	border-top: 1px solid #bfbfbf;
+}
+
+.list-disasters .list-element .col {
+    color: #000;
+    cursor: pointer;
+}
+
+.list-disasters .list-element .col:hover {
+	background-color: rgb(88, 84, 84);
+    background-color: rgba(88, 84, 84, 0.2);
+}
+
+.disaster-descr {
+    font-weight: 100;
+    display: inline-block;
+    padding: 3px;
+    vertical-align: middle;
+}
+
+.disaster-descr .dtype{
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    vertical-align: middle;
+    text-transform: capitalize;
+    font-size: 20px;
+	font-weight: 300;
+}
+
+.disaster-descr .dtitle {
+    display: block;
+	color: #636262;
+	line-height: 18px;
+	font-size: 12px;}
+
+.disaster-descr .dplace {
+    display: block;
+    font-size: 8px;
+}
+
+
+
+/*Styling satellite imagery Opacity*/
+
 /* End Side View */
 
 .map {
@@ -433,10 +577,6 @@ body {
     margin: 0 0 5px;
     letter-spacing: 1px;
     font-size: 16px;
-}
-
-.leaflet-control-attribution  a{
-    color: #000;
 }
 
 .checkbox-slider-primary input  ~ span {
@@ -485,6 +625,22 @@ body {
 .green {
     background-color: #7eff97;
     border-color: #7eff97;
+}
+
+.linetab {
+    font-size: 12px;
+    color: #201f1f;
+    max-width: 400px;
+    word-wrap:break-word;
+    text-align: justify;
+}
+
+.linetab a {
+    cursor: pointer;
+}
+
+.bold {
+    font-weight: bold;
 }
 
 .button-add {
@@ -576,13 +732,6 @@ body {
     pointer-events: none;
 }
 
-.linetab {
-    font-size: 12px;
-    color: #201f1f;
-    max-width: 200px;
-    text-align: justify;
-}
-
 /* ----------- DISASTER FORM ----------- */
 
 .leftblock {
@@ -635,6 +784,34 @@ body {
     background-color: #c8c8c8;
 }
 
+.leftblock .main-section input.tab-selector-1.out,
+.leftblock .main-section input.tab-selector-2.out{
+    display: none;
+}
+
+.leftblock .main-section input.tab-selector-1.out ~ .disaster-images,
+.leftblock .main-section input.tab-selector-2.out ~ .disaster-info {
+    position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+}
+
+.leftblock .main-section input.tab-selector-2.out ~ .disaster-info #addEVT,
+.leftblock .main-section input.tab-selector-2 ~ .disaster-info #updateEVT {
+    display: none;
+}
+
+.leftblock .main-section input.tab-selector-2 ~ .disaster-info #addEVT,
+.leftblock .main-section input.tab-selector-2.out ~ .disaster-info #updateEVT {
+    display: block;
+}
+
+.leftblock .main-section input.tab-selector-1.out ~ .images-label,
+.leftblock .main-section input.tab-selector-2.out ~ .info-label {
+    display: none
+}
+
 .leftblock .main-section .disaster-info{
     padding: 10px;
 }
@@ -661,6 +838,8 @@ body {
     color: #000;
     background-color: #FFF;
 }
+
+/* Top Tab Selector */
 
 .leftblock .main-section .tab-selector {
     display: none;
@@ -740,19 +919,21 @@ body {
     border-left-color: #000;
 }
 
-/* End - Sub Menu */
-
 .leftblock .main-section input.tab-selector-1:checked ~ .disaster-images,
 .leftblock .main-section input.tab-selector-2:checked ~ .disaster-info {
     z-index: 100;
     opacity: 1;
-    /*transition: all ease-out 0.2s 0.1s;*/
+    transition: all ease-out 0.2s 0.1s;
 }
-
+/* End - Top Tab Selector */
 
 .disaster-info .disasterType span {
     padding: 2px;
     margin-right: 4px;
+}
+
+.disaster-info .dropdown-menu a {
+    cursor: pointer;
 }
 
 .disaster-info .dropdown-menu a .right-block {
@@ -766,7 +947,7 @@ body {
     float:right;
 }
 
-.disaster-info textarea{
+.disaster-info textarea {
     max-width: 100%;
 }
 
@@ -774,14 +955,21 @@ body {
     text-align: center;
 }
 
-.disaster-info .checkbox span{
+.disaster-info .uuid {
+    display: block;
+    font-size: 10px;
+    padding-left: 3px;
+    padding-bottom: 10px;
+}
+
+.disaster-info .checkbox span {
     display: block;
     font-size: 10px;
     padding-left: 3px;
     padding-bottom: 5px;
 }
 
-.disaster-info .comments{
+.disaster-info .comments {
     margin: 0 0 10px;
 }
 
@@ -790,171 +978,67 @@ body {
     margin: 0 0 3px;
 }
 
-/*
-    Styling satellite imagery Opacity
-    https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
-*/
-.disaster-info input[type=range] {
-  -webkit-appearance: none;
-  margin: 18px 0;
-  width: 100%;
-}
-
-.disaster-info input[type=range]:focus {
-  outline: none;
-}
-
-.disaster-info input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 4px;
-  cursor: pointer;
-  animate: 0.2s;
-  background: #000000;
-  border-radius: 1.3px;
-}
-
-.disaster-info input[type=range]::-webkit-slider-thumb {
-  border: 1px solid #000000;
-  height: 22px;
-  width: 22px;
-  border-radius: 50%;
-  background: #ffffff;
-  cursor: pointer;
-  -webkit-appearance: none;
-  margin-top: -9px;
-}
-
-.disaster-info input[type=range]::-moz-range-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  animate: 0.2s;
-  background: #000000;
-  border-radius: 1.3px;
-}
-
-.disaster-info input[type=range]::-moz-range-thumb {
-  border: 1px solid #000000;
-  height: 22px;
-  width: 22px;
-  border-radius: 50%;
-  background: #ffffff;
-  cursor: pointer;
-}
-
-.disaster-info input[type=range]::-ms-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  animate: 0.2s;
-  background: transparent;
-  border-color: transparent;
-  border-width: 8px 0;
-  color: transparent;
-}
-
-.disaster-info input[type=range]::-ms-fill-lower,
-.disaster-info input[type=range]::-ms-fill-upper {
-  background: #000000;
-  border-radius: 2.6px;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-}
-
-.disaster-info input[type=range]::-ms-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 22px;
-  width: 22px;
-  border-radius: 50%;
-  background: #ffffff;
-  cursor: pointer;
-}
-
-.disaster-info input[type=range]:focus::-ms-fill-lower,
-.disaster-info input[type=range]:focus::-ms-fill-upper,
-.disaster-info input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #000000;
-}
-
-/*Styling satellite imagery Opacity*/
-
 /* ----------- DISASTER TYPE ----------- */
-.disaster-info .fire {
+.disasterType span{
+    padding: 1px;
+    border-radius: 3px;
+}
+
+.fire {
     background-color: rgb(255, 40, 40);
     color: #FFF;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .earthquake {
+.earthquake {
     background-color: rgb(242, 169, 116);
     color: #000;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .tsunami {
+.tsunami {
     background-color: rgb(84, 86, 255);
     color: #000;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .weather {
+.weather {
     background-color: rgb(116, 174, 242);
     color: #000;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .tornado {
+.tornado {
     background-color: rgb(26, 174, 194);
     color: #000;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .volcano {
+.volcano {
     background-color: rgb(233, 0, 0);
     color: #000;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .floods {
+.floods {
     background-color: rgb(7, 39, 77);
     color: #FFF;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .sandstorm {
+.sandstorm {
     background-color: rgb(233, 205, 16);
     color: #000;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .landslides {
+.landslide {
     background-color: rgb(168, 92, 22);
     color: #FFF;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .manmade {
+.manmade {
     background-color: rgb(0, 0, 0);
     color: #FFF;
-    padding: 1px;
-    border-radius: 3px;
 }
 
-.disaster-info .other {
+.other {
     background-color: rgb(195, 193, 180);
     color: #000;
-    padding: 1px;
-    border-radius: 3px;
 }
+
 /* ----------- DISASTER TYPE ----------- */
 /* ----------- DISASTER FORM ----------- */
 
@@ -970,6 +1054,7 @@ body {
     font-size: 20px;
     text-align: center;
     color: #FFF;
+    z-index: 10000;
 }
 
 .img-preview {
@@ -1210,7 +1295,7 @@ body {
 
     .leftblock .close-block {
         right: 0;
-        width: 20px;
+        width: 30px;
         height: 50px;
         font-size: 10px;
     }
