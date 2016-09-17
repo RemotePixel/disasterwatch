@@ -292,6 +292,19 @@ map.on('draw.selectionchange', function (e) {
     }
 });
 
+// map.on('draw.update', function () {
+//     "use strict";
+//     getImages();
+// });
+//
+// // HACK
+// // if user unselect the draw
+// // this is not user friendly
+// // but mapbox-gl is listening only on map clicks
+// $(document).on("click", ".disaster-info", function() {
+//     $("#map").click();
+// });
+
 map.on('draw.create', function (e) {
     "use strict";
 

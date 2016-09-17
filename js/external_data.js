@@ -101,6 +101,8 @@ function getImages() {
     var sat_api = 'https://api.developmentseed.org/satellites',
         jsonObj = {
             intersects: features.features[0],
+            date_from: "2016-01-01",
+            date_to: moment.utc().format('YYYY-MM-DD'),
             limit: 2000
         };
 

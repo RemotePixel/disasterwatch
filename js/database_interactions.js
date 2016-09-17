@@ -144,6 +144,8 @@ function seeEvtDBimages(id) {
     "use strict";
 
     draw.deleteAll();
+    openleftBlock();
+
     $(".tab-selector-1").addClass('out');
     $(".tab-selector-2").addClass('out');
 
@@ -168,7 +170,6 @@ function seeEvtDBimages(id) {
         map.fitBounds(bbox, {padding: 20});
     }
 
-    openleftBlock();
     getImages();
 }
 
@@ -190,6 +191,17 @@ function editEvt(id) {
         return (e.properties.uuid === id);
     }),
         featureId = draw.add(features[0]);
+
+    if (features[0].geometry.type === "LineString") {
+        var bbox = turf.extent(features[0].geometry);
+        map.fitBounds(bbox, {padding: 20});
+    }
+
+    if (features[0].geometry.type === "Point") {
+        var round = turf.buffer(features[0], 100, 'kilometers'),
+            bbox = turf.extent(round);
+        map.fitBounds(bbox, {padding: 20});
+    }
 
     document.getElementById("uuid").textContent = 'UUID: ' + id;
 
