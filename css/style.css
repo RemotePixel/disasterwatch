@@ -630,8 +630,17 @@ body {
 .linetab {
     font-size: 12px;
     color: #201f1f;
-    max-width: 200px;
+    max-width: 400px;
+    word-wrap:break-word;
     text-align: justify;
+}
+
+.linetab a {
+    cursor: pointer;
+}
+
+.bold {
+    font-weight: bold;
 }
 
 .button-add {
@@ -775,6 +784,34 @@ body {
     background-color: #c8c8c8;
 }
 
+.leftblock .main-section input.tab-selector-1.out,
+.leftblock .main-section input.tab-selector-2.out{
+    display: none;
+}
+
+.leftblock .main-section input.tab-selector-1.out ~ .disaster-images,
+.leftblock .main-section input.tab-selector-2.out ~ .disaster-info {
+    position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+}
+
+.leftblock .main-section input.tab-selector-2.out ~ .disaster-info #addEVT,
+.leftblock .main-section input.tab-selector-2 ~ .disaster-info #updateEVT {
+    display: none;
+}
+
+.leftblock .main-section input.tab-selector-2 ~ .disaster-info #addEVT,
+.leftblock .main-section input.tab-selector-2.out ~ .disaster-info #updateEVT {
+    display: block;
+}
+
+.leftblock .main-section input.tab-selector-1.out ~ .images-label,
+.leftblock .main-section input.tab-selector-2.out ~ .info-label {
+    display: none
+}
+
 .leftblock .main-section .disaster-info{
     padding: 10px;
 }
@@ -895,6 +932,10 @@ body {
     margin-right: 4px;
 }
 
+.disaster-info .dropdown-menu a {
+    cursor: pointer;
+}
+
 .disaster-info .dropdown-menu a .right-block {
     float: none;
     display: none;
@@ -914,6 +955,13 @@ body {
     text-align: center;
 }
 
+.disaster-info .uuid {
+    display: block;
+    font-size: 10px;
+    padding-left: 3px;
+    padding-bottom: 10px;
+}
+
 .disaster-info .checkbox span {
     display: block;
     font-size: 10px;
@@ -931,7 +979,7 @@ body {
 }
 
 /* ----------- DISASTER TYPE ----------- */
-.disaster-info .dropdown-menu span {
+.disasterType span{
     padding: 1px;
     border-radius: 3px;
 }
@@ -976,7 +1024,7 @@ body {
     color: #000;
 }
 
-.landslides {
+.landslide {
     background-color: rgb(168, 92, 22);
     color: #FFF;
 }
@@ -989,9 +1037,8 @@ body {
 .other {
     background-color: rgb(195, 193, 180);
     color: #000;
-    padding: 1px;
-    border-radius: 3px;
 }
+
 /* ----------- DISASTER TYPE ----------- */
 /* ----------- DISASTER FORM ----------- */
 
@@ -1248,7 +1295,7 @@ body {
 
     .leftblock .close-block {
         right: 0;
-        width: 20px;
+        width: 30px;
         height: 50px;
         font-size: 10px;
     }
