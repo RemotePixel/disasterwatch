@@ -212,6 +212,11 @@ function seeEQimages(urlusgs){
     $('.map .spin').removeClass('display-none');
 
     draw.deleteAll();
+
+    if (draw.getMode() !== 'static'){
+        draw.changeMode('static');
+    }
+
     $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + urlusgs)
         .done(function (data) {
             var featureId = draw.add(data.geometry),
@@ -236,6 +241,9 @@ function seeEONETimages(id){
     $('.map .spin').removeClass('display-none');
 
     draw.deleteAll();
+    if (draw.getMode() !== 'static'){
+        draw.changeMode('static');
+    }
     var url = 'http://eonet.sci.gsfc.nasa.gov/api/v2.1/events/' + id;
 
     $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + url)

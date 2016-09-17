@@ -147,6 +147,10 @@ function seeEvtDBimages(id) {
     $(".tab-selector-1").addClass('out');
     $(".tab-selector-2").addClass('out');
 
+    if (draw.getMode() !== 'static'){
+        draw.changeMode('static');
+    }
+
     var features = map.getSource("disasterdb")._data.features.filter(function(e){
         return (e.properties.uuid === id);
     }),
@@ -166,6 +170,44 @@ function seeEvtDBimages(id) {
 
     openleftBlock();
     getImages();
+}
+
+
+function editEvt(id) {
+    openleftBlock();
+    closePopup();
+
+    draw.deleteAll();
+    if (draw.getMode() !== 'simple_select'){
+        draw.changeMode('simple_select');
+    }
+    $(".tab-selector-2").prop( "checked", true);
+    $(".tab-selector-1").addClass('out');
+    $(".tab-selector-2").addClass('out');
+
+    //fill
+    var features = map.getSource("disasterdb")._data.features.filter(function(e){
+        return (e.properties.uuid === id);
+    }),
+        featureId = draw.add(features[0]);
+
+    document.getElementById("uuid").textContent = 'UUID: ' + id;
+
+    features[0].properties.dtype.forEach(function(e){
+        addType(document.getElementById('dropdown-menu').getElementsByClassName(e)[0].parentElement);
+    })
+
+    document.getElementById("disasterName").value = features[0].properties.name;
+    document.getElementById("disasterPlace").value = features[0].properties.place;
+
+    $("#disasterStartDate").datepicker("setDate", features[0].properties.dateStart);
+    if (features[0].properties.dateEnd === ''){
+        $("#dateCheckbox").prop('checked', true).change();
+    } else {
+        $("#disasterEndDate").datepicker("setDate", features[0].properties.dateEnd);
+    }
+
+    document.getElementById("disasterComments").value = features[0].properties.comments.replace('<br/>', "\n");
 }
 
 function mapFlyToDisaster(id) {

@@ -296,7 +296,6 @@ map.on('draw.create', function (e) {
     "use strict";
 
     // limit draw Polygons size ??
-
     openleftBlock();
     getImages();
 
@@ -378,6 +377,10 @@ function drawOnMap(type) {
     "use strict";
 
     draw.deleteAll();
+
+    if (draw.getMode() !== 'simple_select'){
+        draw.changeMode("simple_select");
+    }
 
     switch (type) {
     case 'point':
