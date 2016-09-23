@@ -980,7 +980,7 @@ body {
 
 /* ----------- DISASTER TYPE ----------- */
 .disasterType span{
-    padding: 1px;
+    padding: 1px 3px;
     border-radius: 3px;
 }
 
@@ -1034,7 +1034,8 @@ body {
     color: #FFF;
 }
 
-.other {
+.other,
+.unclassified {
     background-color: rgb(195, 193, 180);
     color: #000;
 }

@@ -6,18 +6,18 @@
 
 function getDisasterdb() {
     "use strict";
-    $.getJSON('https://s3-us-west-2.amazonaws.com/remotepixel/data/disasterwatch/disasterdb.geojson')
-        .done(function (data) {
 
+    $.get("https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/get")
+        .done(function(data){
             map.getSource('disasterdb').setData(data);
-
             $('.list-disasters').scrollTop(0);
             $('.list-disasters').empty();
             for(var i = 0; i < data.features.length; i++) {
+                var disasterType = (data.features[i].properties.dtype.length !== 0) ? data.features[i].properties.dtype[0] : 'unclassified';
                 $('.list-disasters').append(
                     '<div class="list-element" target="_blank" onclick="mapFlyToDisaster(\'' + data.features[i].properties.uuid + '\')">'+
                         '<div class="col">' +
-                            '<div class="disaster-descr"><span class="dtype ' + data.features[i].properties.dtype[0] + '">' + data.features[i].properties.dtype[0].slice(0,1) + '</span></div>' +
+                            '<div class="disaster-descr"><span class="dtype ' + disasterType + '">' + disasterType.slice(0,1) + '</span></div>' +
                             '<div class="disaster-descr">'+
                                 '<span class="dtitle">'+ data.features[i].properties.name +'</span>' +
                                 '<span class="dplace">' + data.features[i].properties.place + '</span>' +
@@ -26,6 +26,27 @@ function getDisasterdb() {
                     '</div>');
             }
         });
+
+    // $.getJSON('https://s3-us-west-2.amazonaws.com/remotepixel/data/disasterwatch/disasterdb.geojson')
+    //     .done(function (data) {
+    //
+    //         map.getSource('disasterdb').setData(data);
+    //
+    //         $('.list-disasters').scrollTop(0);
+    //         $('.list-disasters').empty();
+    //         for(var i = 0; i < data.features.length; i++) {
+    //             $('.list-disasters').append(
+    //                 '<div class="list-element" target="_blank" onclick="mapFlyToDisaster(\'' + data.features[i].properties.uuid + '\')">'+
+    //                     '<div class="col">' +
+    //                         '<div class="disaster-descr"><span class="dtype ' + data.features[i].properties.dtype[0] + '">' + data.features[i].properties.dtype[0].slice(0,1) + '</span></div>' +
+    //                         '<div class="disaster-descr">'+
+    //                             '<span class="dtitle">'+ data.features[i].properties.name +'</span>' +
+    //                             '<span class="dplace">' + data.features[i].properties.place + '</span>' +
+    //                         '</div>' +
+    //                     '</div>' +
+    //                 '</div>');
+    //         }
+    //     });
 }
 
 

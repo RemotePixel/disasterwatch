@@ -240,10 +240,14 @@ map.on('style.load', function () {
 
         if (feature) {
             var dtype = '',
-                sources = JSON.parse(feature.properties.dtype);
+                disasterType = JSON.parse(feature.properties.dtype);
 
-            for (var j = 0; j < sources.length; j++) {
-                dtype += '<span class="' + sources[j] + '">' + sources[j] + '</span> '
+            for (var j = 0; j < disasterType.length; j++) {
+                dtype += '<span class="' + disasterType[j] + '">' + disasterType[j] + '</span> ';
+            }
+
+            if (disasterType.length === 0) {
+                dtype = '<span class="unclassified">unclassified</span>';
             }
 
             var popup = new mapboxgl.Popup()
