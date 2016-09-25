@@ -24,6 +24,8 @@
 
 	<!-- Custom Fonts -->
 	<link href="/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<!-- http://mapsk.in/# -->
+	<link href="https://mapskincdn.appspot.com/1.0/mapskin.min.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
 
@@ -56,14 +58,14 @@
 				</a>
 
                 <!-- Basemaps Button -->
-                <button id="basemaps-btn" type="button" dwmenu="basemap" class="btn btn-default" onclick="toggleParam('basemaps')">
-                    <i class="fa fa-globe fa-2x"></i>
+                <button id="basemaps-btn" type="button" dwmenu="basemap" class="btn btn-default black" onclick="toggleParam('basemaps')">
+                    <i class="ms ms-layers ms-2x"></i>
                     <span class="buttonTitle">Basemaps</span>
                 </button>
 
                 <!-- Setting Button -->
                 <button id="settings-btn" type="button" dwmenu="settings" class="btn btn-default" onclick="toggleParam('settings')">
-                    <i class="fa fa-cog fa-2x"></i>
+                    <i class="ms ms-settings ms-2x"></i>
                     <span class="buttonTitle">Settings</span>
                 </button>
 
@@ -278,7 +280,7 @@
 						</div>
 
 						<div class="block-control">
-                            <div class="text-align-left">Earthquake Locations (>4.5m):</div>
+                            <div class="text-align-left">Earthquakes (Magnitude > 4.5):</div>
 							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary" >
                                 <input id="earthquake-checkbox" type="checkbox"/><span></span>
                             </label>
@@ -328,19 +330,19 @@
 
 						<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4 drawbox">
 							<div class="drawsel" onclick="drawOnMap('point')" data-dismiss="modal">
-								<i class="fa fa-map-marker fa-4x"></i>
+								<i class="ms ms-points ms-2x"></i>
 								<span>Add a marker</span>
 							</div>
 						</div>
 						<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4 drawbox">
 							<div class="drawsel" onclick="drawOnMap('polygon')" data-dismiss="modal">
-								<i class="fa fa-crop fa-4x"></i>
+								<i class="ms ms-polygon ms-2x"></i>
 								<span>Draw shape</span>
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 drawbox">
 							<div class="drawsel" disabled="disabled" data-dismiss="modal">
-								<i class="fa fa-file fa-4x"></i>
+								<i class="ms ms-shp ms-2x"></i>
 								<span>Upload a file</span>
 							</div>
 						</div>
@@ -499,6 +501,8 @@
 	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.js'></script>
 	<!-- <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.11.18/mapbox-gl-draw.js"></script> -->
 	<script src="/js/mapbox-gl-draw.js"></script>
+
+	<script src="https://d3js.org/d3-queue.v3.min.js"></script>
 
 	<!-- DisasterWatch JS -->
 	<script src='/js/utils.js'></script>

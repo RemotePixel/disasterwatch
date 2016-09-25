@@ -1,8 +1,11 @@
 /*jslint browser: true*/
 /*global $, jQuery, alert*/
+/*global map, map, alert*/
 /*global mapboxgl, mapboxgl, alert*/
+/*global draw, draw, alert*/
 /*global moment, moment, alert*/
 /*global console, console, alert*/
+/*global d3, d3, alert*/
 
 // Load/Search External Data :
 //  - earthquakes
@@ -28,9 +31,11 @@ function getEONETEvents() {
             var geojson = {
                 "type": "FeatureCollection",
                 "features": []
-            };
+            },
+                i,
+                j;
 
-            for (var i = 0; i < data.events.length; i++) {
+            for (i = 0; i < data.events.length; i++) {
                 var e = data.events[i],
                     iconName = 'marker';
                 switch (e.categories[0].title) {
@@ -42,7 +47,7 @@ function getEONETEvents() {
                 }
 
                 if (e.geometries.length > 1) {
-                    for (var j = 0; j < e.geometries.length; j++) {
+                    for (j = 0; j < e.geometries.length; j++) {
                         var feature = {};
                         feature.properties = {
                             'dtype': e.categories[0].title,
@@ -80,9 +85,89 @@ function getEONETEvents() {
         });
 }
 
-function getImages() {
+function getL8S2Images(feature, callback) {
     "use strict";
 
+    var jsonRequest = {
+            intersects: feature,
+            date_from: "2016-01-01",
+            date_to: moment.utc().format('YYYY-MM-DD'),
+            limit: 2000
+        },
+        results = [];
+
+    $.ajax({
+        url: 'https://api.developmentseed.org/satellites',
+        type: "POST",
+        data: JSON.stringify(jsonRequest),
+        dataType: "json",
+        contentType: "application/json"
+    })
+        .success(function (data) {
+            if (data.hasOwnProperty('errorMessage')) {
+                return callback(new Error('DevSeed Sat-API servers Error'), null);
+            }
+
+            if (data.meta.found !== 0) {
+                var i,
+                    scene = {};
+
+                for (i = 0; i < data.results.length; i += 1) {
+                    scene = {};
+                    scene.date = data.results[i].date;
+                    scene.cloud = data.results[i].cloud_coverage;
+                    scene.sceneID = data.results[i].scene_id;
+
+                    if (data.results[i].satellite_name === 'landsat-8') {
+                        scene.sat = 'landsat-8';
+                        scene.path = data.results[i].path.toString();
+                        scene.row = data.results[i].row.toString();
+                        scene.grid = data.results[i].path + '/' + data.results[i].row;
+                        scene.usgsURL = data.results[i].cartURL;
+                        scene.browseURL = data.results[i].browseURL.replace('http://', "https://");
+                        scene.AWSurl = 'http://landsat-pds.s3.amazonaws.com/L8/' + zeroPad(data.results[i].path, 3) + '/' + zeroPad(data.results[i].row, 3) + '/' + data.results[i].sceneID + '/';
+                        results.push(scene);
+                    } else {
+                        scene.sat = 'sentinel-2';
+                        scene.utm_zone = data.results[i].utm_zone.toString();
+                        scene.grid_square = data.results[i].grid_square;
+                        scene.coverage = data.results[i].data_coverage_percentage;
+                        scene.latitude_band = data.results[i].latitude_band;
+                        scene.browseURL = data.results[i].thumbnail.replace('.jp2', ".jpg");
+                        scene.path = data.results[i].aws_path.replace('tiles', "#tiles");
+                        scene.AWSurl = 'http://sentinel-s2-l1c.s3-website.eu-central-1.amazonaws.com/' + scene.path + '/';
+                        scene.grid = scene.utm_zone + scene.latitude_band + scene.grid_square;
+                        results.push(scene);
+                    }
+                }
+            }
+            return callback(null, results);
+        })
+        .fail(function () {
+            return callback(new Error('DevSeed Sat-API servers Error'), null);
+        });
+}
+
+function getS1Images(feature, callback) {
+    "use strict";
+
+    $.ajax ({
+        url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/gets1images",
+        type: "POST",
+        data: JSON.stringify(feature),
+        dataType: "json",
+        contentType: "application/json",
+    })
+    .success(function(data){
+        return callback(null, data.scenes);
+    })
+    .fail(function () {
+        return callback(new Error('DisasterWatch API servers Error'), null);
+    });
+}
+
+function getImages() {
+    "use strict";
     $('.disaster-images .spin').removeClass('display-none');
     $('.map .spin').removeClass('display-none');
     $('.img-preview').empty();
@@ -93,129 +178,112 @@ function getImages() {
         var ll = mapboxgl.LngLat.convert(features.features[0].geometry.coordinates).wrap().toArray();
         features.features[0].geometry.coordinates = ll;
     } else {
-        features.features[0].geometry.coordinates[0] = features.features[0].geometry.coordinates[0].map(function(e){
+        features.features[0].geometry.coordinates[0] = features.features[0].geometry.coordinates[0].map(function (e) {
             return mapboxgl.LngLat.convert(e).wrap().toArray();
-        })
+        });
     }
 
-    var sat_api = 'https://api.developmentseed.org/satellites',
-        jsonObj = {
-            intersects: features.features[0],
-            date_from: "2016-01-01",
-            date_to: moment.utc().format('YYYY-MM-DD'),
-            limit: 2000
-        };
+    var q = d3.queue()
+        .defer(getL8S2Images, features.features[0])
+        .defer(getS1Images, features.features[0])
+        .awaitAll(function (error, results) {
+            $('.disaster-images .spin').addClass('display-none');
+            $('.map .spin').addClass('display-none');
 
-    $.ajax ({
-        url: sat_api,
-        type: "POST",
-        data: JSON.stringify(jsonObj),
-        dataType: "json",
-        contentType: "application/json",
-    })
-    .success(function(data){
-        if (data.hasOwnProperty('errorMessage')){
-            $('.img-preview').append('<span class="nodata-error">No image found</span>');
-            $('.spin').addClass('display-none');
-            return;
-        }
-        if (data.meta.found !== 0) {
-            var i,
-                scene = {},
-                results = [];
+            if (error) {
+                $('.img-preview').append('<span class="serv-error">Server Error: Please contact <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></span>');
+            } else {
 
-            for (i = 0; i < data.results.length; i += 1) {
-                scene = {};
-                scene.date = data.results[i].date;
-                scene.cloud = data.results[i].cloud_coverage;
-                scene.sceneID = data.results[i].scene_id;
+                var results = results[0].concat(results[1]),
+                    geojsonS1 = {
+                        "type": "FeatureCollection",
+                        "features": []
+                    },
+                    i;
 
-                if (data.results[i].satellite_name === 'landsat-8') {
-                    scene.sat = 'landsat';
-                    scene.path = data.results[i].path.toString();
-                    scene.row = data.results[i].row.toString();
-                    scene.grid = data.results[i].path + '/' + data.results[i].row;
-                    scene.usgsURL = data.results[i].cartURL;
-                    scene.browseURL = data.results[i].browseURL.replace('http://', "https://");;
-                    scene.AWSurl = 'http://landsat-pds.s3.amazonaws.com/L8/' + zeroPad(data.results[i].path, 3) + '/' + zeroPad(data.results[i].row, 3) + '/' + data.results[i].sceneID + '/';
-                    results.push(scene);
+                if (results.length === 0) {
+                    $('.img-preview').append('<span class="nodata-error">No image found</span>');
                 } else {
-                    scene.sat = 'sentinel';
-                    scene.utm_zone = data.results[i].utm_zone.toString();
-                    scene.grid_square = data.results[i].grid_square;
-                    scene.coverage = data.results[i].data_coverage_percentage;
-                    scene.latitude_band = data.results[i].latitude_band;
-                    scene.browseURL = data.results[i].thumbnail.replace('.jp2', ".jpg");
-                    scene.path = data.results[i].aws_path.replace('tiles', "#tiles");
-                    scene.AWSurl = 'http://sentinel-s2-l1c.s3-website.eu-central-1.amazonaws.com/' + scene.path + '/';
-                    scene.grid = scene.utm_zone + scene.latitude_band + scene.grid_square;
-                    results.push(scene);
+                    results.sort(sortScenes);
+
+                    for (i = 0; i < results.length; i += 1) {
+
+                        var imgMeta = results[i];
+                        switch (imgMeta.sat) {
+                            case 'landsat-8':
+                                var hoverstr = "['all', ['==', 'PATH', " + imgMeta.path + "], ['==', 'ROW', " + imgMeta.row + "]]";
+                                $('.img-preview').append(
+                                    '<div class="item" onmouseover="hoverL8(' + hoverstr + ')" onmouseout="hoverL8(' + "['all', ['==', 'PATH', ''], ['==', 'ROW', '']]" + ')">' +
+                                        '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '">' +
+                                        '<div class="result-overlay">' +
+                                            '<span>' + imgMeta.sceneID + '</span>' +
+                                            '<span><i class="fa fa-calendar-o"></i> ' + imgMeta.date + '</span>' +
+                                            '<span><i class="fa fa-cloud"></i> ' + imgMeta.cloud + '%</span>' +
+                                            '<span>Link:</span>' +
+                                            '<div class="btnDD" onclick="feeddownloadL8(\'' + imgMeta.AWSurl + '\',\'' + imgMeta.sceneID + '\')"><i class="fa fa-download"></i></div>' +
+                                            '<a target="_blank" href="' + imgMeta.AWSurl + 'index.html"><img src="/img/aws.png"> </a>' +
+                                            '<a target="_blank" href="' + imgMeta.usgsURL + '"><img src="/img/usgs.jpg"></a>' +
+                                        '</div>' +
+                                        '</div>'
+                                );
+                                break;
+                            case 'sentinel-2':
+                                var hoverstr = "['==', 'Name', '" + imgMeta.grid + "']";
+                                $('.img-preview').append(
+                                    '<div class="item" onmouseover="hoverS2(' + hoverstr + ')" onmouseout="hoverS2(' + "['in', 'Name', '']" + ')">' +
+                                        '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '">' +
+                                        '<div class="result-overlay">' +
+                                            '<span>' + imgMeta.sceneID + '</span>' +
+                                            '<span><i class="fa fa-calendar-o"></i> ' + imgMeta.date + '</span>' +
+                                            '<span><i class="fa fa-cloud"></i> ' + imgMeta.cloud + '%</span>' +
+                                            '<span>Link:</span>' +
+                                            '<div class="btnDD" onclick="feeddownloadS2(\'' + imgMeta.path.replace('#tiles', "tiles") + '\',\'' + imgMeta.browseURL + '\')"><i class="fa fa-download"></i></div>' +
+                                            '<a target="_blank" href="' + imgMeta.AWSurl + '"><img src="/img/aws.png"> </a>' +
+                                        '</div>' +
+                                        '</div>'
+                                );
+                                break;
+                            case 'sentinel-1':
+
+                                var feat = {
+                                    properties: {"id": imgMeta.sceneID},
+                                    type: "Feature",
+                                    geometry: imgMeta.geometry
+                                };
+                                geojsonS1.features.push(feat);
+                                var hoverstr = "['in', 'id', '" + imgMeta.sceneID + "']";
+                                $('.img-preview').append(
+                                    '<div class="item" onmouseover="hoverS1(' + hoverstr + ')" onmouseout="hoverS1(' + "['==', 'id', '']" + ')">' +
+                                        '<img class="lazy img-responsive" src="/img/sentinel1.jpg">' +
+                                        '<div class="result-overlay">' +
+                                            '<span> S1A_IW_SLC' + moment(imgMeta.fullDate).utc().format('YYYYMMDD_hhmmss') + '</span>' +
+                                            '<span><i class="fa fa-calendar-o"></i> ' + imgMeta.date + '</span>' +
+                                            '<span><i class="ms ms-satellite"></i> ' + imgMeta.orbType.slice(0,4) + ' | ' + imgMeta.refOrbit + '</span>' +
+                                            '<span> Pol: ' + imgMeta.polarisation + ' | SLC </span>' +
+                                            '<span>Link:</span>' +
+                                            '<a target="_blank" href="' + imgMeta.esaURL + '"><img src="/img/esa.png"> </a>' +
+                                        '</div>' +
+                                        '</div>'
+                                );
+                                break;
+                        }
+                    }
+                    map.getSource('sentinel-1').setData(geojsonS1);
                 }
             }
-
-            results.sort(sortScenes);
-            for (i = 0; i < results.length; i += 1) {
-
-                var imgMeta = results[i];
-
-                if (imgMeta.sat === 'landsat') {
-                    var hoverstr = "['all', ['==', 'PATH', " + imgMeta.path + "], ['==', 'ROW', " + imgMeta.row + "]]";
-                    $('.img-preview').append(
-                        '<div class="item" onmouseover="hoverL8(' + hoverstr + ')" onmouseout="hoverL8(' + "['all', ['==', 'PATH', ''], ['==', 'ROW', '']]" + ')">' +
-                            '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '" class="img-responsive">' +
-                            '<div class="result-overlay">' +
-                                '<span>' + imgMeta.sceneID + '</span>' +
-                                '<span><i class="fa fa-calendar-o"></i> ' + imgMeta.date + '</span>' +
-                                '<span><i class="fa fa-cloud"></i> ' + imgMeta.cloud + '%</span>' +
-                                '<span>Link:</span>' +
-                                '<div class="btnDD" onclick="feeddownloadL8(\'' + imgMeta.AWSurl + '\',\'' + imgMeta.sceneID + '\')"><i class="fa fa-download"></i></div>' +
-                                '<a target="_blank" href="' + imgMeta.AWSurl + 'index.html"><img src="/img/aws.png"> </a>' +
-                                '<a target="_blank" href="' + imgMeta.usgsURL + '"><img src="/img/usgs.jpg"></a>' +
-                            '</div>' +
-                            '</div>'
-                    );
-
-                } else {
-                    var hoverstr = "['in', 'Name', '" + imgMeta.grid + "']";
-                    $('.img-preview').append(
-                        '<div class="item" onmouseover="hoverS2(' + hoverstr + ')" onmouseout="hoverS2(' + "['in', 'Name', '']" + ')">' +
-                            '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '" class="img-responsive">' +
-                            '<div class="result-overlay">' +
-                                '<span>' + imgMeta.sceneID + '</span>' +
-                                '<span><i class="fa fa-calendar-o"></i> ' + imgMeta.date + '</span>' +
-                                '<span><i class="fa fa-cloud"></i> ' + imgMeta.cloud + '%</span>' +
-                                '<span>Link:</span>' +
-                                '<div class="btnDD" onclick="feeddownloadS2(\'' + imgMeta.path.replace('#tiles', "tiles") + '\',\'' + imgMeta.browseURL + '\')"><i class="fa fa-download"></i></div>' +
-                                '<a target="_blank" href="' + imgMeta.AWSurl + '"><img src="/img/aws.png"> </a>' +
-                            '</div>' +
-                            '</div>'
-                    );
-                }
-            }
-
-        } else {
-            $('.img-preview').append('<span class="nodata-error">No image found</span>');
-        }
-    })
-    .always(function () {
-        $('.disaster-images .spin').addClass('display-none');
-        $('.map .spin').addClass('display-none');
-    })
-    .fail(function () {
-        $('.img-preview').append('<span class="serv-error">Server Error: Please contact <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></span>');
-    });
+        });
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load Events and See Images
-function seeEQimages(urlusgs){
+function seeEQimages(urlusgs) {
     "use strict";
 
     $('.map .spin').removeClass('display-none');
 
     draw.deleteAll();
 
-    if (draw.getMode() !== 'static'){
+    if (draw.getMode() !== 'static') {
         draw.changeMode('static');
     }
 
@@ -237,13 +305,13 @@ function seeEQimages(urlusgs){
         });
 }
 
-function seeEONETimages(id){
+function seeEONETimages(id) {
     "use strict";
 
     $('.map .spin').removeClass('display-none');
 
     draw.deleteAll();
-    if (draw.getMode() !== 'static'){
+    if (draw.getMode() !== 'static') {
         draw.changeMode('static');
     }
     var url = 'http://eonet.sci.gsfc.nasa.gov/api/v2.1/events/' + id;
@@ -252,9 +320,10 @@ function seeEONETimages(id){
         .done(function (data) {
 
             if (data.geometries.length > 1) {
-                var feature = { "type": 'LineString', "coordinates": []};
-                for(var j = 0; j < data.geometries.length; j++) {
-                    feature.coordinates.push(data.geometries[j].coordinates)
+                var feature = { "type": 'LineString', "coordinates": []},
+                    j;
+                for (j = 0; j < data.geometries.length; j++) {
+                    feature.coordinates.push(data.geometries[j].coordinates);
                 }
             } else {
                 var feature = { "type": 'Point', "coordinates": data.geometries[0].coordinates};
@@ -280,3 +349,8 @@ function seeEONETimages(id){
             getImages();
         });
 }
+
+$("#s1-checkbox").change(function () {
+    "use strict";
+    $("#s1-checkbox").parent().toggleClass('green');
+});

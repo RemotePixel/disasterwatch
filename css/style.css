@@ -1069,13 +1069,13 @@ body {
     background-color: #000;
 }
 
-.img-preview .item{
+.img-preview .item {
 	position: relative;
 	width: 50%;
     float: left
 }
 
-.img-preview .item:before{
+.img-preview .item:before {
 	content: '';
 	display: block;
 	padding-top: 100%; 	/* initial ratio of 1:1*/

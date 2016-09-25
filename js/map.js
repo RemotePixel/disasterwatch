@@ -63,6 +63,28 @@ map.on('style.load', function () {
         "filter": ["in", "Name", ""]
     });
 
+    var geojson = {
+        "type": "FeatureCollection",
+        "features": []
+    };
+
+    map.addSource('sentinel-1', {
+        'type': 'geojson',
+        'data': geojson
+    });
+
+    map.addLayer({
+        "id": "s1-highlighted",
+        "type": "fill",
+        "source": "sentinel-1",
+        "paint": {
+            "fill-outline-color": "#1386af",
+            "fill-color": "#0f6d8e",
+            "fill-opacity": 0.3
+        },
+        "filter": ["==", "id", ""]
+    });
+
     // DisasterDB
     var geojson = {
         "type": "FeatureCollection",
@@ -411,6 +433,11 @@ function drawOnMap(type) {
     case null:
         break;
     }
+}
+
+function hoverS1(gr) {
+    "use strict";
+    map.setFilter("s1-highlighted", gr);
 }
 
 function hoverS2(gr) {
