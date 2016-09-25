@@ -28,7 +28,7 @@ imagery ressources.
 TimeFrame
 -------
 
-- V1 will show only Landsat-8 and Sentinel-2 image
+- V1 will show only Landsat-8, Sentinel-2, Sentinel-1 images
 
 ###### UI Preview
 ![preview](https://cloud.githubusercontent.com/assets/10407788/18424407/409061fe-787d-11e6-950c-5615274a3222.gif)
