@@ -39,6 +39,25 @@ $("#mailCheckbox").change(function () {
     }
 });
 
+$(".sat-filter input").change(function () {
+    "use strict";
+    filterListImage();
+});
+
+function filterListImage() {
+    var sat = $.map($(".sat-filter input:checked"), function(e){
+        return e.getAttribute('data');
+    });
+
+    document.getElementsByClassName('img-preview')[0].childNodes.forEach(function(e){
+        if (sat.indexOf(e.getAttribute('sat')) === -1){
+            e.className += ' display-none';
+        } else {
+            e.className = 'item';
+        }
+    });
+}
+
 function resetForm() {
     "use strict";
     $(".dropdown-toggle").empty();
@@ -78,6 +97,11 @@ function openleftBlock() {
     map.resize();
 }
 
+function openImagesSettings() {
+    $(".openSettings").toggleClass('active');
+    $(".disaster-images .sat-filter").toggleClass('active');
+}
+
 function closeleftblock() {
     "use strict";
     $(".leftblock").removeClass('in');
@@ -85,9 +109,13 @@ function closeleftblock() {
         $(this).attr('disabled', false);
     });
 
-    $(".tab-selector-1").prop( "checked", true );
+    $(".tab-selector-1").prop("checked", true);
     $(".tab-selector-1").removeClass('out');
     $(".tab-selector-2").removeClass('out');
+
+    // $(".sat-filter input").prop('checked', true);
+    $(".openSettings").removeClass('active');
+    $(".disaster-images .sat-filter").removeClass('active');
 
     $('.img-preview').empty();
     resetForm();

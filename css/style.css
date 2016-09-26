@@ -700,8 +700,7 @@ body {
 }
 .drawsel i {
     vertical-align: middle;
-    line-height: 40px;
-    font-size: 40px;
+    line-height: 45px;
     padding: 10px;
     width: 65px;
     height: 65px;
@@ -765,7 +764,6 @@ body {
     display: block;
     width: 100%;
     height: 100%;
-    /*overflow-y: : hidden;*/
 }
 
 .leftblock .main-section .disaster-info,
@@ -778,10 +776,12 @@ body {
     z-index: 1;
     opacity: 0;
     display: inline-block;
-    overflow-y: scroll;
     overflow-x: hidden;
-    /*transition: all linear 0.1s;*/
+    overflow-y: hidden;
     background-color: #c8c8c8;
+}
+.leftblock .main-section .disaster-info {
+    overflow-y: scroll;
 }
 
 .leftblock .main-section input.tab-selector-1.out,
@@ -816,27 +816,37 @@ body {
     padding: 10px;
 }
 
-.leftblock .close-block {
+.leftblock .right-top-button {
     position: absolute;
     top: 0;
     right: -40px;
     width: 40px;
-    height: 50px;
+    height: auto;
     color: #FFF;
-    background-color: #000;
+    background-color: #2a2929;
+    z-index: 10000;
+}
+
+.leftblock .right-top-button div {
+    display: block;
     text-align: center;
     line-height: 50px;
-    font-size: 15px;
-    z-index: 10000;
+    height: 50px;
     cursor: pointer;
 }
-.leftblock .close-block i {
+
+.leftblock .right-top-button div i {
     vertical-align: middle;
 }
 
-.leftblock .close-block:hover{
+.leftblock .right-top-button div:hover{
     color: #000;
     background-color: #FFF;
+}
+
+.leftblock .right-top-button .openSettings.active {
+    color: #FFF;
+    background-color: #505050;
 }
 
 /* Top Tab Selector */
@@ -925,7 +935,33 @@ body {
     opacity: 1;
     transition: all ease-out 0.2s 0.1s;
 }
+
+.leftblock .main-section input.tab-selector-2:checked ~ .right-top-button .openSettings {
+    display: none;
+}
+
 /* End - Top Tab Selector */
+
+.disaster-images .sat-filter {
+    position: relative;
+    display: none;
+    width: 100%;
+    height: auto;
+    min-height: 50px;
+    line-height: 40px;
+    text-align: center;
+    z-index: 2;
+}
+
+.disaster-images .sat-filter.active {
+    display: block;
+}
+
+.disaster-images .sat-filter label {
+    vertical-align: middle;
+    margin: 0;
+    padding: 5px;
+}
 
 .disaster-info .disasterType span {
     padding: 2px;
@@ -1060,11 +1096,12 @@ body {
 
 .img-preview {
     position: relative;
-    min-height: 100%;
+    height: 100%;
     width: 100%;
     padding-left: 15px;
     padding-right: 15px;
     overflow-x: hidden;
+    overflow-y: scroll;
     display: block;
     background-color: #000;
 }
@@ -1294,11 +1331,9 @@ body {
         font-size: 2rem
     }
 
-    .leftblock .close-block {
+    .leftblock .right-top-button{
         right: 0;
         width: 30px;
-        height: 50px;
-        font-size: 10px;
     }
 
     .leftblock .main-section .tab-label {

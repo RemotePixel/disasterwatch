@@ -213,7 +213,7 @@ function getImages() {
                             case 'landsat-8':
                                 var hoverstr = "['all', ['==', 'PATH', " + imgMeta.path + "], ['==', 'ROW', " + imgMeta.row + "]]";
                                 $('.img-preview').append(
-                                    '<div class="item" onmouseover="hoverL8(' + hoverstr + ')" onmouseout="hoverL8(' + "['all', ['==', 'PATH', ''], ['==', 'ROW', '']]" + ')">' +
+                                    '<div sat="landsat8" class="item" onmouseover="hoverL8(' + hoverstr + ')" onmouseout="hoverL8(' + "['all', ['==', 'PATH', ''], ['==', 'ROW', '']]" + ')">' +
                                         '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '">' +
                                         '<div class="result-overlay">' +
                                             '<span>' + imgMeta.sceneID + '</span>' +
@@ -230,7 +230,7 @@ function getImages() {
                             case 'sentinel-2':
                                 var hoverstr = "['==', 'Name', '" + imgMeta.grid + "']";
                                 $('.img-preview').append(
-                                    '<div class="item" onmouseover="hoverS2(' + hoverstr + ')" onmouseout="hoverS2(' + "['in', 'Name', '']" + ')">' +
+                                    '<div sat="sentinel2" class="item" onmouseover="hoverS2(' + hoverstr + ')" onmouseout="hoverS2(' + "['in', 'Name', '']" + ')">' +
                                         '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '">' +
                                         '<div class="result-overlay">' +
                                             '<span>' + imgMeta.sceneID + '</span>' +
@@ -253,7 +253,7 @@ function getImages() {
                                 geojsonS1.features.push(feat);
                                 var hoverstr = "['in', 'id', '" + imgMeta.sceneID + "']";
                                 $('.img-preview').append(
-                                    '<div class="item" onmouseover="hoverS1(' + hoverstr + ')" onmouseout="hoverS1(' + "['==', 'id', '']" + ')">' +
+                                    '<div sat="sentinel1" class="item" onmouseover="hoverS1(' + hoverstr + ')" onmouseout="hoverS1(' + "['==', 'id', '']" + ')">' +
                                         '<img class="lazy img-responsive" src="/img/sentinel1.jpg">' +
                                         '<div class="result-overlay">' +
                                             '<span> S1A_IW_SLC' + moment(imgMeta.fullDate).utc().format('YYYYMMDD_hhmmss') + '</span>' +
@@ -268,6 +268,9 @@ function getImages() {
                                 break;
                         }
                     }
+
+                    filterListImage();
+
                     map.getSource('sentinel-1').setData(geojsonS1);
                 }
             }

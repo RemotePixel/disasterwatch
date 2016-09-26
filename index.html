@@ -98,9 +98,23 @@
 					<input id="tab-2" type="radio" name="radio-set" class="tab-selector tab-selector-2" />
 					<label for="tab-2" class="tab-label col-xs-6 col-sm-6 col-md-6 col-lg-6 info-label">Add To Database</label>
 
-					<div class="close-block" onclick="closeleftblock()"><i class="fa fa-times fa-2x"></i></div>
+					<div class="right-top-button">
+						<div class="closeleftblock" onclick="closeleftblock()"><i class="fa fa-times fa-2x"></i></div>
+						<div class="openSettings" onclick="openImagesSettings()"><i class="fa fa-cog fa-2x"></i></div>
+					</div>
 
 					<section class="disaster-images">
+						<div class="sat-filter">
+							<label>
+								<input data="landsat8" type="checkbox" checked> Landsat-8
+							</label>
+							<label>
+								<input data="sentinel2" type="checkbox" checked> Sentinel-2
+							</label>
+							<label>
+								<input data="sentinel1" type="checkbox" checked> Sentinel-1
+							</label>
+						</div>
 						<div class="img-preview"></div>
 						<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
 					</section>
