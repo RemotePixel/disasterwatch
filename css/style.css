@@ -951,6 +951,8 @@ body {
     line-height: 40px;
     text-align: center;
     z-index: 2;
+    background-color: #000;
+    color: #FFF;
 }
 
 .disaster-images .sat-filter.active {

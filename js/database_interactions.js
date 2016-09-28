@@ -26,27 +26,6 @@ function getDisasterdb() {
                     '</div>');
             }
         });
-
-    // $.getJSON('https://s3-us-west-2.amazonaws.com/remotepixel/data/disasterwatch/disasterdb.geojson')
-    //     .done(function (data) {
-    //
-    //         map.getSource('disasterdb').setData(data);
-    //
-    //         $('.list-disasters').scrollTop(0);
-    //         $('.list-disasters').empty();
-    //         for(var i = 0; i < data.features.length; i++) {
-    //             $('.list-disasters').append(
-    //                 '<div class="list-element" target="_blank" onclick="mapFlyToDisaster(\'' + data.features[i].properties.uuid + '\')">'+
-    //                     '<div class="col">' +
-    //                         '<div class="disaster-descr"><span class="dtype ' + data.features[i].properties.dtype[0] + '">' + data.features[i].properties.dtype[0].slice(0,1) + '</span></div>' +
-    //                         '<div class="disaster-descr">'+
-    //                             '<span class="dtitle">'+ data.features[i].properties.name +'</span>' +
-    //                             '<span class="dplace">' + data.features[i].properties.place + '</span>' +
-    //                         '</div>' +
-    //                     '</div>' +
-    //                 '</div>');
-    //         }
-    //     });
 }
 
 
@@ -207,7 +186,6 @@ function editEvt(id) {
     $(".tab-selector-1").addClass('out');
     $(".tab-selector-2").addClass('out');
 
-    //fill
     var features = map.getSource("disasterdb")._data.features.filter(function(e){
         return (e.properties.uuid === id);
     }),

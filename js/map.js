@@ -224,7 +224,7 @@ map.on('style.load', function () {
                                 '<div class="linetab">Duration (min): ' + feature.properties.dmin + '</div>' +
                                 '<div class="linetab">Tsunami: ' + ((feature.properties.tsunami === 0) ? 'No' : 'Yes') + '</div>' +
                                 '<div class="linetab"><a target="_blank" href="' + feature.properties.url + '">Info</a></div>' +
-                                '<div class="linetab"><a class="link" onclick="seeEQimages(\'' + feature.properties.detail + '\')">See Images</a></div>')
+                                '<div class="linetab"><a class="link" onclick="seeEQimages(\'' + feature.properties.detail + '\')">Search Images</a></div>')
                     .addTo(map);
             }
         }
@@ -249,8 +249,8 @@ map.on('style.load', function () {
                                 '<div class="linetab">Date: ' + moment(feature.properties.date).format('YYYY-MM-DD HH:mm:ss') + '(UTC)</div>' +
                                 '<div class="linetab">Type: ' + feature.properties.dtype + '</div>' +
                                 '<div class="linetab">Description: ' + feature.properties.description + '</div>' +
-                                '<div class="linetab">Links: ' + links + '</div>' +
-                                '<div class="linetab"><a class="link" onclick="seeEONETimages(\'' + feature.properties.id + '\')">See Images</a></div>')
+                                '<div class="linetab">Links: ' + links + '</div>') //+
+                                // '<div class="linetab"><a class="link" onclick="seeEONETimages(\'' + feature.properties.id + '\')">Search Images</a></div>')
                     .addTo(map);
             }
         }
@@ -280,7 +280,7 @@ map.on('style.load', function () {
                             '<div class="linetab">Start Date: ' + feature.properties.dateStart + '</div>' +
                             '<div class="linetab">End Date: ' + feature.properties.dateEnd + '</div>' +
                             '<div class="linetab">Comments: <br>' + feature.properties.comments + '</div>' +
-                            '<div class="linetab"><a onclick="seeEvtDBimages(\'' + feature.properties.uuid + '\')">See Images</a></div>' +
+                            '<div class="linetab"><a onclick="seeEvtDBimages(\'' + feature.properties.uuid + '\')">Search Images</a></div>' +
                             '<div class="linetab">' +
                                 // '<a onclick="subscribeEvt(\'' + feature.properties.uuid + '\')">Subscribe</a> | ' +
                                 '<a onclick="editEvt(\'' + feature.properties.uuid + '\')">Update</a> | ' +

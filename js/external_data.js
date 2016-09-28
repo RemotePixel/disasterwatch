@@ -144,7 +144,9 @@ function getL8S2Images(feature, callback) {
             return callback(null, results);
         })
         .fail(function () {
-            return callback(new Error('DevSeed Sat-API servers Error'), null);
+            // return callback(new Error('DevSeed Sat-API servers Error'), null);
+            console.log('DevSeed Sat-API servers Error');
+            return callback(null, null);
         });
 }
 
@@ -162,7 +164,9 @@ function getS1Images(feature, callback) {
         return callback(null, data.scenes);
     })
     .fail(function () {
-        return callback(new Error('DisasterWatch API servers Error'), null);
+        console.log('DisasterWatch API servers Error');
+        // return callback(new Error('DisasterWatch API servers Error'), null);
+        return callback(null, null);
     });
 }
 
@@ -186,16 +190,24 @@ function getImages() {
     var q = d3.queue()
         .defer(getL8S2Images, features.features[0])
         .defer(getS1Images, features.features[0])
-        .awaitAll(function (error, results) {
+        .await(function (error, resultsS2L8, resultsS1) {
             $('.disaster-images .spin').addClass('display-none');
             $('.map .spin').addClass('display-none');
 
-            if (error) {
+            var results;
+            if (! resultsS1 && ! resultsS2L8) {
                 $('.img-preview').append('<span class="serv-error">Server Error: Please contact <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></span>');
             } else {
 
-                var results = results[0].concat(results[1]),
-                    geojsonS1 = {
+                if (resultsS2L8 && !resultsS1)  {
+                    results = resultsS2L8;
+                } else if (!resultsS2L8 && resultsS1) {
+                    results = resultsS1;
+                } else {
+                    results = resultsS2L8.concat(resultsS1);
+                }
+
+                var geojsonS1 = {
                         "type": "FeatureCollection",
                         "features": []
                     },
