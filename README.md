@@ -41,11 +41,11 @@ To Do
 - [x] UI to add disaster to the database.
 
 ##### Back End (AWS Lambda based):
-- [x] Create a database (Geojson) read/write/update functions
+- [ ] Create a database (Geojson) read/write/update functions
 - [ ] Mailing function
 
 ##### Things to be added after V1:
-- other imagery sources (UrtheCast, Planet, ...)
+- add Other imagery sources (UrtheCast, Planet, ...)
 
 ##### Ressources
 - [Global Disaster Alert and Coordination System](http://www.gdacs.org)
