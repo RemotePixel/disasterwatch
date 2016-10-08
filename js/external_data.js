@@ -126,6 +126,7 @@ function getL8S2Images(feature, callback) {
                         scene.usgsURL = data.results[i].cartURL;
                         scene.browseURL = data.results[i].browseURL.replace('http://', "https://");
                         scene.AWSurl = 'http://landsat-pds.s3.amazonaws.com/L8/' + zeroPad(data.results[i].path, 3) + '/' + zeroPad(data.results[i].row, 3) + '/' + data.results[i].sceneID + '/';
+                        scene.sumAWSurl = 'https://landsatonaws.com/L8/' + zeroPad(data.results[i].path, 3) + '/' + zeroPad(data.results[i].row, 3) + '/' + data.results[i].sceneID;
                         results.push(scene);
                     } else {
                         scene.sat = 'sentinel-2';
@@ -233,7 +234,8 @@ function getImages() {
                                             '<span><i class="fa fa-cloud"></i> ' + imgMeta.cloud + '%</span>' +
                                             '<span>Link:</span>' +
                                             '<div class="btnDD" onclick="feeddownloadL8(\'' + imgMeta.AWSurl + '\',\'' + imgMeta.sceneID + '\')"><i class="fa fa-download"></i></div>' +
-                                            '<a target="_blank" href="' + imgMeta.AWSurl + 'index.html"><img src="/img/aws.png"> </a>' +
+                                            // '<a target="_blank" href="' + imgMeta.AWSurl + 'index.html"><img src="/img/aws.png"> </a>' +
+                                            '<a target="_blank" href="' + imgMeta.sumAWSurl + '"><img src="/img/aws.png"> </a>' +
                                             '<a target="_blank" href="' + imgMeta.usgsURL + '"><img src="/img/usgs.jpg"></a>' +
                                         '</div>' +
                                         '</div>'

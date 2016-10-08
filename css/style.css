@@ -18,7 +18,6 @@ body {
     height:100%;
     width: 100%;
     font-size: 0;
-
 }
 
 .row {
@@ -230,6 +229,10 @@ body {
     overflow-x: hidden;
 }
 
+#disasters-panel .side-view-content {
+    height: calc(100% - 107px);
+}
+
 .side-element{
     display: block;
     width: 100%;
@@ -314,7 +317,7 @@ body {
     opacity: 1;
 }
 
-.side-element .link .link-hover .link-hover-content{
+.side-element .link .link-hover .link-hover-content {
     position: absolute;
     top: 50%;
     width: 100%;
@@ -325,19 +328,23 @@ body {
     color: #FFF;
 }
 
-.side-element .link .link-hover .link-hover-content i{
+.side-element .link .link-hover .link-hover-content i {
     margin-top: -12px;
 }
 
-.side-element .link .link-on.on{
+.side-element .link .link-on.on {
     opacity: 1;
 }
 
-.block-control{
+.block-control {
     width: 100%;
     height: auto;
     padding-bottom: 20px;
     color: #000;
+}
+
+#disasters-panel .block-control{
+    padding-bottom: 5px;
 }
 
 .block-control i{

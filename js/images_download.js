@@ -68,13 +68,8 @@ function feeddownloadL8(url, id) {
     $('#modalDownloadL8').modal();
 }
 
-$('#modalDownloadL8').on('hidden.bs.modal', function () {
+$('#modalDownloadL8').on('shown.bs.modal', function () {
     "use strict";
-    $("#modalPreview").focus();
-    $('#modalDownloadL8 .dwn-bands').empty();
-    $('#modalDownloadL8 .overview').attr('data-id', '');
-    $('#modalDownloadL8 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-
     $("#modalDownloadL8 .dropdown-menu li a").each(function () {
         $(this).removeClass('on');
     });
@@ -82,19 +77,31 @@ $('#modalDownloadL8').on('hidden.bs.modal', function () {
     $("#modalDownloadL8 .dropdown .btn:first-child").html($("#modalDownloadL8 .dropdown-menu li a").first().text() + ' <span class="caret"></span>');
 });
 
-$('#modalDownloadS2').on('hidden.bs.modal', function () {
+$('#modalDownloadL8').on('hidden.bs.modal', function () {
     "use strict";
-    $("#modalPreview").focus();
-    $('#modalDownloadS2 .dwn-bands').empty();
-    $('#modalDownloadS2 .overview').attr('data-id', '');
-    $('#modalDownloadS2 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+    $("#modalDownloadL8 .dropdown-menu li a").each(function () {
+        $(this).removeClass('on');
+    });
+    $('#modalDownloadL8 .overview').attr('data-id', '');
+    $('#modalDownloadL8 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+});
 
+$('#modalDownloadS2').on('shown.bs.modal', function () {
+    "use strict";
     $("#modalDownloadS2 .dropdown-menu li a").each(function () {
         $(this).removeClass('on');
     });
     $("#modalDownloadS2 .dropdown-menu li a").first().addClass("on");
-    $("#modalDownloadS2 .dropdown .btn:first-child").html($("#modalDownloadL8 .dropdown-menu li a").first().text() + ' <span class="caret"></span>');
+    $("#modalDownloadS2 .dropdown .btn:first-child").html($("#modalDownloadS2 .dropdown-menu li a").first().text() + ' <span class="caret"></span>');
 });
+
+$('#modalDownloadS2').on('hidden.bs.modal', function () {
+    "use strict";
+    $('#modalDownloadS2 .dwn-bands').empty();
+    $('#modalDownloadS2 .overview').attr('data-id', '');
+    $('#modalDownloadS2 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+});
+
 
 $(function () {
     "use strict";
