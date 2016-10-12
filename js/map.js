@@ -10,7 +10,7 @@ var map = new mapboxgl.Map({
         container: 'map',
         center: [0, 10],
         zoom: 1,
-        style: 'mapbox://styles/mapbox/light-v9',
+        style: 'mapbox://styles/vincentsarago/ciu1lp37x00ag2ilfp9vhb7cw',
         attributionControl: true,
         minZoom: 0,
         maxZoom: 8
@@ -192,6 +192,22 @@ map.on('style.load', function () {
         }
     });
 
+    // Volcanoes
+    // map.addSource('volcanoes', {
+    //     'type': 'geojson',
+    //     'data': geojson
+    // });
+    //
+    // map.addLayer({
+    //     "id": "volcanoes",
+    //     "type": "symbol",
+    //     "source": "volcanoes",
+    //     "layout": {
+    //         "visibility" : "none",
+    //         "icon-image": "volcano-15"
+    //     }
+    // });
+
     map.on('mousemove', function (e) {
         var mouseRadius = 1,
             feature = map.queryRenderedFeatures([
@@ -300,11 +316,10 @@ map.on('style.load', function () {
         sliderValue.textContent = e.target.value + '%';
     });
 
-    //Wrapping in d3-queue - loading app ?
     getDisasterdb();
     getEarthquake();
     getEONETEvents();
-
+    // getVolcanoes();
 });
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -449,6 +464,16 @@ function hoverL8(gr) {
     "use strict";
     map.setFilter("l8-highlighted", gr);
 }
+
+$("#volcanoes-checkbox").change(function () {
+    "use strict";
+    $("#volcanoes-checkbox").parent().toggleClass('green');
+    if (document.getElementById("volcanoes-checkbox").checked) {
+        map.setLayoutProperty('volcanoes', 'visibility', 'visible');
+    } else {
+        map.setLayoutProperty('volcanoes', 'visibility', 'none');
+    }
+});
 
 $("#earthquake-checkbox").change(function () {
     "use strict";

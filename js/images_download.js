@@ -79,9 +79,7 @@ $('#modalDownloadL8').on('shown.bs.modal', function () {
 
 $('#modalDownloadL8').on('hidden.bs.modal', function () {
     "use strict";
-    $("#modalDownloadL8 .dropdown-menu li a").each(function () {
-        $(this).removeClass('on');
-    });
+    $('#modalDownloadL8 .dwn-bands').empty();
     $('#modalDownloadL8 .overview').attr('data-id', '');
     $('#modalDownloadL8 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
 });

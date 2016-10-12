@@ -4,11 +4,22 @@
 /*global moment, moment, alert*/
 /*global console, console, alert*/
 
+
+var disasterwatchAPI = 'https://8zyi22d2r4.execute-api.us-east-1.amazonaws.com/test/';
+
+// POST - https://8zyi22d2r4.execute-api.us-east-1.amazonaws.com/test/add
+// POST - https://8zyi22d2r4.execute-api.us-east-1.amazonaws.com/test/remove
+// POST - https://8zyi22d2r4.execute-api.us-east-1.amazonaws.com/test/update
+// GET - https://8zyi22d2r4.execute-api.us-east-1.amazonaws.com/test/toGEOJSON
+// POST - https://8zyi22d2r4.execute-api.us-east-1.amazonaws.com/test/subscribe
+// POST - https://8zyi22d2r4.execute-api.us-east-1.amazonaws.com/test/unsubscribe
+
 function getDisasterdb() {
     "use strict";
 
-    $.get("https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/get")
+    $.get(disasterwatchAPI + "toGEOJSON")
         .done(function(data){
+            console.log(data);
             map.getSource('disasterdb').setData(data);
             $('.list-disasters').scrollTop(0);
             $('.list-disasters').empty();
@@ -53,7 +64,7 @@ function addDisastTodb() {
     geojson.properties.comments = document.getElementById("disasterComments").value.replace(/\r?\n/g, '<br/>');
 
     $.ajax ({
-        url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/add",
+        url: disasterwatchAPI + "add",
         type: "POST",
         data: JSON.stringify(geojson),
         dataType: "json",
@@ -96,9 +107,10 @@ function updateDisastTodb() {
     geojson.properties.comments = document.getElementById("disasterComments").value.replace(/\r?\n/g, '<br/>');
 
     $.ajax ({
-        url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/update",
+        url: disasterwatchAPI + "update",
         type: "POST",
         data: JSON.stringify(geojson),
+        // data: geojson,
         dataType: "json",
         contentType: "application/json",
     })
@@ -122,7 +134,7 @@ function removeEvt(id) {
 
     $('.map .spin').removeClass('display-none');
     $.ajax ({
-        url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/remove",
+        url: disasterwatchAPI + "remove",
         type: "POST",
         data: JSON.stringify({"uuid": id}),
         dataType: "json",

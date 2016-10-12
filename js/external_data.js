@@ -22,6 +22,14 @@ function getEarthquake() {
         });
 }
 
+// function getVolcanoes() {
+//     'use strict';
+//     $.getJSON('https://data.remotepixel.ca/disasterwatch/ActiveVolcanoes.geojson')
+//         .done(function (data) {
+//             map.getSource('volcanoes').setData(data);
+//         });
+// }
+
 function getEONETEvents() {
     "use strict";
     var eoneturl = 'http://eonet.sci.gsfc.nasa.gov/api/v2.1/events';
