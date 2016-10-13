@@ -163,7 +163,8 @@ function getS1Images(feature, callback) {
     "use strict";
 
     $.ajax ({
-        url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/gets1images",
+        // url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/gets1images",
+        url: "https://eri3bguxzd.execute-api.us-west-2.amazonaws.com/prod/getS1images",
         type: "POST",
         data: JSON.stringify(feature),
         dataType: "json",
