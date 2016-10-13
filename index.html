@@ -210,6 +210,22 @@
 			WhiteSpace
 		--><div id="map" class="map">
 				<span class="spin display-none"><i class="fa fa-spinner fa-spin black"></i></span>
+				<div class="bottom-right-control display-none">
+					<div class="close-block" onclick="toggleImageryOption()">
+						<i class="fa fa-angle-right fa-2x"></i>
+						<i class="fa fa-angle-left fa-2x"></i>
+					</div>
+
+					<div class="block-control">
+						<div class="text-align-left">Basemap Imagery Date:</div>
+						<span class="date-button">date</span>
+					</div>
+
+					<div class="block-control slider">
+						<div class="text-align-left">Basemap Imagery opacity: <span id='slider-value'>100%</span></div>
+						<input id='slider' type='range' min='0' max='100' step='0' value='100' />
+					</div>
+				</div>
 			</div>
 
 
@@ -293,16 +309,6 @@
                     <div class="title">Settings</div>
 
                     <div class="side-view-content">
-
-						<div class="block-control">
-                            <div class="text-align-left">Basemap Imagery Date:</div>
-							<span class="date-button">date</span>
-                        </div>
-
-						<div class="block-control slider">
-							<div class="text-align-left">Basemap Imagery opacity: <span id='slider-value'>100%</span></div>
-							<input id='slider' type='range' min='0' max='100' step='0' value='100' />
-						</div>
 
 						<!-- <div class="block-control">
 							<div class="text-align-left">Volcanoes</div>

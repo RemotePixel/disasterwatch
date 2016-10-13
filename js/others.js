@@ -155,6 +155,9 @@ function closeleftblock() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+function toggleImageryOption() {
+    $(".bottom-right-control").toggleClass('on');
+}
 
 function toggleParam(setting) {
     "use strict";
