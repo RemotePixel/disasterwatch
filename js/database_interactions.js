@@ -5,14 +5,14 @@
 /*global console, console, alert*/
 
 
-var disasterwatchAPI = 'https://8zyi22d2r4.execute-api.us-east-1.amazonaws.com/test/';
+var disasterwatchAPI = 'https://9c7j2wm1mc.execute-api.us-east-1.amazonaws.com/test/';
 
-// POST - https://8zyi22d2r4.execute-api.us-east-1.amazonaws.com/test/add
-// POST - https://8zyi22d2r4.execute-api.us-east-1.amazonaws.com/test/remove
-// POST - https://8zyi22d2r4.execute-api.us-east-1.amazonaws.com/test/update
-// GET - https://8zyi22d2r4.execute-api.us-east-1.amazonaws.com/test/toGEOJSON
-// POST - https://8zyi22d2r4.execute-api.us-east-1.amazonaws.com/test/subscribe
-// POST - https://8zyi22d2r4.execute-api.us-east-1.amazonaws.com/test/unsubscribe
+// POST - https://9c7j2wm1mc.execute-api.us-east-1.amazonaws.com/test/add
+// POST - https://9c7j2wm1mc.execute-api.us-east-1.amazonaws.com/test/remove
+// POST - https://9c7j2wm1mc.execute-api.us-east-1.amazonaws.com/test/update
+// GET - https://9c7j2wm1mc.execute-api.us-east-1.amazonaws.com/test/toGEOJSON
+// POST - https://9c7j2wm1mc.execute-api.us-east-1.amazonaws.com/test/subscribe
+// POST - https://9c7j2wm1mc.execute-api.us-east-1.amazonaws.com/test/unsubscribe
 
 function getDisasterdb() {
     "use strict";
