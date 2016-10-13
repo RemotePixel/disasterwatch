@@ -10,7 +10,7 @@ var map = new mapboxgl.Map({
         container: 'map',
         center: [0, 10],
         zoom: 1,
-        style: 'mapbox://styles/mapbox/light-v9',
+        style: 'mapbox://styles/vincentsarago/ciu1lp37x00ag2ilfp9vhb7cw',
         attributionControl: true,
         minZoom: 0,
         maxZoom: 8
@@ -192,6 +192,22 @@ map.on('style.load', function () {
         }
     });
 
+    // Volcanoes
+    // map.addSource('volcanoes', {
+    //     'type': 'geojson',
+    //     'data': geojson
+    // });
+    //
+    // map.addLayer({
+    //     "id": "volcanoes",
+    //     "type": "symbol",
+    //     "source": "volcanoes",
+    //     "layout": {
+    //         "visibility" : "none",
+    //         "icon-image": "volcano-15"
+    //     }
+    // });
+
     map.on('mousemove', function (e) {
         var mouseRadius = 1,
             feature = map.queryRenderedFeatures([
@@ -275,6 +291,7 @@ map.on('style.load', function () {
             var popup = new mapboxgl.Popup()
                 .setLngLat(e.lngLat)
                 .setHTML('<div class="linetab bold">Name: ' + feature.properties.name + '</div>' +
+                            '<div class="linetab uuid">uuid: ' + feature.properties.uuid + '</div>' +
                             '<div class="linetab disasterType">Type: ' + dtype + '</div>' +
                             '<div class="linetab">Location: ' + feature.properties.place + '</div>' +
                             '<div class="linetab">Start Date: ' + feature.properties.dateStart + '</div>' +
@@ -300,11 +317,10 @@ map.on('style.load', function () {
         sliderValue.textContent = e.target.value + '%';
     });
 
-    //Wrapping in d3-queue - loading app ?
     getDisasterdb();
     getEarthquake();
     getEONETEvents();
-
+    // getVolcanoes();
 });
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -354,9 +370,6 @@ map.on('draw.create', function (e) {
 function setStyle(basename) {
     "use strict";
 
-    $(".date-button").attr('disabled', 'disabled');
-    $("#slider").attr('disabled', 'disabled');
-
     if (map.getSource("gibs-tiles")) {
         map.removeLayer("gibs-tiles");
         map.removeSource("gibs-tiles");
@@ -364,8 +377,16 @@ function setStyle(basename) {
 
     switch (basename) {
     case 'MapboxMap':
+        $(".date-button").attr('disabled', 'disabled');
+        $("#slider").attr('disabled', 'disabled');
+        $(".bottom-right-control").addClass("display-none");
+        $(".bottom-right-control").removeClass("on");
         return;
     default:
+        if ($(".bottom-right-control").hasClass("display-none")) {
+            $(".bottom-right-control").removeClass("display-none");
+            $(".bottom-right-control").addClass("on");
+        }
         $(".date-button").attr('disabled', false);
         $("#slider").attr('disabled', false);
         var dateValue = document.getElementsByClassName('date-button')[0].textContent,
@@ -382,8 +403,7 @@ function setStyle(basename) {
             'tileSize': 256
         });
 
-        var slider = document.getElementById('slider'),
-            opa = (parseInt(slider.getAttribute('value'), 10) / 100);
+        var opa = document.getElementById('slider').value / 100;
 
         map.addLayer({
             'id': 'gibs-tiles',
@@ -449,6 +469,16 @@ function hoverL8(gr) {
     "use strict";
     map.setFilter("l8-highlighted", gr);
 }
+
+$("#volcanoes-checkbox").change(function () {
+    "use strict";
+    $("#volcanoes-checkbox").parent().toggleClass('green');
+    if (document.getElementById("volcanoes-checkbox").checked) {
+        map.setLayoutProperty('volcanoes', 'visibility', 'visible');
+    } else {
+        map.setLayoutProperty('volcanoes', 'visibility', 'none');
+    }
+});
 
 $("#earthquake-checkbox").change(function () {
     "use strict";

@@ -22,6 +22,14 @@ function getEarthquake() {
         });
 }
 
+// function getVolcanoes() {
+//     'use strict';
+//     $.getJSON('https://data.remotepixel.ca/disasterwatch/ActiveVolcanoes.geojson')
+//         .done(function (data) {
+//             map.getSource('volcanoes').setData(data);
+//         });
+// }
+
 function getEONETEvents() {
     "use strict";
     var eoneturl = 'http://eonet.sci.gsfc.nasa.gov/api/v2.1/events';
@@ -126,6 +134,7 @@ function getL8S2Images(feature, callback) {
                         scene.usgsURL = data.results[i].cartURL;
                         scene.browseURL = data.results[i].browseURL.replace('http://', "https://");
                         scene.AWSurl = 'http://landsat-pds.s3.amazonaws.com/L8/' + zeroPad(data.results[i].path, 3) + '/' + zeroPad(data.results[i].row, 3) + '/' + data.results[i].sceneID + '/';
+                        scene.sumAWSurl = 'https://landsatonaws.com/L8/' + zeroPad(data.results[i].path, 3) + '/' + zeroPad(data.results[i].row, 3) + '/' + data.results[i].sceneID;
                         results.push(scene);
                     } else {
                         scene.sat = 'sentinel-2';
@@ -154,7 +163,8 @@ function getS1Images(feature, callback) {
     "use strict";
 
     $.ajax ({
-        url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/gets1images",
+        // url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/gets1images",
+        url: "https://eri3bguxzd.execute-api.us-west-2.amazonaws.com/prod/getS1images",
         type: "POST",
         data: JSON.stringify(feature),
         dataType: "json",
@@ -225,7 +235,7 @@ function getImages() {
                             case 'landsat-8':
                                 var hoverstr = "['all', ['==', 'PATH', " + imgMeta.path + "], ['==', 'ROW', " + imgMeta.row + "]]";
                                 $('.img-preview').append(
-                                    '<div sat="landsat8" class="item" onmouseover="hoverL8(' + hoverstr + ')" onmouseout="hoverL8(' + "['all', ['==', 'PATH', ''], ['==', 'ROW', '']]" + ')">' +
+                                    '<div sat="landsat8" img-date="' + imgMeta.date + '" class="item" onmouseover="hoverL8(' + hoverstr + ')" onmouseout="hoverL8(' + "['all', ['==', 'PATH', ''], ['==', 'ROW', '']]" + ')">' +
                                         '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '">' +
                                         '<div class="result-overlay">' +
                                             '<span>' + imgMeta.sceneID + '</span>' +
@@ -233,7 +243,8 @@ function getImages() {
                                             '<span><i class="fa fa-cloud"></i> ' + imgMeta.cloud + '%</span>' +
                                             '<span>Link:</span>' +
                                             '<div class="btnDD" onclick="feeddownloadL8(\'' + imgMeta.AWSurl + '\',\'' + imgMeta.sceneID + '\')"><i class="fa fa-download"></i></div>' +
-                                            '<a target="_blank" href="' + imgMeta.AWSurl + 'index.html"><img src="/img/aws.png"> </a>' +
+                                            // '<a target="_blank" href="' + imgMeta.AWSurl + 'index.html"><img src="/img/aws.png"> </a>' +
+                                            '<a target="_blank" href="' + imgMeta.sumAWSurl + '"><img src="/img/aws.png"> </a>' +
                                             '<a target="_blank" href="' + imgMeta.usgsURL + '"><img src="/img/usgs.jpg"></a>' +
                                         '</div>' +
                                         '</div>'
@@ -242,7 +253,7 @@ function getImages() {
                             case 'sentinel-2':
                                 var hoverstr = "['==', 'Name', '" + imgMeta.grid + "']";
                                 $('.img-preview').append(
-                                    '<div sat="sentinel2" class="item" onmouseover="hoverS2(' + hoverstr + ')" onmouseout="hoverS2(' + "['in', 'Name', '']" + ')">' +
+                                    '<div sat="sentinel2" img-date="' + imgMeta.date + '" class="item" onmouseover="hoverS2(' + hoverstr + ')" onmouseout="hoverS2(' + "['in', 'Name', '']" + ')">' +
                                         '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '">' +
                                         '<div class="result-overlay">' +
                                             '<span>' + imgMeta.sceneID + '</span>' +
@@ -265,7 +276,7 @@ function getImages() {
                                 geojsonS1.features.push(feat);
                                 var hoverstr = "['in', 'id', '" + imgMeta.sceneID + "']";
                                 $('.img-preview').append(
-                                    '<div sat="sentinel1" class="item" onmouseover="hoverS1(' + hoverstr + ')" onmouseout="hoverS1(' + "['==', 'id', '']" + ')">' +
+                                    '<div sat="sentinel1" img-date="' + imgMeta.date + '" class="item" onmouseover="hoverS1(' + hoverstr + ')" onmouseout="hoverS1(' + "['==', 'id', '']" + ')">' +
                                         '<img class="lazy img-responsive" src="/img/sentinel1.jpg">' +
                                         '<div class="result-overlay">' +
                                             '<span> S1A_IW_SLC' + moment(imgMeta.fullDate).utc().format('YYYYMMDD_hhmmss') + '</span>' +

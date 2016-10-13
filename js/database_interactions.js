@@ -4,10 +4,20 @@
 /*global moment, moment, alert*/
 /*global console, console, alert*/
 
+
+var disasterwatchAPI = 'https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/';
+
+// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/add
+// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/remove
+// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/update
+// GET - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/toGEOJSON
+// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/subscribe
+// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/unsubscribe
+
 function getDisasterdb() {
     "use strict";
 
-    $.get("https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/get")
+    $.get(disasterwatchAPI + "toGEOJSON")
         .done(function(data){
             map.getSource('disasterdb').setData(data);
             $('.list-disasters').scrollTop(0);
@@ -15,7 +25,7 @@ function getDisasterdb() {
             for(var i = 0; i < data.features.length; i++) {
                 var disasterType = (data.features[i].properties.dtype.length !== 0) ? data.features[i].properties.dtype[0] : 'unclassified';
                 $('.list-disasters').append(
-                    '<div class="list-element" target="_blank" onclick="mapFlyToDisaster(\'' + data.features[i].properties.uuid + '\')">'+
+                    '<div class="list-element" date-start="' +  data.features[i].properties.dateStart + '" date-end="' + data.features[i].properties.dateEnd + '" target="_blank" onclick="mapFlyToDisaster(\'' + data.features[i].properties.uuid + '\')">'+
                         '<div class="col">' +
                             '<div class="disaster-descr"><span class="dtype ' + disasterType + '">' + disasterType.slice(0,1) + '</span></div>' +
                             '<div class="disaster-descr">'+
@@ -25,9 +35,9 @@ function getDisasterdb() {
                         '</div>' +
                     '</div>');
             }
+            filterListDisaster();
         });
 }
-
 
 function addDisastTodb() {
     "use strict";
@@ -42,8 +52,19 @@ function addDisastTodb() {
     delete geojson['id'];
 
     geojson.properties.uuid = generateUUID();
-    geojson.properties.mailTO = (document.getElementById("mailCheckbox").checked)? document.getElementById("disastermailTo").value : '';
-    geojson.properties.dtype = $('#disasterType').children().map(function(){
+    // geojson.properties.mailTO = (document.getElementById("mailCheckbox").checked)? document.getElementById("disastermailTo").value : '';
+    if (document.getElementById("mailCheckbox").checked) {
+        var sat = $.map($(".disaster-info .sat-filter input:checked"), function (e) {
+            return e.getAttribute('data');
+        });
+        geojson.properties.mailTO = {
+            'mail': document.getElementById("disastermailTo").value,
+            'satellite': sat
+        };
+    } else {
+        geojson.properties.mailTO = null;
+    }
+    geojson.properties.dtype = $('#disasterType').children().map(function () {
         return this.className
     }).toArray();
     geojson.properties.name = document.getElementById("disasterName").value;
@@ -52,8 +73,15 @@ function addDisastTodb() {
     geojson.properties.dateEnd = (document.getElementById("dateCheckbox").checked)? '' : document.getElementById("disasterEndDate").value;
     geojson.properties.comments = document.getElementById("disasterComments").value.replace(/\r?\n/g, '<br/>');
 
+    //get latest images for each satellite (mailing input)
+    geojson.properties.images = {
+        'landsat8' : $('.img-preview [sat="landsat8"]').first().attr('img-date'),
+        'sentinel2' : $('.img-preview [sat="sentinel2"]').first().attr('img-date'),
+        'sentinel1' : $('.img-preview [sat="sentinel1"]').first().attr('img-date')
+    };
+
     $.ajax ({
-        url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/add",
+        url: disasterwatchAPI + "add",
         type: "POST",
         data: JSON.stringify(geojson),
         dataType: "json",
@@ -85,7 +113,19 @@ function updateDisastTodb() {
 
     delete geojson['id'];
 
-    geojson.properties.mailTO = (document.getElementById("mailCheckbox").checked)? document.getElementById("disastermailTo").value : '';
+    // geojson.properties.mailTO = (document.getElementById("mailCheckbox").checked)? document.getElementById("disastermailTo").value : '';
+    if (document.getElementById("mailCheckbox").checked) {
+        var sat = $.map($(".disaster-info .sat-filter input:checked"), function (e) {
+            return e.getAttribute('data');
+        });
+        geojson.properties.mailTO = {
+            'mail': document.getElementById("disastermailTo").value,
+            'satellite': sat
+        };
+    } else {
+        geojson.properties.mailTO = null;
+    }
+
     geojson.properties.dtype = $('#disasterType').children().map(function(){
         return this.className
     }).toArray();
@@ -96,7 +136,7 @@ function updateDisastTodb() {
     geojson.properties.comments = document.getElementById("disasterComments").value.replace(/\r?\n/g, '<br/>');
 
     $.ajax ({
-        url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/update",
+        url: disasterwatchAPI + "update",
         type: "POST",
         data: JSON.stringify(geojson),
         dataType: "json",
@@ -122,7 +162,7 @@ function removeEvt(id) {
 
     $('.map .spin').removeClass('display-none');
     $.ajax ({
-        url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/remove",
+        url: disasterwatchAPI + "remove",
         type: "POST",
         data: JSON.stringify({"uuid": id}),
         dataType: "json",
