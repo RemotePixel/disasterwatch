@@ -123,7 +123,7 @@
 						<form>
 							<div class="form-group">
 								<label for="disasterName">Name</label>
-								<input type="name" class="form-control" id="disasterName" placeholder="Name">
+								<input type="name" class="form-control" id="disasterName" placeholder="Name" tabindex="1">
 							</div>
 
 							<span id="uuid" class="uuid"></span>
@@ -131,7 +131,7 @@
 							<div class="form-group">
 								<label>Disaster Type</label>
 								<div class="dropdown">
-									<span id="disasterType" class="form-control dropdown-toggle disasterType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></span>
+									<span id="disasterType" class="form-control dropdown-toggle disasterType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" tabindex="2"></span>
 									<ul id="dropdown-menu" class="dropdown-menu disasterType" aria-labelledby="dropdownMenu1">
 										<li><a onclick="addType(this)"><span class="fire">fire</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span class="earthquake">earthquake</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
@@ -150,29 +150,29 @@
 
 							<div class="form-group">
 								<label for="disasterPlace">Place</label>
-								<input type="place" class="form-control" id="disasterPlace" placeholder="Place">
+								<input type="place" class="form-control" id="disasterPlace" placeholder="Place" tabindex="3">
 							</div>
 
 							<label>Date</label>
 							<div class="row">
 								<div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
 									<span>Start</span>
-									<input id="disasterStartDate" type="text" class="form-control date-input" value="">
+									<input id="disasterStartDate" type="text" class="form-control date-input" value="" tabindex="4">
 									<div class="checkbox">
 										<label>
-											<input id="dateCheckbox" type="checkbox"> Ongoing Event
+											<input id="dateCheckbox" type="checkbox" tabindex="6"> Ongoing Event
 										</label>
 									</div>
 								</div>
 								<div class="form-group col-xs-6 col-sm-6 col-md-6 col-lg-6">
 									<span>End</span>
-									<input id="disasterEndDate" type="text" class="form-control date-input" value="">
+									<input id="disasterEndDate" type="text" class="form-control date-input" value="" tabindex="5">
 								</div>
 							</div>
 
 							<div class="checkbox">
 								<label>
-									<input id="mailCheckbox" type="checkbox"> Keep Me Posted
+									<input id="mailCheckbox" type="checkbox" tabindex="7"> Keep Me Posted
 								</label>
 								<span>Receive notification when a new image is available</span>
 								<div class="sat-filter">
@@ -186,12 +186,12 @@
 										<input data="sentinel1" type="checkbox" checked disabled> Sentinel-1
 									</label>
 								</div>
-								<input type="email" class="form-control" id="disastermailTo" placeholder="Email" disabled>
+								<input type="email" class="form-control" id="disastermailTo" placeholder="Email" disabled tabindex="8">
 							</div>
 
 							<div class="form-group">
 								<label for="disasterDate">Comments</label>
-								<textarea type="comment" class="form-control" id="disasterComments" placeholder="Comments"></textarea>
+								<textarea type="comment" class="form-control" id="disasterComments" placeholder="Comments" tabindex="9"></textarea>
 							</div>
 
 							<div class="comments">
@@ -200,7 +200,7 @@
 									added please contact me or open a ticket on <a href="https://github.com/RemotePixel/disasterwatch/issues" target="_blank">Github</a></p>
 							</div>
 
-							<div id="addEVT" type="submit" class="btn btn-default" onclick="addDisastTodb()">Add</div>
+							<div id="addEVT" type="submit" class="btn btn-default" onclick="addDisastTodb()" tabindex="10">Add</div>
 							<div id="updateEVT" type="submit" class="btn btn-default" onclick="updateDisastTodb()">Update</div>
 						</form>
 						<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
@@ -231,11 +231,11 @@
 									</div>
 								</div>
 								<div class="link-on on">
-									<span>On View</span>
+									<span>Current</span>
 								</div>
 								<img src="/img/mapboxmap.jpg"></img>
 							</div>
-							<span>Mapbox Map</span>
+							<span>Mapbox</span>
 						</div>
 
 						<div class="side-element">
@@ -246,7 +246,7 @@
 									</div>
 								</div>
 								<div class="link-on">
-									<span>On View</span>
+									<span>Current</span>
 								</div>
 								<img src="/img/Suomi_true.jpg"></img>
 							</div>
@@ -261,7 +261,7 @@
 									</div>
 								</div>
 								<div class="link-on">
-									<span>On View</span>
+									<span>Current</span>
 								</div>
 								<img src="/img/Terra_true.jpg"></img>
 							</div>
@@ -276,7 +276,7 @@
 									</div>
 								</div>
 								<div class="link-on">
-									<span>On View</span>
+									<span>Current</span>
 								</div>
 								<img src="/img/Aqua_true.jpg"></img>
 							</div>
@@ -376,7 +376,7 @@
 								<span>Draw shape</span>
 							</div>
 						</div>
-						<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 drawbox">
+						<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 drawbox" title="Coming Soon">
 							<div class="drawsel" disabled="disabled" data-dismiss="modal">
 								<i class="ms ms-shp ms-2x"></i>
 								<span>Upload a file</span>
@@ -472,11 +472,11 @@
                 </div>
                    <div class="modal-body">
                         <div class="hmodal-info">
-	                        <p>Disaster watch is a tool to visualize latest satellite imagery available for a disaster area.</p>
+	                        <p>Disaster watch is an open-source tool to visualize the latest satellite imagery in disaster areas.</p>
 
-		                    <p><a href="https://github.com/vincentsarago/disasterwatch" target="_blank">GitHub</a></p>
+		                    <p><a href="https://github.com/vincentsarago/disasterwatch" target="_blank">Check out this project on GitHub</a></p>
 
-		                    <p>Questions or comments to <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></p>
+		                    <p>Questions or comments? Contact <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></p>
 
                         </div>
                 </div>
