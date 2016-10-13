@@ -251,5 +251,4 @@ $(document).ready(function () {
 
     $(".date-button").datepicker('setDate', moment.utc().subtract(1, 'days').format('YYYY-MM-DD'));
     $("#slider").attr('disabled', 'disabled');
-    // $('#modalUnderConstruction').modal();
 });

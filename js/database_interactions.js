@@ -14,7 +14,7 @@ var disasterwatchAPI = 'https://tcuraimo51.execute-api.us-east-1.amazonaws.com/t
 // POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/subscribe
 // POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/unsubscribe
 
-function getDisasterdb() {
+function getDisasterdb(callback) {
     "use strict";
 
     $.get(disasterwatchAPI + "toGEOJSON")
@@ -36,6 +36,7 @@ function getDisasterdb() {
                     '</div>');
             }
             filterListDisaster();
+            return callback(null, 'ready');
         });
 }
 

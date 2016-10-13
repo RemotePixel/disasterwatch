@@ -317,10 +317,22 @@ map.on('style.load', function () {
         sliderValue.textContent = e.target.value + '%';
     });
 
-    getDisasterdb();
-    getEarthquake();
-    getEONETEvents();
-    // getVolcanoes();
+    var q = d3.queue()
+        .defer(getDisasterdb)
+        .defer(getEarthquake)
+        .defer(getEONETEvents)
+        // .defer(getVolcanoes)
+        .awaitAll(function(error, results) {
+          if (error) throw error;
+          //when ready :
+          var keys = getUrlVars();
+          if (keys.hasOwnProperty('event')) {
+              editEvt(keys.event);
+          } else {
+              $('#modalUnderConstruction').modal();
+          }
+          $('.map .spin').addClass('display-none');
+        });
 });
 
 ////////////////////////////////////////////////////////////////////////////////
