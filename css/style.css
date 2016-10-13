@@ -39,7 +39,7 @@ body {
     z-index: 2;
     background-color: #FFF;
     vertical-align: top;
-    font-size: 2rem
+    font-size: 2rem;
 }
 
 .main-container {
@@ -56,7 +56,7 @@ body {
          -moz-user-select: none;
           -ms-user-select: none;
               user-select: none;
-    font-size: 2rem
+    font-size: 2rem;
 }
 
 .buttonTitle {
@@ -1349,7 +1349,7 @@ body {
         margin: 0;
         padding: 0;
         vertical-align: top;
-        font-size: 2rem
+        font-size: 2rem;
     }
 
     .leftblock .right-top-button{
