@@ -746,7 +746,7 @@ body {
     filter: alpha(opacity=65);
     -webkit-box-shadow: none;
     box-shadow: none;
-    opacity: .65;
+    opacity: .2;
     pointer-events: none;
 }
 
@@ -775,7 +775,7 @@ body {
     margin: 0;
     padding: 0;
     vertical-align: top;
-    font-size: 2rem
+    /*font-size: 2rem*/
 }
 
 .leftblock .main-section{
