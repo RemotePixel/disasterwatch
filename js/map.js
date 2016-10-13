@@ -370,9 +370,6 @@ map.on('draw.create', function (e) {
 function setStyle(basename) {
     "use strict";
 
-    $(".date-button").attr('disabled', 'disabled');
-    $("#slider").attr('disabled', 'disabled');
-
     if (map.getSource("gibs-tiles")) {
         map.removeLayer("gibs-tiles");
         map.removeSource("gibs-tiles");
@@ -380,8 +377,16 @@ function setStyle(basename) {
 
     switch (basename) {
     case 'MapboxMap':
+        $(".date-button").attr('disabled', 'disabled');
+        $("#slider").attr('disabled', 'disabled');
+        $(".bottom-right-control").addClass("display-none");
+        $(".bottom-right-control").removeClass("on");
         return;
     default:
+        if ($(".bottom-right-control").hasClass("display-none")) {
+            $(".bottom-right-control").removeClass("display-none");
+            $(".bottom-right-control").addClass("on");
+        }
         $(".date-button").attr('disabled', false);
         $("#slider").attr('disabled', false);
         var dateValue = document.getElementsByClassName('date-button')[0].textContent,
@@ -398,8 +403,7 @@ function setStyle(basename) {
             'tileSize': 256
         });
 
-        var slider = document.getElementById('slider'),
-            opa = (parseInt(slider.getAttribute('value'), 10) / 100);
+        var opa = document.getElementById('slider').value / 100;
 
         map.addLayer({
             'id': 'gibs-tiles',
