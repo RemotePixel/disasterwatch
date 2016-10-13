@@ -34,8 +34,10 @@ $("#mailCheckbox").change(function () {
     "use strict";
     if (this.checked) {
         $("#disastermailTo").attr('disabled', false);
+        $(".disaster-info .sat-filter input").attr('disabled', false);
     } else {
         $("#disastermailTo").attr('disabled', 'disabled');
+        $(".disaster-info .sat-filter input").attr('disabled', 'disabled');
     }
 });
 
@@ -68,11 +70,9 @@ $("#event-checkbox").change(function () {
     filterListDisaster();
 });
 
-
-
 function filterListImage() {
     "use strict";
-    var sat = $.map($(".sat-filter input:checked"), function (e) {
+    var sat = $.map($(".disaster-images .sat-filter input:checked"), function (e) {
         return e.getAttribute('data');
     });
 
@@ -85,7 +85,7 @@ function filterListImage() {
     });
 }
 
-$(".sat-filter input").change(function () {
+$(".disaster-images .sat-filter input").change(function () {
     "use strict";
     filterListImage();
 });
@@ -98,13 +98,11 @@ function resetForm() {
         $(this).addClass('right-block');
     });
 
-    $(".disaster-info input").each(function () {
-        $(this).val('');
-    });
+    $(".disaster-info input").val('');
+    $('.disaster-info input[type=checkbox]').prop('checked', false);
 
-    $('.disaster-info input[type=checkbox]').each(function () {
-        $(this).attr('checked', false);
-    });
+    $(".disaster-info .sat-filter input").attr('disabled', 'disabled');
+    $(".disaster-info .sat-filter input[type=checkbox]").prop('checked', true);
 
     $('.disaster-info .uuid').text('');
     $('.disaster-info textarea').val('');
@@ -146,7 +144,7 @@ function closeleftblock() {
     $(".tab-selector-1").removeClass('out');
     $(".tab-selector-2").removeClass('out');
 
-    // $(".sat-filter input").prop('checked', true);
+    // $(".disaster-images .sat-filter input").prop('checked', true);
     $(".openSettings").removeClass('active');
     $(".disaster-images .sat-filter").removeClass('active');
 
