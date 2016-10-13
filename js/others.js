@@ -120,7 +120,7 @@ function openleftBlock() {
         $(this).attr('disabled', true);
     });
 
-    ['#settings-panel', '#settings-btn', '#basemaps-panel', '#basemaps-btn', '#disasters-panel', '#disasters-btn'].forEach(function (e) {
+    ['#layers-panel', '#layers-btn', '#basemaps-panel', '#basemaps-btn', '#disasters-panel', '#disasters-btn'].forEach(function (e) {
         $(e).removeClass('on');
     });
 
@@ -129,7 +129,7 @@ function openleftBlock() {
 
 function openImagesSettings() {
     "use strict";
-    $(".openSettings").toggleClass('active');
+    $(".opensettings").toggleClass('active');
     $(".disaster-images .sat-filter").toggleClass('active');
 }
 
@@ -145,7 +145,7 @@ function closeleftblock() {
     $(".tab-selector-2").removeClass('out');
 
     // $(".disaster-images .sat-filter input").prop('checked', true);
-    $(".openSettings").removeClass('active');
+    $(".opensettings").removeClass('active');
     $(".disaster-images .sat-filter").removeClass('active');
 
     $('.img-preview').empty();
@@ -164,36 +164,36 @@ function toggleParam(setting) {
     switch (setting) {
     case 'basemaps':
         $("#basemaps-panel .side-view-content").scrollTop(0);
-        $('#settings-panel').removeClass('on');
-        $('#settings-btn').removeClass('on');
+        $('#layers-panel').removeClass('on');
+        $('#layers-btn').removeClass('on');
         $('#disasters-panel').removeClass('on');
         $('#disasters-btn').removeClass('on');
         $('#basemaps-panel').toggleClass('on');
         $('#basemaps-btn').toggleClass('on');
         break;
 
-    case 'settings':
+    case 'layers':
         $('#basemaps-panel').removeClass('on');
         $('#basemaps-btn').removeClass('on');
         $('#disasters-panel').removeClass('on');
         $('#disasters-btn').removeClass('on');
-        $('#settings-panel').toggleClass('on');
-        $('#settings-btn').toggleClass('on');
+        $('#layers-panel').toggleClass('on');
+        $('#layers-btn').toggleClass('on');
         break;
 
     case 'disasterslist':
         $("#disasters-panel .side-view-content").scrollTop(0);
         $('#basemaps-panel').removeClass('on');
         $('#basemaps-btn').removeClass('on');
-        $('#settings-panel').removeClass('on');
-        $('#settings-btn').removeClass('on');
+        $('#layers-panel').removeClass('on');
+        $('#layers-btn').removeClass('on');
         $('#disasters-panel').toggleClass('on');
         $('#disasters-btn').toggleClass('on');
         break;
 
     case 'add':
-        $('#settings-panel').removeClass('on');
-        $('#settings-btn').removeClass('on');
+        $('#layers-panel').removeClass('on');
+        $('#layers-btn').removeClass('on');
         $('#basemaps-panel').removeClass('on');
         $('#basemaps-btn').removeClass('on');
         $('#disasters-panel').removeClass('on');

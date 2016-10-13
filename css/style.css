@@ -932,7 +932,7 @@ body {
     background-color: #FFF;
 }
 
-.leftblock .right-top-button .openSettings.active {
+.leftblock .right-top-button .opensettings.active {
     color: #FFF;
     background-color: #505050;
 }
@@ -1024,7 +1024,7 @@ body {
     transition: all ease-out 0.2s 0.1s;
 }
 
-.leftblock .main-section input.tab-selector-2:checked ~ .right-top-button .openSettings {
+.leftblock .main-section input.tab-selector-2:checked ~ .right-top-button .opensettings {
     display: none;
 }
 
