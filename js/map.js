@@ -291,6 +291,7 @@ map.on('style.load', function () {
             var popup = new mapboxgl.Popup()
                 .setLngLat(e.lngLat)
                 .setHTML('<div class="linetab bold">Name: ' + feature.properties.name + '</div>' +
+                            '<div class="linetab uuid">uuid: ' + feature.properties.uuid + '</div>' +
                             '<div class="linetab disasterType">Type: ' + dtype + '</div>' +
                             '<div class="linetab">Location: ' + feature.properties.place + '</div>' +
                             '<div class="linetab">Start Date: ' + feature.properties.dateStart + '</div>' +

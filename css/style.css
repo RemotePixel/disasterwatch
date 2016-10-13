@@ -59,7 +59,6 @@ body {
     font-size: 2rem
 }
 
-
 .buttonTitle {
     font-weight: 100;
     display: block;
@@ -548,6 +547,14 @@ body {
     z-index: 1;
 }
 
+.map .mapboxgl-popup-content {
+    -webkit-touch-callout: unset;
+      -webkit-user-select: text;
+         -moz-user-select: text;
+          -ms-user-select: text;
+              user-select: text;
+}
+
 .display-none {
     display: none;
 }
@@ -640,6 +647,11 @@ body {
     max-width: 400px;
     word-wrap:break-word;
     text-align: justify;
+}
+
+.linetab .uuid {
+    font-size: 10px;
+    color: #464646;
 }
 
 .linetab a {
