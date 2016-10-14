@@ -14,6 +14,7 @@ body {
     font-weight: 100;
     letter-spacing: 0;
 }
+
 .content {
     height:100%;
     width: 100%;
@@ -24,8 +25,13 @@ body {
     margin: 0;
     padding: 0;
 }
+
 .black {
     color: #000;
+}
+
+.red {
+    color: rgb(190, 5, 5);
 }
 
 .display-none {
@@ -751,6 +757,28 @@ body {
     padding-left: 4px;
 }
 
+.mapboxgl-popup-content .subscribe-section input,
+.mapboxgl-popup-content .subscribe-section .btn {
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.mapboxgl-popup-content .subscribe-section .error {
+    display: none;
+    font-size: 10px;
+}
+
+.mapboxgl-popup-content .subscribe-section .error.on {
+    display: block;
+    font-size: 10px;
+}
+
+.mapboxgl-popup-content .subscribe-section .sat-filter label {
+    vertical-align: middle;
+    margin: 0;
+    padding: 5px;
+}
+
 .bold {
     font-weight: bold;
 }
@@ -1440,6 +1468,18 @@ body {
         font-size: 8px;
         line-height: 12px;
         max-width: 200px;
+    }
+
+    .mapboxgl-popup-content .subscribe-section .sat-filter label {
+        font-size: 8px;
+        padding: 2px;
+    }
+
+    .mapboxgl-popup-content .subscribe-section input,
+    .mapboxgl-popup-content .subscribe-section .btn {
+        margin-top: 2px;
+        font-size: 8px;
+        height: auto;
     }
 
     .leftblock.in ~ .map {

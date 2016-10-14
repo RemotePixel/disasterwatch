@@ -296,7 +296,6 @@ map.on('style.load', function () {
                 commentsBlock += comments[j];
             }
 
-            console.log(comments);
             var popup = new mapboxgl.Popup()
                 .setLngLat(e.lngLat)
                 .setHTML('<div class="dtypeImage"><img src="img/dw.png" class="img-responsive"></div>' +
@@ -315,13 +314,27 @@ map.on('style.load', function () {
                             '<div class="delim"></div>' +
                             '<div class="linetab"><a onclick="seeEvtDBimages(\'' + feature.properties.uuid + '\')">Search Images</a></div>' +
                             '<div class="linetab">' +
-                                // '<a onclick="subscribeEvt(\'' + feature.properties.uuid + '\')">Subscribe</a> | ' +
                                 '<a onclick="editEvt(\'' + feature.properties.uuid + '\')">Update</a> | ' +
-                                '<a onclick="removeEvt(\'' + feature.properties.uuid + '\')">Remove</a>' +
-                            '</div>')
+                                '<a onclick="removeEvt(\'' + feature.properties.uuid + '\')">Remove</a> | ' +
+                                '<a onclick="toggleSubscribe()">Subscribe</a>' +
+                            '</div>' +
+                            '<div data-uuid="' + feature.properties.uuid + '" class="subscribe-section display-none">' +
+                                '<div class="delim"></div>' +
+                                '<div class="sat-filter">' +
+									'<label><input data="landsat8" type="checkbox" checked> Landsat-8</label>' +
+									'<label><input data="sentinel2" type="checkbox" checked> Sentinel-2</label>' +
+									'<label><input data="sentinel1" type="checkbox" checked> Sentinel-1</label>' +
+								'</div>' +
+								'<input type="email" class="form-control" placeholder="Email">' +
+                                '<div class="btn btn-default" onclick="subscribeEvt(this)">Subscribe</div>' +
+                                '<span class="error red">Error...</span>' +
+                            '</div>'
+                        )
                 .addTo(map);
         }
     });
+
+
 
     var slider = document.getElementById('slider'),
         sliderValue = document.getElementById('slider-value');

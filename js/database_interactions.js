@@ -160,6 +160,49 @@ function updateDisastTodb() {
     closeleftblock();
 }
 
+function subscribeEvt(elem) {
+    $('.map .spin').removeClass('display-none');
+
+    var div = $(elem).parent(),
+        uuid = div.attr("data-uuid");
+
+    var sat = $.map($(div).find(".sat-filter input:checked"), function (e) {
+        return e.getAttribute('data');
+    });
+
+    var mail = {
+        'mail': $(div).find('input[type="email"]').val(),
+        'satellite': sat
+    },
+        request = {
+            "uuid": uuid,
+            "mail" : mail
+        }
+
+    $.ajax ({
+        url: disasterwatchAPI + "subscribe",
+        type: "POST",
+        data: JSON.stringify(request),
+        dataType: "json",
+        contentType: "application/json",
+    })
+    .success(function(data){
+        getDisasterdb(function(err, res){
+            if (err) throw error;
+        });
+        closePopup();
+        $('.mapboxgl-popup-content .subscribe-section .error').removeClass('on');
+    })
+    .always(function () {
+        $('.map .spin').addClass('display-none');
+    })
+    .fail(function () {
+        $('.mapboxgl-popup-content .subscribe-section .error').addClass('on');
+        console.log('Could not update Disaster Event to database');
+    });
+
+}
+
 function removeEvt(id) {
     "use strict";
 

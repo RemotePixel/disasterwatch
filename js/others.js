@@ -160,6 +160,10 @@ function toggleImageryOption() {
     $(".bottom-right-control").toggleClass('on');
 }
 
+function toggleSubscribe(){
+    $(".subscribe-section").toggleClass('display-none');
+}
+
 function toggleParam(setting) {
     "use strict";
     switch (setting) {
