@@ -65,7 +65,8 @@ function addDisastTodb() {
     } else {
         geojson.properties.mailTO = null;
     }
-    geojson.properties.dtype = $('#disasterType').children().map(function () {
+
+    geojson.properties.dtype = $('#disasterType span[type="dtype"]').map(function () {
         return this.className
     }).toArray();
     geojson.properties.name = document.getElementById("disasterName").value;
@@ -127,7 +128,7 @@ function updateDisastTodb() {
         geojson.properties.mailTO = null;
     }
 
-    geojson.properties.dtype = $('#disasterType').children().map(function(){
+    geojson.properties.dtype = $('#disasterType span[type="dtype"]').map(function () {
         return this.className
     }).toArray();
     geojson.properties.name = document.getElementById("disasterName").value;

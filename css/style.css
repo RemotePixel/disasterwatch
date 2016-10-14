@@ -55,11 +55,11 @@ body {
     z-index: 0;
     overflow: hidden;
     background-color: #c8c8c8;
-    -webkit-touch-callout: none;
+    /*-webkit-touch-callout: none;
       -webkit-user-select: none;
          -moz-user-select: none;
           -ms-user-select: none;
-              user-select: none;
+              user-select: none;*/
     font-size: 2rem;
 }
 
@@ -514,7 +514,7 @@ body {
     vertical-align: middle;
 }
 
-.disaster-descr .dtype{
+.disaster-descr .dtype {
     display: inline-block;
     height: 40px;
     width: 40px;
@@ -549,6 +549,11 @@ body {
     height: 100%;
     width: auto;
     z-index: 1;
+    -webkit-touch-callout: none;
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
 }
 
 .map .mapboxgl-popup-content {
@@ -1053,8 +1058,12 @@ body {
     padding: 5px;
 }
 
-.disaster-info .disasterType span {
-    padding: 2px;
+.disasterType span[type=dtype] {
+    padding: 1px 3px;
+    border-radius: 3px;
+}
+
+.dropdown-toggle span[type=dtype] {
     margin-right: 4px;
 }
 
@@ -1105,10 +1114,6 @@ body {
 }
 
 /* ----------- DISASTER TYPE ----------- */
-.disasterType span{
-    padding: 1px 3px;
-    border-radius: 3px;
-}
 
 .fire {
     background-color: rgb(255, 40, 40);

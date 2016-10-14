@@ -281,11 +281,11 @@ map.on('style.load', function () {
                 disasterType = JSON.parse(feature.properties.dtype);
 
             for (var j = 0; j < disasterType.length; j++) {
-                dtype += '<span class="' + disasterType[j] + '">' + disasterType[j] + '</span> ';
+                dtype += '<span type="dtype" class="' + disasterType[j] + '">' + disasterType[j] + '</span> ';
             }
 
             if (disasterType.length === 0) {
-                dtype = '<span class="unclassified">unclassified</span>';
+                dtype = '<span type="dtype" class="unclassified">unclassified</span>';
             }
 
             var popup = new mapboxgl.Popup()
