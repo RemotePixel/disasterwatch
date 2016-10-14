@@ -25,6 +25,15 @@ function closePopup() {
     $('.mapboxgl-popup-close-button').click();
 }
 
+function textTolink(text) {
+    var patt = new RegExp("^(http)|(www)");
+    if (patt.test(text)){
+        return '<a href="' + text + '" target="_blank">' + text + '</a>'
+    } else {
+        return '<span>' + text + '</span>'
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //from http://jsfiddle.net/briguy37/2MVFd/
 function generateUUID() {

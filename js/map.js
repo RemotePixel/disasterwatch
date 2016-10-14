@@ -287,16 +287,32 @@ map.on('style.load', function () {
             if (disasterType.length === 0) {
                 dtype = '<span type="dtype" class="unclassified">unclassified</span>';
             }
+            var comments = feature.properties.comments.split('<br />').map(function(e){
+                return textTolink(e);
+            })
 
+            var commentsBlock = '';
+            for (var j = 0; j < comments.length; j++) {
+                commentsBlock += comments[j];
+            }
+
+            console.log(comments);
             var popup = new mapboxgl.Popup()
                 .setLngLat(e.lngLat)
-                .setHTML('<div class="linetab bold">Name: ' + feature.properties.name + '</div>' +
+                .setHTML('<div class="dtypeImage"><img src="img/dw.png" class="img-responsive"></div>' +
+                            '<div class="delim"></div>' +
+                            '<div class="linetab bold">Name: ' + feature.properties.name + '</div>' +
                             '<div class="linetab uuid">uuid: ' + feature.properties.uuid + '</div>' +
                             '<div class="linetab disasterType">Type: ' + dtype + '</div>' +
                             '<div class="linetab">Location: ' + feature.properties.place + '</div>' +
                             '<div class="linetab">Start Date: ' + feature.properties.dateStart + '</div>' +
                             '<div class="linetab">End Date: ' + feature.properties.dateEnd + '</div>' +
-                            '<div class="linetab">Comments: <br>' + feature.properties.comments + '</div>' +
+                            '<div class="linetab">Followers: ' + feature.properties.nbfollowers + '</div>' +
+                            '<div class="linetab">Comments:</div>' +
+                            '<div class="linetab comments">' +
+                                commentsBlock +
+                            '</div>' +
+                            '<div class="delim"></div>' +
                             '<div class="linetab"><a onclick="seeEvtDBimages(\'' + feature.properties.uuid + '\')">Search Images</a></div>' +
                             '<div class="linetab">' +
                                 // '<a onclick="subscribeEvt(\'' + feature.properties.uuid + '\')">Subscribe</a> | ' +

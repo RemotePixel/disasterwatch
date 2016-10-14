@@ -72,7 +72,7 @@ function addDisastTodb() {
     geojson.properties.place = document.getElementById("disasterPlace").value;
     geojson.properties.dateStart = document.getElementById("disasterStartDate").value;
     geojson.properties.dateEnd = (document.getElementById("dateCheckbox").checked)? '' : document.getElementById("disasterEndDate").value;
-    geojson.properties.comments = document.getElementById("disasterComments").value.replace(/\r?\n/g, '<br/>');
+    geojson.properties.comments  = document.getElementById("disasterComments").value.replace(/\n\r?/g, '<br />');
 
     geojson.properties.images = {
         'landsat8': ($('.img-preview [sat="landsat8"]').first().attr('img-date'))? $('.img-preview [sat="landsat8"]').first().attr('img-date') : '2016-01-01',
@@ -134,7 +134,7 @@ function updateDisastTodb() {
     geojson.properties.place = document.getElementById("disasterPlace").value;
     geojson.properties.dateStart = document.getElementById("disasterStartDate").value;
     geojson.properties.dateEnd = (document.getElementById("dateCheckbox").checked)? '' : document.getElementById("disasterEndDate").value;
-    geojson.properties.comments = document.getElementById("disasterComments").value.replace(/\r?\n/g, '<br/>');
+    geojson.properties.comments  = document.getElementById("disasterComments").value.replace(/\n\r?/g, '<br />');
 
     $.ajax ({
         url: disasterwatchAPI + "update",
@@ -264,7 +264,7 @@ function editEvt(id) {
         $("#disasterEndDate").datepicker("setDate", features[0].properties.dateEnd);
     }
 
-    document.getElementById("disasterComments").value = features[0].properties.comments.replace('<br/>', "\n");
+    document.getElementById("disasterComments").value = features[0].properties.comments.replace(/<br\s?\/?>/g,"\n");
 }
 
 function mapFlyToDisaster(id) {

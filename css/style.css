@@ -31,6 +31,9 @@ body {
 .display-none {
     display: none;
 }
+.img-responsive {
+    margin: auto;
+}
 
 /* NavBar & Buttons */
 .menu-bar-left {
@@ -719,7 +722,7 @@ body {
     font-size: 12px;
     color: #201f1f;
     max-width: 400px;
-    word-wrap:break-word;
+    word-wrap: break-word;
     text-align: justify;
 }
 
@@ -730,6 +733,22 @@ body {
 
 .linetab a {
     cursor: pointer;
+}
+.mapboxgl-popup-content .delim {
+    width: 100%;
+    border-bottom: 1px solid #000;
+    margin-bottom: 5px;
+}
+
+.mapboxgl-popup-content .dtypeImage {
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+}
+
+.mapboxgl-popup-content .comments * {
+    display: block;
+    padding-left: 4px;
 }
 
 .bold {
@@ -1415,6 +1434,12 @@ body {
         height: 100%;
         background-color: #d2cece;
         margin: 0;
+    }
+
+    .linetab {
+        font-size: 8px;
+        line-height: 12px;
+        max-width: 200px;
     }
 
     .leftblock.in ~ .map {
