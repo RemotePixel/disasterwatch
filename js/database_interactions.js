@@ -218,6 +218,7 @@ function seeEvtDBimages(id) {
 
 function editEvt(id) {
     openleftBlock();
+    resetForm();
     closePopup();
 
     draw.deleteAll();
