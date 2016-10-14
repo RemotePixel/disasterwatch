@@ -300,6 +300,7 @@ function getImages() {
                 }
             }
         });
+    closePopup();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -331,6 +332,7 @@ function seeEQimages(urlusgs) {
             openleftBlock();
             getImages();
         });
+    closePopup();
 }
 
 function seeEONETimages(id) {
@@ -376,6 +378,7 @@ function seeEONETimages(id) {
             openleftBlock();
             getImages();
         });
+    closePopup();
 }
 
 $("#s1-checkbox").change(function () {
