@@ -323,15 +323,17 @@ map.on('style.load', function () {
         .defer(getEONETEvents)
         // .defer(getVolcanoes)
         .awaitAll(function(error, results) {
-          if (error) throw error;
-          //when ready :
-          var keys = getUrlVars();
-          if (keys.hasOwnProperty('event')) {
-              editEvt(keys.event);
-          } else {
-              $('#modalUnderConstruction').modal();
-          }
-          $('.map .spin').addClass('display-none');
+            if (error) throw error;
+            //when ready :
+            var keys = getUrlVars();
+            if (keys.hasOwnProperty('update')) {
+                editEvt(keys.update);
+            } else if (keys.hasOwnProperty('images')) {
+                seeEvtDBimages(keys.images)
+            } else {
+                $('#modalUnderConstruction').modal();
+            }
+            $('.map .spin').addClass('display-none');
         });
 });
 
