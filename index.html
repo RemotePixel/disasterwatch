@@ -10,7 +10,7 @@
     <meta name="twitter:site" content="@RemotePixel" />
     <meta name="twitter:description" content="Disaster Watch - Disaster monitoring with satellite imagery" />
 
-	<title>Remote Pixel | Disaster Watch</title>
+	<title>Disaster Watch By RemotePixel</title>
 
 	<!-- Bootstrap Core CSS -->
 	<link href="/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -131,19 +131,21 @@
 							<div class="form-group">
 								<label>Disaster Type</label>
 								<div class="dropdown">
-									<span id="disasterType" class="form-control dropdown-toggle disasterType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" tabindex="2"></span>
+									<span id="disasterType" class="form-control dropdown-toggle disasterType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" tabindex="2">
+										<span class="caret"></span>
+									</span>
 									<ul id="dropdown-menu" class="dropdown-menu disasterType" aria-labelledby="dropdownMenu1">
-										<li><a onclick="addType(this)"><span class="fire">fire</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="earthquake">earthquake</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="tsunami">tsunami</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="weather">weather</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="tornado">tornado</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="volcano">volcano</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="floods">floods</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="landslide">landslide</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="sandstorm">sandstorm</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="manmade">manmade</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span class="other">other</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="fire">fire</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="earthquake">earthquake</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="tsunami">tsunami</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="weather">weather</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="tornado">tornado</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="volcano">volcano</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="floods">floods</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="landslide">landslide</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="sandstorm">sandstorm</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="manmade">manmade</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="other">other</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 									</ul>
 								</div>
 							</div>
@@ -209,7 +211,7 @@
 			</div><!--
 			WhiteSpace
 		--><div id="map" class="map">
-				<span class="spin display-none"><i class="fa fa-spinner fa-spin black"></i></span>
+				<span class="spin"><i class="fa fa-spinner fa-spin black"></i></span>
 				<div class="bottom-right-control display-none">
 					<div class="close-block" onclick="toggleImageryOption()">
 						<i class="fa fa-angle-right fa-2x"></i>

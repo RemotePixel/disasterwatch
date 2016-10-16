@@ -281,31 +281,60 @@ map.on('style.load', function () {
                 disasterType = JSON.parse(feature.properties.dtype);
 
             for (var j = 0; j < disasterType.length; j++) {
-                dtype += '<span class="' + disasterType[j] + '">' + disasterType[j] + '</span> ';
+                dtype += '<span type="dtype" class="' + disasterType[j] + '">' + disasterType[j] + '</span> ';
             }
 
             if (disasterType.length === 0) {
-                dtype = '<span class="unclassified">unclassified</span>';
+                dtype = '<span type="dtype" class="unclassified">unclassified</span>';
+            }
+            var comments = feature.properties.comments.split('<br />').map(function(e){
+                return textTolink(e);
+            })
+
+            var commentsBlock = '';
+            for (var j = 0; j < comments.length; j++) {
+                commentsBlock += comments[j];
             }
 
             var popup = new mapboxgl.Popup()
                 .setLngLat(e.lngLat)
-                .setHTML('<div class="linetab bold">Name: ' + feature.properties.name + '</div>' +
+                .setHTML('<div class="dtypeImage"><img src="img/dw.png" class="img-responsive"></div>' +
+                            '<div class="delim"></div>' +
+                            '<div class="linetab bold">Name: ' + feature.properties.name + '</div>' +
                             '<div class="linetab uuid">uuid: ' + feature.properties.uuid + '</div>' +
                             '<div class="linetab disasterType">Type: ' + dtype + '</div>' +
                             '<div class="linetab">Location: ' + feature.properties.place + '</div>' +
                             '<div class="linetab">Start Date: ' + feature.properties.dateStart + '</div>' +
                             '<div class="linetab">End Date: ' + feature.properties.dateEnd + '</div>' +
-                            '<div class="linetab">Comments: <br>' + feature.properties.comments + '</div>' +
+                            '<div class="linetab">Followers: ' + feature.properties.nbfollowers + '</div>' +
+                            '<div class="linetab">Comments:</div>' +
+                            '<div class="linetab comments">' +
+                                commentsBlock +
+                            '</div>' +
+                            '<div class="delim"></div>' +
                             '<div class="linetab"><a onclick="seeEvtDBimages(\'' + feature.properties.uuid + '\')">Search Images</a></div>' +
                             '<div class="linetab">' +
-                                // '<a onclick="subscribeEvt(\'' + feature.properties.uuid + '\')">Subscribe</a> | ' +
                                 '<a onclick="editEvt(\'' + feature.properties.uuid + '\')">Update</a> | ' +
-                                '<a onclick="removeEvt(\'' + feature.properties.uuid + '\')">Remove</a>' +
-                            '</div>')
+                                '<a onclick="removeEvt(\'' + feature.properties.uuid + '\')">Remove</a> | ' +
+                                '<a onclick="toggleSubscribe()">Subscribe</a>' +
+                            '</div>' +
+                            '<div data-uuid="' + feature.properties.uuid + '" class="subscribe-section display-none">' +
+                                '<div class="delim"></div>' +
+                                '<div class="sat-filter">' +
+									'<label><input data="landsat8" type="checkbox" checked> Landsat-8</label>' +
+									'<label><input data="sentinel2" type="checkbox" checked> Sentinel-2</label>' +
+									'<label><input data="sentinel1" type="checkbox" checked> Sentinel-1</label>' +
+								'</div>' +
+								'<input type="email" class="form-control" placeholder="Email">' +
+                                '<div class="btn btn-default" onclick="subscribeEvt(this)">Subscribe</div>' +
+                                '<span class="error red">Error...</span>' +
+                            '</div>'
+                        )
                 .addTo(map);
         }
     });
+
+
 
     var slider = document.getElementById('slider'),
         sliderValue = document.getElementById('slider-value');
@@ -317,10 +346,24 @@ map.on('style.load', function () {
         sliderValue.textContent = e.target.value + '%';
     });
 
-    getDisasterdb();
-    getEarthquake();
-    getEONETEvents();
-    // getVolcanoes();
+    var q = d3.queue()
+        .defer(getDisasterdb)
+        .defer(getEarthquake)
+        .defer(getEONETEvents)
+        // .defer(getVolcanoes)
+        .awaitAll(function(error, results) {
+            if (error) throw error;
+            //when ready :
+            var keys = getUrlVars();
+            if (keys.hasOwnProperty('update')) {
+                editEvt(keys.update);
+            } else if (keys.hasOwnProperty('images')) {
+                seeEvtDBimages(keys.images)
+            } else {
+                $('#modalUnderConstruction').modal();
+            }
+            $('.map .spin').addClass('display-none');
+        });
 });
 
 ////////////////////////////////////////////////////////////////////////////////

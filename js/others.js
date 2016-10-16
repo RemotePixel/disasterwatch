@@ -92,7 +92,8 @@ $(".disaster-images .sat-filter input").change(function () {
 
 function resetForm() {
     "use strict";
-    $(".dropdown-toggle").empty();
+    // $(".dropdown-toggle").empty();
+    $('#disasterType span[type="dtype"]').remove()
     $(".disaster-info .dropdown-menu i").each(function () {
         $(this).removeClass('right-block-in');
         $(this).addClass('right-block');
@@ -157,6 +158,10 @@ function closeleftblock() {
 ////////////////////////////////////////////////////////////////////////////////
 function toggleImageryOption() {
     $(".bottom-right-control").toggleClass('on');
+}
+
+function toggleSubscribe(){
+    $(".subscribe-section").toggleClass('display-none');
 }
 
 function toggleParam(setting) {
@@ -251,5 +256,4 @@ $(document).ready(function () {
 
     $(".date-button").datepicker('setDate', moment.utc().subtract(1, 'days').format('YYYY-MM-DD'));
     $("#slider").attr('disabled', 'disabled');
-    // $('#modalUnderConstruction').modal();
 });

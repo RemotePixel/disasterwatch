@@ -13,12 +13,13 @@
 //  - Disaster database
 //  - Landsat/Sentinel Images
 
-function getEarthquake() {
+function getEarthquake(callback) {
     "use strict";
     var urlusgs = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson';
     $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + urlusgs)
         .done(function (data) {
             map.getSource('earthquakes').setData(data);
+            return callback(null, 'ready');
         });
 }
 
@@ -30,7 +31,7 @@ function getEarthquake() {
 //         });
 // }
 
-function getEONETEvents() {
+function getEONETEvents(callback) {
     "use strict";
     var eoneturl = 'http://eonet.sci.gsfc.nasa.gov/api/v2.1/events';
     $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + eoneturl)
@@ -90,6 +91,7 @@ function getEONETEvents() {
             }
 
             map.getSource('eonet').setData(geojson);
+            return callback(null, 'ready');
         });
 }
 
@@ -298,6 +300,7 @@ function getImages() {
                 }
             }
         });
+    closePopup();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -329,6 +332,7 @@ function seeEQimages(urlusgs) {
             openleftBlock();
             getImages();
         });
+    closePopup();
 }
 
 function seeEONETimages(id) {
@@ -374,6 +378,7 @@ function seeEONETimages(id) {
             openleftBlock();
             getImages();
         });
+    closePopup();
 }
 
 $("#s1-checkbox").change(function () {

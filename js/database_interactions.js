@@ -14,7 +14,7 @@ var disasterwatchAPI = 'https://tcuraimo51.execute-api.us-east-1.amazonaws.com/t
 // POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/subscribe
 // POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/unsubscribe
 
-function getDisasterdb() {
+function getDisasterdb(callback) {
     "use strict";
 
     $.get(disasterwatchAPI + "toGEOJSON")
@@ -36,6 +36,7 @@ function getDisasterdb() {
                     '</div>');
             }
             filterListDisaster();
+            return callback(null, 'ready');
         });
 }
 
@@ -52,32 +53,31 @@ function addDisastTodb() {
     delete geojson['id'];
 
     geojson.properties.uuid = generateUUID();
-    // geojson.properties.mailTO = (document.getElementById("mailCheckbox").checked)? document.getElementById("disastermailTo").value : '';
     if (document.getElementById("mailCheckbox").checked) {
         var sat = $.map($(".disaster-info .sat-filter input:checked"), function (e) {
             return e.getAttribute('data');
         });
-        geojson.properties.mailTO = {
+        geojson.properties.mail = {
             'mail': document.getElementById("disastermailTo").value,
             'satellite': sat
         };
     } else {
-        geojson.properties.mailTO = null;
+        geojson.properties.mail = null;
     }
-    geojson.properties.dtype = $('#disasterType').children().map(function () {
+
+    geojson.properties.dtype = $('#disasterType span[type="dtype"]').map(function () {
         return this.className
     }).toArray();
     geojson.properties.name = document.getElementById("disasterName").value;
     geojson.properties.place = document.getElementById("disasterPlace").value;
     geojson.properties.dateStart = document.getElementById("disasterStartDate").value;
     geojson.properties.dateEnd = (document.getElementById("dateCheckbox").checked)? '' : document.getElementById("disasterEndDate").value;
-    geojson.properties.comments = document.getElementById("disasterComments").value.replace(/\r?\n/g, '<br/>');
+    geojson.properties.comments  = document.getElementById("disasterComments").value.replace(/\n\r?/g, '<br />');
 
-    //get latest images for each satellite (mailing input)
     geojson.properties.images = {
-        'landsat8' : $('.img-preview [sat="landsat8"]').first().attr('img-date'),
-        'sentinel2' : $('.img-preview [sat="sentinel2"]').first().attr('img-date'),
-        'sentinel1' : $('.img-preview [sat="sentinel1"]').first().attr('img-date')
+        'landsat8': ($('.img-preview [sat="landsat8"]').first().attr('img-date'))? $('.img-preview [sat="landsat8"]').first().attr('img-date') : '2016-01-01',
+        'sentinel2': ($('.img-preview [sat="sentinel2"]').first().attr('img-date'))? $('.img-preview [sat="sentinel2"]').first().attr('img-date') : '2016-01-01',
+        'sentinel1': ($('.img-preview [sat="sentinel1"]').first().attr('img-date'))? $('.img-preview [sat="sentinel1"]').first().attr('img-date') : '2016-01-01',
     };
 
     $.ajax ({
@@ -88,7 +88,9 @@ function addDisastTodb() {
         contentType: "application/json",
     })
     .success(function(data){
-        getDisasterdb();
+        getDisasterdb(function(err, res){
+            if (err) throw error;
+        });
     })
     .always(function () {
         $('.disaster-info .spin').addClass('display-none');
@@ -113,27 +115,26 @@ function updateDisastTodb() {
 
     delete geojson['id'];
 
-    // geojson.properties.mailTO = (document.getElementById("mailCheckbox").checked)? document.getElementById("disastermailTo").value : '';
     if (document.getElementById("mailCheckbox").checked) {
         var sat = $.map($(".disaster-info .sat-filter input:checked"), function (e) {
             return e.getAttribute('data');
         });
-        geojson.properties.mailTO = {
+        geojson.properties.mail = {
             'mail': document.getElementById("disastermailTo").value,
             'satellite': sat
         };
     } else {
-        geojson.properties.mailTO = null;
+        geojson.properties.mail = null;
     }
 
-    geojson.properties.dtype = $('#disasterType').children().map(function(){
+    geojson.properties.dtype = $('#disasterType span[type="dtype"]').map(function () {
         return this.className
     }).toArray();
     geojson.properties.name = document.getElementById("disasterName").value;
     geojson.properties.place = document.getElementById("disasterPlace").value;
     geojson.properties.dateStart = document.getElementById("disasterStartDate").value;
     geojson.properties.dateEnd = (document.getElementById("dateCheckbox").checked)? '' : document.getElementById("disasterEndDate").value;
-    geojson.properties.comments = document.getElementById("disasterComments").value.replace(/\r?\n/g, '<br/>');
+    geojson.properties.comments  = document.getElementById("disasterComments").value.replace(/\n\r?/g, '<br />');
 
     $.ajax ({
         url: disasterwatchAPI + "update",
@@ -143,7 +144,9 @@ function updateDisastTodb() {
         contentType: "application/json",
     })
     .success(function(data){
-        getDisasterdb();
+        getDisasterdb(function(err, res){
+            if (err) throw error;
+        });
     })
     .always(function () {
         $('.disaster-info .spin').addClass('display-none');
@@ -155,6 +158,49 @@ function updateDisastTodb() {
 
     resetForm();
     closeleftblock();
+}
+
+function subscribeEvt(elem) {
+    $('.map .spin').removeClass('display-none');
+
+    var div = $(elem).parent(),
+        uuid = div.attr("data-uuid");
+
+    var sat = $.map($(div).find(".sat-filter input:checked"), function (e) {
+        return e.getAttribute('data');
+    });
+
+    var mail = {
+        'mail': $(div).find('input[type="email"]').val(),
+        'satellite': sat
+    },
+        request = {
+            "uuid": uuid,
+            "mail" : mail
+        }
+
+    $.ajax ({
+        url: disasterwatchAPI + "subscribe",
+        type: "POST",
+        data: JSON.stringify(request),
+        dataType: "json",
+        contentType: "application/json",
+    })
+    .success(function(data){
+        getDisasterdb(function(err, res){
+            if (err) throw error;
+        });
+        closePopup();
+        $('.mapboxgl-popup-content .subscribe-section .error').removeClass('on');
+    })
+    .always(function () {
+        $('.map .spin').addClass('display-none');
+    })
+    .fail(function () {
+        $('.mapboxgl-popup-content .subscribe-section .error').addClass('on');
+        console.log('Could not update Disaster Event to database');
+    });
+
 }
 
 function removeEvt(id) {
@@ -169,7 +215,9 @@ function removeEvt(id) {
         contentType: "application/json",
     })
     .success(function(data){
-        getDisasterdb();
+        getDisasterdb(function(err, res){
+            if (err) throw error;
+        });
     })
     .always(function () {
         $('.map .spin').addClass('display-none');
@@ -216,6 +264,7 @@ function seeEvtDBimages(id) {
 
 function editEvt(id) {
     openleftBlock();
+    resetForm();
     closePopup();
 
     draw.deleteAll();
@@ -258,7 +307,7 @@ function editEvt(id) {
         $("#disasterEndDate").datepicker("setDate", features[0].properties.dateEnd);
     }
 
-    document.getElementById("disasterComments").value = features[0].properties.comments.replace('<br/>', "\n");
+    document.getElementById("disasterComments").value = features[0].properties.comments.replace(/<br\s?\/?>/g,"\n");
 }
 
 function mapFlyToDisaster(id) {
