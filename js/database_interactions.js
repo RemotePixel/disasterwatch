@@ -7,13 +7,6 @@
 
 var disasterwatchAPI = 'https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/';
 
-// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/add
-// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/remove
-// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/update
-// GET - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/toGEOJSON
-// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/subscribe
-// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/unsubscribe
-
 function getDisasterdb(callback) {
     "use strict";
 

@@ -13,13 +13,12 @@
 //  - Disaster database
 //  - Landsat/Sentinel Images
 
-function getEarthquake(callback) {
+function getEarthquake() {
     "use strict";
     var urlusgs = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson';
     $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + urlusgs)
         .done(function (data) {
             map.getSource('earthquakes').setData(data);
-            return callback(null, 'ready');
         });
 }
 
@@ -31,7 +30,7 @@ function getEarthquake(callback) {
 //         });
 // }
 
-function getEONETEvents(callback) {
+function getEONETEvents() {
     "use strict";
     var eoneturl = 'http://eonet.sci.gsfc.nasa.gov/api/v2.1/events';
     $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + eoneturl)
@@ -91,7 +90,6 @@ function getEONETEvents(callback) {
             }
 
             map.getSource('eonet').setData(geojson);
-            return callback(null, 'ready');
         });
 }
 
@@ -165,7 +163,6 @@ function getS1Images(feature, callback) {
     "use strict";
 
     $.ajax ({
-        // url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/gets1images",
         url: "https://eri3bguxzd.execute-api.us-west-2.amazonaws.com/prod/getS1images",
         type: "POST",
         data: JSON.stringify(feature),

@@ -1223,6 +1223,7 @@ body {
 
 /* ----------- DISASTER IMAGES ----------- */
 .spin,
+.spin2,
 .serv-error,
 .nodata-error {
     position: absolute;
@@ -1232,8 +1233,13 @@ body {
     width: 100%;
     font-size: 20px;
     text-align: center;
-    color: #FFF;
+    color: #000;
     z-index: 10000;
+}
+
+.spin2 .span,
+.spin2 i {
+    display: block;
 }
 
 .img-preview {
