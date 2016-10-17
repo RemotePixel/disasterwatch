@@ -29,6 +29,9 @@ body {
 .black {
     color: #000;
 }
+.white {
+    color: #FFF;
+}
 
 .red {
     color: rgb(190, 5, 5);
@@ -918,8 +921,14 @@ body {
     display: inline-block;
     overflow-x: hidden;
     overflow-y: hidden;
+    color: #FFF;
     background-color: #c8c8c8;
 }
+
+.leftblock .main-section .disaster-info {
+    color: #000;
+}
+
 .leftblock .main-section .disaster-info {
     overflow-y: scroll;
 }
@@ -1233,7 +1242,6 @@ body {
     width: 100%;
     font-size: 20px;
     text-align: center;
-    color: #000;
     z-index: 10000;
 }
 

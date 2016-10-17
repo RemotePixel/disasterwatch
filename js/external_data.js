@@ -153,7 +153,6 @@ function getL8S2Images(feature, callback) {
             return callback(null, results);
         })
         .fail(function () {
-            // return callback(new Error('DevSeed Sat-API servers Error'), null);
             console.log('DevSeed Sat-API servers Error');
             return callback(null, null);
         });
@@ -161,7 +160,6 @@ function getL8S2Images(feature, callback) {
 
 function getS1Images(feature, callback) {
     "use strict";
-
     $.ajax ({
         url: "https://eri3bguxzd.execute-api.us-west-2.amazonaws.com/prod/getS1images",
         type: "POST",
@@ -170,12 +168,11 @@ function getS1Images(feature, callback) {
         contentType: "application/json",
     })
     .success(function(data){
-        return callback(null, data.scenes);
+        return callback(null, data);
     })
-    .fail(function () {
+    .fail(function(err) {
         console.log('DisasterWatch API servers Error');
-        // return callback(new Error('DisasterWatch API servers Error'), null);
-        return callback(null, null);
+        return callback(null);
     });
 }
 
@@ -199,21 +196,21 @@ function getImages() {
     var q = d3.queue()
         .defer(getL8S2Images, features.features[0])
         .defer(getS1Images, features.features[0])
-        .await(function (error, resultsS2L8, resultsS1) {
+        .await(function (error, imagesL8S2, imagesS1) {
             $('.disaster-images .spin').addClass('display-none');
             $('.map .spin').addClass('display-none');
 
-            var results;
-            if (! resultsS1 && ! resultsS2L8) {
+            if (!imagesS1 && ! !imagesL8S2) {
                 $('.img-preview').append('<span class="serv-error">Server Error: Please contact <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></span>');
             } else {
-
-                if (resultsS2L8 && !resultsS1)  {
-                    results = resultsS2L8;
-                } else if (!resultsS2L8 && resultsS1) {
-                    results = resultsS1;
-                } else {
-                    results = resultsS2L8.concat(resultsS1);
+                var images = [imagesS1, imagesL8S2]
+                var results = [];
+                if (images.length !== 0) {
+                    for (var j = 0; j <images.length; j++) {
+                        if (images[j]) {
+                            results = results.concat(images[j]);
+                        }
+                    }
                 }
 
                 var geojsonS1 = {

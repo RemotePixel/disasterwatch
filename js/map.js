@@ -347,14 +347,14 @@ map.on('style.load', function () {
     getDisasterdb(function(err, res){
         if (err) throw err;
         //when ready :
-        var keys = getUrlVars();
-        if (keys.hasOwnProperty('update')) {
-            editEvt(keys.update);
-        } else if (keys.hasOwnProperty('images')) {
-            seeEvtDBimages(keys.images)
-        } else {
-            $('#modalUnderConstruction').modal();
-        }
+        // var keys = getUrlVars();
+        // if (keys.hasOwnProperty('update')) {
+        //     editEvt(keys.update);
+        // } else if (keys.hasOwnProperty('images')) {
+        //     seeEvtDBimages(keys.images)
+        // } else {
+        //     $('#modalUnderConstruction').modal();
+        // }
         $('.map .spin2').addClass('display-none');
     });
     getEarthquake();
