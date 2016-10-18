@@ -116,7 +116,6 @@ function getL8S2Images(feature, callback) {
                 console.log('DevSeed Sat-API servers Error');
                 return callback(null);
             }
-
             if (data.meta.found !== 0) {
                 var i,
                     scene = {};
@@ -170,7 +169,8 @@ function getS1Images(feature, callback) {
     })
     .success(function(data){
         if (data.hasOwnProperty('errorMessage')) {
-            return callback(new Error('DisasterWatch API servers Error'), null);
+            console.log('DisasterWatch API servers Error');
+            return callback(null);
         }
         return callback(null, data.scenes);
     })
@@ -204,8 +204,10 @@ function getImages() {
             $('.disaster-images .spin').addClass('display-none');
             $('.map .spin').addClass('display-none');
 
-            if (!images) {
-                $('.img-preview').append('<span class="serv-error">Server Error: Please contact <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></span>');
+            console.log(images);
+
+            if (!images[0] && !images[1]) {
+                $('.img-preview').append('<span class="serv-error">Error: Cannot connect to APIs</span>');
             } else {
                 var results = [];
                 if (images.length !== 0) {
