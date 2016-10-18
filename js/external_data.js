@@ -113,7 +113,8 @@ function getL8S2Images(feature, callback) {
     })
         .success(function (data) {
             if (data.hasOwnProperty('errorMessage')) {
-                return callback(new Error('DevSeed Sat-API servers Error'), null);
+                console.log('DevSeed Sat-API servers Error');
+                return callback(null);
             }
 
             if (data.meta.found !== 0) {
@@ -154,7 +155,7 @@ function getL8S2Images(feature, callback) {
         })
         .fail(function () {
             console.log('DevSeed Sat-API servers Error');
-            return callback(null, null);
+            return callback(null);
         });
 }
 
@@ -168,7 +169,10 @@ function getS1Images(feature, callback) {
         contentType: "application/json",
     })
     .success(function(data){
-        return callback(null, data);
+        if (data.hasOwnProperty('errorMessage')) {
+            return callback(new Error('DisasterWatch API servers Error'), null);
+        }
+        return callback(null, data.scenes);
     })
     .fail(function(err) {
         console.log('DisasterWatch API servers Error');
@@ -196,14 +200,13 @@ function getImages() {
     var q = d3.queue()
         .defer(getL8S2Images, features.features[0])
         .defer(getS1Images, features.features[0])
-        .await(function (error, imagesL8S2, imagesS1) {
+        .awaitAll(function(error, images) {
             $('.disaster-images .spin').addClass('display-none');
             $('.map .spin').addClass('display-none');
 
-            if (!imagesS1 && ! !imagesL8S2) {
+            if (!images) {
                 $('.img-preview').append('<span class="serv-error">Server Error: Please contact <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></span>');
             } else {
-                var images = [imagesS1, imagesL8S2]
                 var results = [];
                 if (images.length !== 0) {
                     for (var j = 0; j <images.length; j++) {
