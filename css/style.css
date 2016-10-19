@@ -1228,73 +1228,7 @@ body {
     color: #FFF;
 }
 
-/* ----------- DISASTER ICONS ----------- */
-.fire::before {
-    content: url(/img/fire.svg);
-    height: 10px;
-}
-
-.earthquake::before {
-  content: url(/img/earthquake.svg);
-  height: 10px;
-}
-
-.tsunami::before {
-  content: url(/img/tsunami.svg);
-  height: 10px;
-}
-
-.weather::before {
-  content: url(/img/weather.svg);
-  height: 10px;
-}
-
-.tornado::before {
-  content: url(/img/tornado.svg);
-  height: 10px;
-}
-
-.volcano::before {
-  content: url(/img/volcano.svg);
-  height: 10px;
-}
-
-.floods::before {
-  content: url(/img/floods.svg);
-  height: 10px;
-}
-
-.sandstorm::before {
-  content: url(/img/sandstorm.svg);
-  height: 10px;
-}
-
-.landslide::before {
-  content: url(/img/landslide.svg);
-  height: 10px;
-}
-
-.manmade::before {
-  content: url(/img/manmade.svg);
-  height: 10px;
-}
-
-.avalanche::before {
-  content: url(/img/avalanche.svg);
-  height: 10px;
-}
-
-.disease::before {
-  content: url(/img/disease.svg);
-  height: 10px;
-}
-
-.other::before,
-.unclassified::before {
-  content: url(/img/other.svg);
-  height: 10px;
-}
-
+/* ----------- DISASTER TYPE ----------- */
 /* ----------- DISASTER FORM ----------- */
 
 /* ----------- DISASTER IMAGES ----------- */
