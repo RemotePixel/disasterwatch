@@ -136,6 +136,10 @@ function openImagesSettings() {
 
 function closeleftblock() {
     "use strict";
+
+    $('.disaster-images .spin').addClass('display-none');
+    $('.map .spin').addClass('display-none');
+        
     $(".leftblock").removeClass('in');
     $("button[dwmenu]").each(function () {
         $(this).attr('disabled', false);
@@ -160,8 +164,12 @@ function toggleImageryOption() {
     $(".bottom-right-control").toggleClass('on');
 }
 
-function toggleSubscribe(){
+function toggleSubscribe() {
     $(".subscribe-section").toggleClass('display-none');
+}
+
+function toggleSearch() {
+    $('.geocoder-container').toggleClass('in');
 }
 
 function toggleParam(setting) {

@@ -105,7 +105,7 @@ function getL8S2Images(feature, callback) {
         results = [];
 
     $.ajax({
-        url: 'https://api.developmentseed.org/satellites',
+        url: 'https://api.developmentseed.org/satellites/',
         type: "POST",
         data: JSON.stringify(jsonRequest),
         dataType: "json",
@@ -204,10 +204,11 @@ function getImages() {
             $('.disaster-images .spin').addClass('display-none');
             $('.map .spin').addClass('display-none');
 
-            console.log(images);
-
             if (!images[0] && !images[1]) {
-                $('.img-preview').append('<span class="serv-error">Error: Cannot connect to APIs</span>');
+                $('.img-preview').append('<div class="serv-error">' +
+                    '<span>Error: Cannot connect to APIs</span>' +
+                    '<div class="center-block"><button class="btn btn-default" onclick="getImages()">Retry</button></div>'
+                );
             } else {
                 var results = [];
                 if (images.length !== 0) {

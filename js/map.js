@@ -22,8 +22,41 @@ var map = new mapboxgl.Map({
 map.dragRotate.disable();
 map.touchZoomRotate.disableRotation();
 
+var geocoder = new mapboxgl.Geocoder({
+     container: 'geocoder-container'
+});
+map.addControl(geocoder);
+
 map.addControl(draw);
 map.addControl(new mapboxgl.Navigation());
+
+var btnsearch = document.createElement('button');
+btnsearch.className = 'mapboxgl-ctrl-icon';
+btnsearch.setAttribute("onclick", "toggleSearch()");
+var icnsearch = document.createElement('i');
+icnsearch.className = 'fa fa-search ';
+btnsearch.appendChild(icnsearch);
+
+var grp = document.createElement('div');
+grp.className = 'mapboxgl-ctrl-group mapboxgl-ctrl';
+grp.appendChild(btnsearch);
+
+var control = document.getElementsByClassName("mapboxgl-ctrl-top-right");
+control[0].appendChild(grp.cloneNode(true));
+
+geocoder.on('result', function(ev) {
+    $('.geocoder-container').toggleClass('in');
+
+    var feature = {
+        geometry: ev.result.geometry,
+        properties: {},
+        type: "Feature"
+    };
+
+    var featureId = draw.add(feature);
+    openleftBlock();
+    getImages();
+});
 
 map.on('style.load', function () {
     "use strict";

@@ -645,6 +645,30 @@ body {
     background-color: #000;
 }
 
+.geocoder-container {
+    position: absolute;
+    top: -100px;
+    width: 100%;
+    margin-top: 10px;
+    -webkit-transition: all .4s ease;
+    -moz-transition: all .4s ease;
+    -o-transition: all .4s ease;
+    -ms-transition: all .4s ease;
+    transition: all .4s ease;
+}
+.geocoder-container.in {
+    top: 0;
+    -webkit-transition: all .4s ease;
+    -moz-transition: all .4s ease;
+    -o-transition: all .4s ease;
+    -ms-transition: all .4s ease;
+    transition: all .4s ease;
+}
+.geocoder-container > div {
+    min-width:50%;
+    margin-left:25%;
+}
+
 .img-thumb-modal {
     width:50%;
     padding-top: 5px;
@@ -907,6 +931,7 @@ body {
     display: block;
     width: 100%;
     height: 100%;
+    z-index: 10000;
 }
 
 .leftblock .main-section .disaster-info,
@@ -916,7 +941,6 @@ body {
 	left: 0;
 	height: calc(100% - 50px);
     width: 100%;
-    z-index: 1;
     opacity: 0;
     display: inline-block;
     overflow-x: hidden;
