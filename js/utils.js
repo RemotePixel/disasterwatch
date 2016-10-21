@@ -54,3 +54,16 @@ function getUrlVars() {
     });
     return vars;
 }
+
+function getPlace(coordinates) {
+    "use strict";
+
+    //This is RemotePixel TOKEN
+    var mapboxToken = 'pk.eyJ1IjoidmluY2VudHNhcmFnbyIsImEiOiJjaWlleG1vdmowMWhydGtrc2xqcmQzNmhlIn0.80HAFLCQ6yUWCk4mwm6zbw',
+        mapboxAPIurl = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + coordinates[0].toString() + ',' + coordinates[1].toString() + '.json?type=place&access_token=' + mapboxToken;
+
+    $.getJSON(mapboxAPIurl)
+        .success(function(data){
+            document.getElementById("disasterPlace").value = data.features[0].place_name;
+        });
+}

@@ -327,8 +327,14 @@ function seeEQimages(urlusgs) {
                 map.fitBounds(bbox, {padding: 20});
             }
 
-            $(".tab-selector-1").addClass('out');
-            $(".tab-selector-2").addClass('out');
+            addType(document.getElementById('dropdown-menu').getElementsByClassName('earthquake')[0].parentElement);
+
+            document.getElementById("disasterName").value = data.properties.title;
+            document.getElementById("disasterPlace").value = data.properties.place;
+            document.getElementById("disasterStartDate").value = moment(data.properties.time).utc().format('YYYY-MM-DD');
+            document.getElementById("disasterEndDate").value = moment(data.properties.time).utc().format('YYYY-MM-DD');
+            document.getElementById("disasterComments").value = data.properties.url;
+
             openleftBlock();
             getImages();
         });

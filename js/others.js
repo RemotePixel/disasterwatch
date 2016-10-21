@@ -139,7 +139,7 @@ function closeleftblock() {
 
     $('.disaster-images .spin').addClass('display-none');
     $('.map .spin').addClass('display-none');
-        
+
     $(".leftblock").removeClass('in');
     $("button[dwmenu]").each(function () {
         $(this).attr('disabled', false);
@@ -170,6 +170,7 @@ function toggleSubscribe() {
 
 function toggleSearch() {
     $('.geocoder-container').toggleClass('in');
+    $('.geocoder-container input').focus();
 }
 
 function toggleParam(setting) {

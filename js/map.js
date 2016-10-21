@@ -25,6 +25,7 @@ map.touchZoomRotate.disableRotation();
 var geocoder = new mapboxgl.Geocoder({
      container: 'geocoder-container'
 });
+
 map.addControl(geocoder);
 
 map.addControl(draw);
@@ -43,20 +44,6 @@ grp.appendChild(btnsearch);
 
 var control = document.getElementsByClassName("mapboxgl-ctrl-top-right");
 control[0].appendChild(grp.cloneNode(true));
-
-geocoder.on('result', function(ev) {
-    $('.geocoder-container').toggleClass('in');
-
-    var feature = {
-        geometry: ev.result.geometry,
-        properties: {},
-        type: "Feature"
-    };
-
-    var featureId = draw.add(feature);
-    openleftBlock();
-    getImages();
-});
 
 map.on('style.load', function () {
     "use strict";
@@ -394,7 +381,6 @@ map.on('style.load', function () {
 });
 
 ////////////////////////////////////////////////////////////////////////////////
-//Check if User
 map.on('draw.selectionchange', function (e) {
     "use strict";
     if (!$(".leftblock").hasClass('in')) {
@@ -426,16 +412,41 @@ map.on('draw.create', function (e) {
 
     if (e.features[0].geometry.type === "Polygon") {
         var bbox = turf.extent(e.features[0].geometry);
+
+        var centroid = turf.centroid(e.features[0]);
+        getPlace(centroid.geometry.coordinates);
+
         map.fitBounds(bbox, {padding: 20});
     }
 
     if (e.features[0].geometry.type === "Point") {
         var round = turf.buffer(e.features[0], 100, 'kilometers'),
             bbox = turf.extent(round);
+
+        getPlace(e.features[0].geometry.coordinates);
+
         map.fitBounds(bbox, {padding: 20});
     }
 });
 
+geocoder.on('result', function(ev) {
+    $('.geocoder-container').toggleClass('in');
+
+    var feature = {
+        geometry: ev.result.geometry,
+        properties: {},
+        type: "Feature"
+    };
+
+    var featureId = draw.add(feature);
+    // edit place information
+    document.getElementById("disasterPlace").value = ev.result.place_name;
+
+    openleftBlock();
+    getImages();
+});
+
+////////////////////////////////////////////////////////////////////////////////
 
 function setStyle(basename) {
     "use strict";
