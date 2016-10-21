@@ -120,6 +120,8 @@ function updateDisastTodb() {
         geojson.properties.mail = null;
     }
 
+    delete geojson['nbfollowers'];
+
     geojson.properties.dtype = $('#disasterType span[type="dtype"]').map(function () {
         return this.className
     }).toArray();
