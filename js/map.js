@@ -10,7 +10,7 @@ var map = new mapboxgl.Map({
         container: 'map',
         center: [0, 10],
         zoom: 1,
-        style: 'mapbox://styles/vincentsarago/ciu1lp37x00ag2ilfp9vhb7cw',
+        style: 'mapbox://styles/vincentsarago/ciuknp8en007g2io2qc4bbh7x',
         attributionControl: true,
         minZoom: 0,
         maxZoom: 8
@@ -253,7 +253,8 @@ map.on('style.load', function () {
             if (feature) {
                 var popup = new mapboxgl.Popup()
                     .setLngLat(e.lngLat)
-                    .setHTML('<div class="linetab bold">Name: ' + feature.properties.title + '</div>' +
+                    .setHTML('<div class="dtypeImage"><div class="icon icon-earthquake" title="earthquake"></div></div>' +
+                                '<div class="linetab bold">Name: ' + feature.properties.title + '</div>' +
                                 '<div class="linetab">Date: ' + moment(feature.properties.time).utc().format('YYYY-MM-DD HH:mm:ss') + '(UTC)</div>' +
                                 '<div class="linetab">Magnitude: ' + feature.properties.mag + '</div>' +
                                 '<div class="linetab">Felt: ' + ((feature.properties.felt === null) ? 'No' : 'Yes') + '</div>' +
@@ -318,8 +319,7 @@ map.on('style.load', function () {
 
             var popup = new mapboxgl.Popup()
                 .setLngLat(e.lngLat)
-                .setHTML('<div class="dtypeImage"><img src="img/dw.png" class="img-responsive"></div>' +
-                            '<div class="delim"></div>' +
+                .setHTML('<div class="dtypeImage"><div class="icon icon-' + disasterType + '" title="' + disasterType + '"></div></div>' +
                             '<div class="linetab bold">Name: ' + feature.properties.name + '</div>' +
                             '<div class="linetab uuid">uuid: ' + feature.properties.uuid + '</div>' +
                             '<div class="linetab disasterType">Type: ' + dtype + '</div>' +

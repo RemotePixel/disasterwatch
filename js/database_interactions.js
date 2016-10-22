@@ -20,7 +20,7 @@ function getDisasterdb(callback) {
                 $('.list-disasters').append(
                     '<div class="list-element" date-start="' +  data.features[i].properties.dateStart + '" date-end="' + data.features[i].properties.dateEnd + '" target="_blank" onclick="mapFlyToDisaster(\'' + data.features[i].properties.uuid + '\')">'+
                         '<div class="col">' +
-                            '<div class="disaster-descr"><span class="dtype ' + disasterType + '">' + disasterType.slice(0,1) + '</span></div>' +
+                            '<div class="disaster-descr"><div class="icon icon-' + disasterType + '" title="' + disasterType + '"></div></div>' +
                             '<div class="disaster-descr">'+
                                 '<span class="dtitle">'+ data.features[i].properties.name +'</span>' +
                                 '<span class="dplace">' + data.features[i].properties.place + '</span>' +
@@ -86,15 +86,12 @@ function addDisastTodb() {
         });
     })
     .always(function () {
-        $('.disaster-info .spin').addClass('display-none');
-        $('.map .spin').addClass('display-none');
+        resetForm();
+        closeleftblock();
     })
     .fail(function () {
         console.log('Could not add Disaster Event to database');
     });
-
-    resetForm();
-    closeleftblock();
 }
 
 function updateDisastTodb() {

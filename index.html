@@ -110,7 +110,7 @@
 					<div class="right-top-button">
 						<div class="closeleftblock" onclick="closeleftblock()"><i class="fa fa-times fa-2x"></i></div>
 						<div class="opensettings" onclick="openImagesSettings()"><i class="fa fa-cog"></i></div>
-						<div onclick="getImages()"><i class="fa fa-refresh"></i></div>
+						<div class="refreshimages" onclick="getImages()"><i class="fa fa-refresh"></i></div>
 					</div>
 
 					<section class="disaster-images">
@@ -147,14 +147,16 @@
 									<ul id="dropdown-menu" class="dropdown-menu disasterType" aria-labelledby="dropdownMenu1">
 										<li><a onclick="addType(this)"><span type="dtype" class="fire">fire</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="earthquake">earthquake</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span type="dtype" class="tsunami">tsunami</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="weather">weather</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="avalanche">avalanche</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="tornado">tornado</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="volcano">volcano</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="floods">floods</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="landslide">landslide</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="tsunami">tsunami</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="sandstorm">sandstorm</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="manmade">manmade</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="disease">disease</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="other">other</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 									</ul>
 								</div>
@@ -250,12 +252,14 @@
 			<div id="SideViewCtrl" class="side-view">
 				<div id="basemaps-panel" class="navpanel side-view-container">
 
-                    <button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('basemaps')">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
-                    </button>
-                    <div class="title">Basemaps</div>
+					<div class="row side-view-header">
+	                    <button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('basemaps')">
+	                        <span class="glyphicon glyphicon-chevron-left"></span>
+	                    </button>
+	                    <div class="title">Basemaps</div>
+					</div>
 
-					<div class="side-view-content">
+					<div class="row side-view-content">
 						<div class="side-element">
 							<div id="MapboxMap" class="link" onclick="changeOverlay('MapboxMap')">
 								<div class="link-hover">
@@ -320,13 +324,14 @@
 
                 <div id="layers-panel" class="navpanel side-view-container">
 
-                    <button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('layers')">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
-                    </button>
-                    <div class="title">Layers</div>
+					<div class="row side-view-header">
+	                    <button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('layers')">
+	                        <span class="glyphicon glyphicon-chevron-left"></span>
+	                    </button>
+	                    <div class="title">Layers</div>
+					</div>
 
-                    <div class="side-view-content">
-
+					<div class="row side-view-content">
 						<!-- <div class="block-control">
 							<div class="text-align-left">Volcanoes</div>
 							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary" >
@@ -335,11 +340,11 @@
 						</div> -->
 
 						<div class="block-control">
-                            <div class="text-align-left">Earthquakes (Magnitude > 4.5):</div>
+							<div class="text-align-left">Earthquakes (Magnitude > 4.5):</div>
 							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary" >
-                                <input id="earthquake-checkbox" type="checkbox"/><span></span>
-                            </label>
-                        </div>
+								<input id="earthquake-checkbox" type="checkbox"/><span></span>
+							</label>
+						</div>
 
 						<div class="block-control">
 							<div class="text-align-left">EONET Events:</div>
@@ -347,26 +352,50 @@
 								<input id="eonet-checkbox" type="checkbox"/><span></span>
 							</label>
 						</div>
-                    </div>
+					</div>
                 </div>
 
 				<div id="disasters-panel" class="navpanel side-view-container">
 
-					<button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('disasterslist')">
-						<span class="glyphicon glyphicon-chevron-left"></span>
-					</button>
-					<div class="title">Events</div>
-					<div class="block-control">
-						<div class="text-align-left">Show only On-Going</div>
-						<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary" >
-							<input id="event-checkbox" type="checkbox"/><span></span>
-						</label>
+					<div class="row side-view-header">
+						<button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('disasterslist')">
+							<span class="glyphicon glyphicon-chevron-left"></span>
+						</button>
+						<div class="title">Events</div>
+						<div class="block-control">
+							<div class="text-align-left">Show only On-Going</div>
+							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary" >
+								<input id="event-checkbox" type="checkbox"/><span></span>
+							</label>
+						</div>
 					</div>
 
-					<div class="side-view-content list-disasters"></div>
+					<div class="row side-view-content">
+						<div class="list-disasters"></div>
+					</div>
+
+					<!-- <div class="row side-view-footer">
+						<div class="dropup">
+						  <span class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							<span class="caret"></span>
+						  </span>
+						  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						  	<li><a><span type="dtype" class="fire">fire</span></a></li>
+						  	<li><a><span type="dtype" class="earthquake">earthquake</span></a></li>
+						  	<li><a><span type="dtype" class="tsunami">tsunami</span></a></li>
+						  	<li><a><span type="dtype" class="weather">weather</span></a></li>
+						  	<li><a><span type="dtype" class="tornado">tornado</span></a></li>
+						  	<li><a><span type="dtype" class="volcano">volcano</span></a></li>
+						  	<li><a><span type="dtype" class="floods">floods</span></a></li>
+						  	<li><a><span type="dtype" class="landslide">landslide</span></a></li>
+						  	<li><a><span type="dtype" class="sandstorm">sandstorm</span></a></li>
+						  	<li><a><span type="dtype" class="manmade">manmade</span></a></li>
+						  	<li><a><span type="dtype" class="other">other</span></a></li>
+						  </ul>
+						</div>
+					</div> -->
+
 				</div>
-
-
             </div>
         </div>
 
