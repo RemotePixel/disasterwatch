@@ -197,8 +197,9 @@ function getL8S2Images(feature, callback) {
 
 function getS1Images(feature, callback) {
     "use strict";
+
     $.ajax ({
-        url: "https://eri3bguxzd.execute-api.us-west-2.amazonaws.com/prod/getS1images",
+        url: "https://fzzc9dpwij.execute-api.us-west-2.amazonaws.com/prod/getS1images",
         type: "POST",
         data: JSON.stringify(feature),
         dataType: "json",
@@ -272,7 +273,7 @@ function getImages() {
         .defer(getS1Images, features.features[0])
         .awaitAll(function(error, images) {
             $('.disaster-images .spin-load').addClass('display-none');
-
+            console.log(images);
             sortListImage();
 
             if (!images[0] && !images[1]) {
