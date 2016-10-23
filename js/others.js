@@ -85,6 +85,13 @@ function filterListImage() {
     });
 }
 
+function sortListImage() {
+    "use strict";
+    var list = $(".img-preview").children();
+    list.sort(sortScenes);
+    list.detach().appendTo($(".img-preview"));
+}
+
 $(".disaster-images .sat-filter input").change(function () {
     "use strict";
     filterListImage();
@@ -160,6 +167,11 @@ function closeleftblock() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+function toggleHelp() {
+    $(".dwhelp-block").toggleClass('on');
+}
+
 function toggleImageryOption() {
     $(".bottom-right-control").toggleClass('on');
 }

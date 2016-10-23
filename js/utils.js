@@ -17,7 +17,7 @@ function zeroPad(n, c) {
 
 function sortScenes(a, b) {
     'use strict';
-    return Date.parse(b.date) - Date.parse(a.date);
+    return Date.parse(b.getAttribute('img-date')) - Date.parse(a.getAttribute('img-date'));
 }
 
 function closePopup() {

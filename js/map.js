@@ -369,11 +369,11 @@ map.on('style.load', function () {
         var keys = getUrlVars();
         if (keys.hasOwnProperty('update')) {
             editEvt(keys.update);
+            $(".dwhelp-block").removeClass('on');
         } else if (keys.hasOwnProperty('images')) {
+            $(".dwhelp-block").removeClass('on');
             seeEvtDBimages(keys.images)
-        } else {
-            $('#modalUnderConstruction').modal();
-        }
+        } 
         $('.map .spin2').addClass('display-none');
     });
     getEarthquake();
@@ -479,7 +479,7 @@ function setStyle(basename) {
                 basemaps_url
             ],
             'attribution' : [
-                '<a href="https://earthdata.nasa.gov/about/science-system-description/eosdis-components/global-imagery-browse-services-gibs" >NASA EOSDIS GIBS</a>'
+                '<a href="https://earthdata.nasa.gov/about/science-system-description/eosdis-components/global-imagery-browse-services-gibs"> NASA EOSDIS GIBS</a>'
             ],
             'tileSize': 256
         });

@@ -57,8 +57,61 @@
 </head>
 
 <body>
-	<div class="content">
 
+	<div class="dwhelp-block on">
+		<div class="close-help" onclick="toggleHelp()">
+			<div class="lr">
+				<div class="rl"></div>
+			</div>
+		</div>
+
+		<div class="help-content">
+			<h2>DisasterWatch</h2>
+			<h6>Monitor disasters areas with satellite imagery</h6>
+
+			<!-- <img class="img-responsive center" src="img/help_satsearch.gif"> -->
+			<h4>Info</h4>
+			<p>Landsat-8 and Sentinel-2 image search results is powered by
+				<a href="https://github.com/sat-utils/sat-api" target="_blank">Developmentseed new Satellite API</a>. Sentinel-1 image search is done through ESA scihub API.</p>
+
+			<p>Landsat and Sentinel images previews are from <a href="https://earthexplorer.usgs.gov" target="_blank">USGS Earth Explorer</a>
+				and <a href="http://sentinel-pds.s3-website.eu-central-1.amazonaws.com" target="_blank"> Sentinel on AWS S3</a>
+				(via <a href="http://www.sinergise.com" target="_blank">Sinergise</a>).
+			</p>
+
+			<p>This project is powered by Mapbox-GL API and the awesome vector tile technology develloped by <a href="https://mapbox.com" target="_blank">Mapbox</a>.</p>
+
+			<p>Continue reading: <a href="/blog/satellitesearch_20160610.html">Blog post</a> on RemotePixel.ca</p>
+
+			<h4>HowTo</h4>
+			<ul>
+				<li>Check the events database (<i class="ms ms-database-o"></i>)</li>
+				<li>Use the <i class="fa fa-plus"></i> to add an event or search for imagery</li>
+				<li>Use <i class="ms ms-map-folded-o"></i> button to display MODIS/VIIRS daily/worldwide basemap</li>
+				<li>Latest EarthQuakes or Event Earth Observatory Natural Event from NASA <a href="http://eonet.sci.gsfc.nasa.gov" target="_blank">EONET</i></a> available in <i class="ms ms-layers-o"></i></li>
+				<li>In anytime you can subscrive to an event to receive E-mail update when new images are available</li>
+			</ul>
+
+			<h4>Contribute</h4>
+			<p>Source code of the project is on <a href="https://github.com/RemotePixel/disasterwatch"><i class="fa fa-github"></i> GitHub</a>.</p>
+
+			<h4>Contact</h4>
+			<p>Questions or comments to <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></p>
+
+			<h4>Thanks</h4>
+
+			<div class="thanks-images row">
+				<a href="https://www.mapbox.com" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/mapbox.png"></a>
+				<a href="http://www.sinergise.com" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/sinergise.png"></a>
+				<a href="https://developmentseed.org" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/devseed.png"></a>
+				<a href="https://aws.amazon.com/" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/awservice.png"></a>
+			</div>
+
+			<div class="site-version">Version: 2.1</div>
+		</div>
+	</div>
+
+	<div class="content">
 		<div class="menu-bar-left">
             <div class="NavButtonGroup">
 
@@ -90,7 +143,7 @@
                 </button>
 
                 <!-- Info Button -->
-                <div id="info-btn" class="float-bottom" data-toggle="modal" data-target="#modalAbout">
+                <div id="info-btn" class="float-bottom" onclick="toggleHelp()">
                     <i class="fa fa-info fa-2x"></i>
                 </div>
             </div>
@@ -126,7 +179,7 @@
 							</label>
 						</div>
 						<div class="img-preview"></div>
-						<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
+						<span class="spin-load display-none"><i class="fa fa-spinner fa-spin"></i></span>
 					</section>
 
 					<section class="disaster-info">
@@ -352,6 +405,12 @@
 								<input id="eonet-checkbox" type="checkbox"/><span></span>
 							</label>
 						</div>
+
+						<div class="delim"></div>
+						<!-- http://eonet.sci.gsfc.nasa.gov -->
+						<!-- http://earthquake.usgs.gov/earthquakes/map/ -->
+
+
 					</div>
                 </div>
 
