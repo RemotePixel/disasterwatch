@@ -21,6 +21,36 @@ function addType(elem) {
     }
 }
 
+function filterType(elem) {
+    "use strict";
+    var type = elem.childNodes[0],
+        dTypelist = document.getElementById("disasterType2");
+    dTypelist.innerHTML = '<span class="caret"></span>' + type.outerHTML;
+    filterListDisaster();
+}
+
+function filterListDisaster() {
+    "use strict";
+    var filterClass = $("#disasterType2 span[type='dtype']")[0].className;
+    if (filterClass === 'all') {
+        document.getElementsByClassName('list-disasters')[0].childNodes.forEach(function (e) {
+            if (e.getAttribute('date-end') !== '' && document.getElementById('event-checkbox').checked) {
+                e.className = 'list-element display-none';
+            } else {
+                e.className = 'list-element';
+            }
+        });
+    } else {
+        document.getElementsByClassName('list-disasters')[0].childNodes.forEach(function (e) {
+            if ((e.getAttribute('date-end') !== '' && document.getElementById('event-checkbox').checked) || (e.getAttribute('dw-type') !== filterClass)) {
+                e.className = 'list-element display-none';
+            } else {
+                e.className = 'list-element';
+            }
+        });
+    }
+}
+
 $("#dateCheckbox").change(function () {
     "use strict";
     if (this.checked) {
@@ -40,29 +70,6 @@ $("#mailCheckbox").change(function () {
         $(".disaster-info .sat-filter input").attr('disabled', 'disabled');
     }
 });
-
-function filterListDisaster() {
-    "use strict";
-    document.getElementsByClassName('list-disasters')[0].childNodes.forEach(function (e) {
-        if (e.getAttribute('date-end') !== '' && document.getElementById('event-checkbox').checked) {
-            e.className = 'list-element display-none';
-        } else {
-            e.className = 'list-element';
-        }
-    });
-
-    if (document.getElementById('event-checkbox').checked) {
-        var ptFilter = ["all", ["==", "$type", "Point"], ["==", "dateEnd", ""]],
-            pgFilter = ["all", ["==", "$type", "Polygon"], ["==", "dateEnd", ""]];
-    } else {
-        var ptFilter = ["==", "$type", "Point"],
-            pgFilter = ["==", "$type", "Polygon"];
-    }
-
-    map.setFilter("disasterdb-points", ptFilter);
-    map.setFilter("disasterdb-polygons", pgFilter);
-}
-
 
 $("#event-checkbox").change(function () {
     "use strict";

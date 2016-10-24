@@ -18,7 +18,7 @@ function getDisasterdb(callback) {
             for(var i = 0; i < data.features.length; i++) {
                 var disasterType = (data.features[i].properties.dtype.length !== 0) ? data.features[i].properties.dtype[0] : 'unclassified';
                 $('.list-disasters').append(
-                    '<div class="list-element" date-start="' +  data.features[i].properties.dateStart + '" date-end="' + data.features[i].properties.dateEnd + '" target="_blank" onclick="mapFlyToDisaster(\'' + data.features[i].properties.uuid + '\')">'+
+                    '<div class="list-element" dw-type="' + disasterType + '" date-start="' +  data.features[i].properties.dateStart + '" date-end="' + data.features[i].properties.dateEnd + '" target="_blank" onclick="mapFlyToDisaster(\'' + data.features[i].properties.uuid + '\')">'+
                         '<div class="col">' +
                             '<div class="disaster-descr"><div class="icon icon-' + disasterType + '" title="' + disasterType + '"></div></div>' +
                             '<div class="disaster-descr">'+

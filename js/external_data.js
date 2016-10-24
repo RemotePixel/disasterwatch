@@ -273,7 +273,6 @@ function getImages() {
         .defer(getS1Images, features.features[0])
         .awaitAll(function(error, images) {
             $('.disaster-images .spin-load').addClass('display-none');
-            console.log(images);
             sortListImage();
 
             if (!images[0] && !images[1]) {

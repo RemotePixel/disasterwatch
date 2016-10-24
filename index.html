@@ -374,6 +374,42 @@
 							</div>
 							<span>Aqua True Color (CR)</span>
 						</div>
+
+						<div class="delim"></div>
+
+						<p>VIIRS: 2015/11/24 -> Today</p>
+						<p>MODIS Terra: 2012/05/08 -> Today</p>
+						<p>MODIS Aqua: 2012/05/08 -> Today</p>
+
+						<p>MODIS instruments (Moderate-Resolution Imaging Spectroradiometer) on-board Terra and
+							Aqua satellites provide a global view
+							of earth on a daily basis since 1999 and 2002.
+							With a resolution up to 250m per pixel and 36 spectral bands,
+							MODIS images can produce stunning view of earth.</p>
+
+						<p>Only data produced after May 2012 are available on-line.</p>
+
+						<p>Late 2015 (Nov. 25), VIIRS imagery from SUOMI NPP spacecraft
+							was also added to available global and daily dataset.</p>
+
+						<p>Data are available 3-4 hours after acquisition.
+							if the map appears black, it means the data are not yet available.</p>
+
+						<p>Terra satellite local equatorial crossing time is approximately 10:30 a.m. in a
+							descending orbit.</p>
+
+						<p>Aqua satellite local equatorial crossing time is approximately 1:30 p.m.
+							in an ascending orbit.</p>
+
+						<p>SUOMI NPP satellite local equatorial crossing time is approximately 1:30 p.m.
+							in an ascending orbit.</p>
+
+						<p>Sources:<br>
+							<a href="http://modis.gsfc.nasa.gov" target="_blanck">MODIS website</a><br>
+							<a href="https://nsidc.org/data/modis/terra_aqua_differences" target="_blanck">National Snow & Ice Data Center</a><br>
+							<a href="http://npp.gsfc.nasa.gov/viirs.html" target="_blanck">Visible Infrared Imaging Radiometer Suite (VIIRS)</a>
+						</p>
+
 					</div>
                 </div>
 
@@ -409,9 +445,9 @@
 						</div>
 
 						<div class="delim"></div>
-						<!-- http://eonet.sci.gsfc.nasa.gov -->
-						<!-- http://earthquake.usgs.gov/earthquakes/map/ -->
 
+						<p>Latest earthquakes from USGS (<a href="http://earthquake.usgs.gov/earthquakes/map/" target="_blank">link</a>).</p>
+						<p>NASA Earth Observatory Natural Event Tracker (EONET) is "a repository of metadata about natural events" (<a href="http://eonet.sci.gsfc.nasa.gov" target="_blank">link</a>).</p>
 
 					</div>
                 </div>
@@ -435,26 +471,30 @@
 						<div class="list-disasters"></div>
 					</div>
 
-					<!-- <div class="row side-view-footer">
+					<div class="row side-view-footer">
 						<div class="dropup">
-						  <span class="dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						  <span id="disasterType2" class="dropdown-toggle disasterType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 							<span class="caret"></span>
+							<span type="dtype" class="all">All</span>
 						  </span>
-						  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-						  	<li><a><span type="dtype" class="fire">fire</span></a></li>
-						  	<li><a><span type="dtype" class="earthquake">earthquake</span></a></li>
-						  	<li><a><span type="dtype" class="tsunami">tsunami</span></a></li>
-						  	<li><a><span type="dtype" class="weather">weather</span></a></li>
-						  	<li><a><span type="dtype" class="tornado">tornado</span></a></li>
-						  	<li><a><span type="dtype" class="volcano">volcano</span></a></li>
-						  	<li><a><span type="dtype" class="floods">floods</span></a></li>
-						  	<li><a><span type="dtype" class="landslide">landslide</span></a></li>
-						  	<li><a><span type="dtype" class="sandstorm">sandstorm</span></a></li>
-						  	<li><a><span type="dtype" class="manmade">manmade</span></a></li>
-						  	<li><a><span type="dtype" class="other">other</span></a></li>
+						  <ul id="dropdown-menu2" class="dropdown-menu disasterType" aria-labelledby="dropdownMenu2">
+							<li><a onclick="filterType(this)"><span type="dtype" class="all">All</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="fire">fire</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="earthquake">earthquake</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="weather">weather</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="avalanche">avalanche</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="tornado">tornado</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="volcano">volcano</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="floods">floods</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="landslide">landslide</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="tsunami">tsunami</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="sandstorm">sandstorm</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="manmade">manmade</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="disease">disease</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="other">other</span></a></li>
 						  </ul>
 						</div>
-					</div> -->
+					</div>
 
 				</div>
             </div>

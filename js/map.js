@@ -120,9 +120,9 @@ map.on('style.load', function () {
         "id": "disasterdb-points",
         "type": "circle",
         "source": "disasterdb",
-        "filter": ["==", "$type", "Point"],
+        "filter": ["all", ["==", "$type", "Point"], ["!=", "dateEnd", ""]],
         "paint": {
-            "circle-color": '#da7979',
+            "circle-color": '#ed9d32',
             'circle-radius': {
                 "base": 1.8,
                 'stops': [
@@ -137,7 +137,36 @@ map.on('style.load', function () {
         "id": "disasterdb-polygons",
         "type": "fill",
         "source": "disasterdb",
-        "filter": ["==", "$type", "Polygon"],
+        "filter": ["all", ["==", "$type", "Polygon"], ["!=", "dateEnd", ""]],
+        "paint": {
+            "fill-outline-color": "#ed9d32",
+            "fill-color": "#454545",
+            "fill-opacity": 0.4
+        }
+    });
+
+    map.addLayer({
+        "id": "disasterdb-points-ongoing",
+        "type": "circle",
+        "source": "disasterdb",
+        "filter": ["all", ["==", "$type", "Point"], ["==", "dateEnd", ""]],
+        "paint": {
+            "circle-color": '#da7979',
+            'circle-radius': {
+                "base": 1.8,
+                'stops': [
+                    [0, 2],
+                    [9, 10]
+                ]
+            }
+        }
+    });
+
+    map.addLayer({
+        "id": "disasterdb-polygons-ongoing",
+        "type": "fill",
+        "source": "disasterdb",
+        "filter": ["all", ["==", "$type", "Polygon"], ["==", "dateEnd", ""]],
         "paint": {
             "fill-outline-color": "#da7979",
             "fill-color": "#ba3e3e",
@@ -373,7 +402,7 @@ map.on('style.load', function () {
         } else if (keys.hasOwnProperty('images')) {
             $(".dwhelp-block").removeClass('on');
             seeEvtDBimages(keys.images)
-        } 
+        }
         $('.map .spin2').addClass('display-none');
     });
     getEarthquake();

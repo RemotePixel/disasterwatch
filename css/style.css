@@ -190,6 +190,7 @@ body {
     position: absolute;
     background-color: #393939;
     border-radius: 0;
+    border-color: #393939;
     float: right;
     top: 5px;
     right: 5px;
@@ -212,11 +213,13 @@ body {
 .side-view button:hover:active {
     color: black;
     background-color: #adadad;
+    border-color: #393939;
 }
 
 .side-view button:hover {
     color: black;
     background-color: white;
+    border-color: #393939;
 }
 
 .side-view-container {
@@ -236,6 +239,11 @@ body {
     -webkit-flex: 1 1 auto;
     overflow-y: auto;
     height: 200px;
+}
+
+.side-view-container .side-view-content p {
+    text-align: left;
+    font-size: 10px;
 }
 
 .side-view-container .side-view-footer {
@@ -511,6 +519,30 @@ body {
 .list-disasters .list-element .col:hover {
 	background-color: rgb(88, 84, 84);
     background-color: rgba(88, 84, 84, 0.2);
+}
+
+.side-view-container .side-view-footer .dropup {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+    color: #393939;
+    border: 1px solid #000;
+    border-radius: 2px;
+    text-align: left;
+    padding-left: 5px;
+    cursor: pointer;
+}
+
+.side-view-container .side-view-footer .dropup .dropdown-menu {
+    max-height: 200px;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.side-view-container .side-view-footer .dropup .dropdown-toggle {
+    width: 100%;
+    display: block;
 }
 
 .disaster-descr {
@@ -1159,7 +1191,7 @@ body {
 }
 
 .dropdown-toggle span[type=dtype] {
-    margin-right: 4px;
+    margin-left: 4px;
 }
 
 .disaster-info .dropdown-menu a {
