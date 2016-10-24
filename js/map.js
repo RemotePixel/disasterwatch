@@ -262,7 +262,7 @@ map.on('style.load', function () {
             feature = map.queryRenderedFeatures([
                 [e.point.x - mouseRadius, e.point.y - mouseRadius],
                 [e.point.x + mouseRadius, e.point.y + mouseRadius]
-            ], {layers: ["eonet-point", "earthquakes-point", "disasterdb-points", "disasterdb-polygons"]})[0];
+            ], {layers: ["eonet-point", "earthquakes-point", "disasterdb-points", "disasterdb-polygons", "disasterdb-points-ongoing", "disasterdb-polygons-ongoing"]})[0];
 
         if (feature) {
             map.getCanvas().style.cursor = 'pointer';
@@ -324,7 +324,7 @@ map.on('style.load', function () {
         var feature = map.queryRenderedFeatures([
             [e.point.x - mouseRadius, e.point.y - mouseRadius],
             [e.point.x + mouseRadius, e.point.y + mouseRadius]
-        ], {layers: ["disasterdb-points", "disasterdb-polygons"]})[0];
+        ], {layers: ["disasterdb-points", "disasterdb-polygons","disasterdb-points-ongoing", "disasterdb-polygons-ongoing"]})[0];
 
         if (feature) {
             var dtype = '',

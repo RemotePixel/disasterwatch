@@ -1793,7 +1793,7 @@ body {
     .dwhelp-block  {
         position: absolute;
         display: inline-block;
-        width: calc(100% - 30px);
+        width: 100%;
         right: -100%;
     }
 }

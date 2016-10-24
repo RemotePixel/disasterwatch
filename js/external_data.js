@@ -334,6 +334,7 @@ function seeEQimages(urlusgs) {
 
             openleftBlock();
             getImages();
+            $('.map .spin').addClass('display-none');
         });
     closePopup();
 }
@@ -380,6 +381,7 @@ function seeEONETimages(id) {
             $(".tab-selector-2").addClass('out');
             openleftBlock();
             getImages();
+            $('.map .spin').addClass('display-none');
         });
     closePopup();
 }
