@@ -29,6 +29,9 @@ body {
 .black {
     color: #000;
 }
+.white {
+    color: #FFF;
+}
 
 .red {
     color: rgb(190, 5, 5);
@@ -918,8 +921,14 @@ body {
     display: inline-block;
     overflow-x: hidden;
     overflow-y: hidden;
+    color: #FFF;
     background-color: #c8c8c8;
 }
+
+.leftblock .main-section .disaster-info {
+    color: #000;
+}
+
 .leftblock .main-section .disaster-info {
     overflow-y: scroll;
 }
@@ -1233,6 +1242,7 @@ body {
 
 /* ----------- DISASTER IMAGES ----------- */
 .spin,
+.spin2,
 .serv-error,
 .nodata-error {
     position: absolute;
@@ -1242,8 +1252,12 @@ body {
     width: 100%;
     font-size: 20px;
     text-align: center;
-    color: #FFF;
     z-index: 10000;
+}
+
+.spin2 .span,
+.spin2 i {
+    display: block;
 }
 
 .img-preview {

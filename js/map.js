@@ -334,8 +334,6 @@ map.on('style.load', function () {
         }
     });
 
-
-
     var slider = document.getElementById('slider'),
         sliderValue = document.getElementById('slider-value');
 
@@ -346,24 +344,20 @@ map.on('style.load', function () {
         sliderValue.textContent = e.target.value + '%';
     });
 
-    var q = d3.queue()
-        .defer(getDisasterdb)
-        .defer(getEarthquake)
-        .defer(getEONETEvents)
-        // .defer(getVolcanoes)
-        .awaitAll(function(error, results) {
-            if (error) throw error;
-            //when ready :
-            var keys = getUrlVars();
-            if (keys.hasOwnProperty('update')) {
-                editEvt(keys.update);
-            } else if (keys.hasOwnProperty('images')) {
-                seeEvtDBimages(keys.images)
-            } else {
-                $('#modalUnderConstruction').modal();
-            }
-            $('.map .spin').addClass('display-none');
-        });
+    getDisasterdb(function(err, res){
+        if (err) throw err;
+        var keys = getUrlVars();
+        if (keys.hasOwnProperty('update')) {
+            editEvt(keys.update);
+        } else if (keys.hasOwnProperty('images')) {
+            seeEvtDBimages(keys.images)
+        } else {
+            $('#modalUnderConstruction').modal();
+        }
+        $('.map .spin2').addClass('display-none');
+    });
+    getEarthquake();
+    getEONETEvents();
 });
 
 ////////////////////////////////////////////////////////////////////////////////

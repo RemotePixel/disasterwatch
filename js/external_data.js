@@ -13,13 +13,12 @@
 //  - Disaster database
 //  - Landsat/Sentinel Images
 
-function getEarthquake(callback) {
+function getEarthquake() {
     "use strict";
     var urlusgs = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson';
     $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + urlusgs)
         .done(function (data) {
             map.getSource('earthquakes').setData(data);
-            return callback(null, 'ready');
         });
 }
 
@@ -31,7 +30,7 @@ function getEarthquake(callback) {
 //         });
 // }
 
-function getEONETEvents(callback) {
+function getEONETEvents() {
     "use strict";
     var eoneturl = 'http://eonet.sci.gsfc.nasa.gov/api/v2.1/events';
     $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + eoneturl)
@@ -91,7 +90,6 @@ function getEONETEvents(callback) {
             }
 
             map.getSource('eonet').setData(geojson);
-            return callback(null, 'ready');
         });
 }
 
@@ -115,9 +113,9 @@ function getL8S2Images(feature, callback) {
     })
         .success(function (data) {
             if (data.hasOwnProperty('errorMessage')) {
-                return callback(new Error('DevSeed Sat-API servers Error'), null);
+                console.log('DevSeed Sat-API servers Error');
+                return callback(null);
             }
-
             if (data.meta.found !== 0) {
                 var i,
                     scene = {};
@@ -155,17 +153,14 @@ function getL8S2Images(feature, callback) {
             return callback(null, results);
         })
         .fail(function () {
-            // return callback(new Error('DevSeed Sat-API servers Error'), null);
             console.log('DevSeed Sat-API servers Error');
-            return callback(null, null);
+            return callback(null);
         });
 }
 
 function getS1Images(feature, callback) {
     "use strict";
-
     $.ajax ({
-        // url: "https://shqxykh2td.execute-api.us-west-2.amazonaws.com/v1/gets1images",
         url: "https://eri3bguxzd.execute-api.us-west-2.amazonaws.com/prod/getS1images",
         type: "POST",
         data: JSON.stringify(feature),
@@ -173,12 +168,15 @@ function getS1Images(feature, callback) {
         contentType: "application/json",
     })
     .success(function(data){
+        if (data.hasOwnProperty('errorMessage')) {
+            console.log('DisasterWatch API servers Error');
+            return callback(null);
+        }
         return callback(null, data.scenes);
     })
-    .fail(function () {
+    .fail(function(err) {
         console.log('DisasterWatch API servers Error');
-        // return callback(new Error('DisasterWatch API servers Error'), null);
-        return callback(null, null);
+        return callback(null);
     });
 }
 
@@ -202,21 +200,22 @@ function getImages() {
     var q = d3.queue()
         .defer(getL8S2Images, features.features[0])
         .defer(getS1Images, features.features[0])
-        .await(function (error, resultsS2L8, resultsS1) {
+        .awaitAll(function(error, images) {
             $('.disaster-images .spin').addClass('display-none');
             $('.map .spin').addClass('display-none');
 
-            var results;
-            if (! resultsS1 && ! resultsS2L8) {
-                $('.img-preview').append('<span class="serv-error">Server Error: Please contact <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></span>');
-            } else {
+            console.log(images);
 
-                if (resultsS2L8 && !resultsS1)  {
-                    results = resultsS2L8;
-                } else if (!resultsS2L8 && resultsS1) {
-                    results = resultsS1;
-                } else {
-                    results = resultsS2L8.concat(resultsS1);
+            if (!images[0] && !images[1]) {
+                $('.img-preview').append('<span class="serv-error">Error: Cannot connect to APIs</span>');
+            } else {
+                var results = [];
+                if (images.length !== 0) {
+                    for (var j = 0; j <images.length; j++) {
+                        if (images[j]) {
+                            results = results.concat(images[j]);
+                        }
+                    }
                 }
 
                 var geojsonS1 = {

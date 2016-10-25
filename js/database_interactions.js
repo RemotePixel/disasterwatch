@@ -7,13 +7,6 @@
 
 var disasterwatchAPI = 'https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/';
 
-// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/add
-// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/remove
-// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/update
-// GET - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/toGEOJSON
-// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/subscribe
-// POST - https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/unsubscribe
-
 function getDisasterdb(callback) {
     "use strict";
 
@@ -75,9 +68,9 @@ function addDisastTodb() {
     geojson.properties.comments  = document.getElementById("disasterComments").value.replace(/\n\r?/g, '<br />');
 
     geojson.properties.images = {
-        'landsat8': ($('.img-preview [sat="landsat8"]').first().attr('img-date'))? $('.img-preview [sat="landsat8"]').first().attr('img-date') : '2016-01-01',
-        'sentinel2': ($('.img-preview [sat="sentinel2"]').first().attr('img-date'))? $('.img-preview [sat="sentinel2"]').first().attr('img-date') : '2016-01-01',
-        'sentinel1': ($('.img-preview [sat="sentinel1"]').first().attr('img-date'))? $('.img-preview [sat="sentinel1"]').first().attr('img-date') : '2016-01-01',
+        'landsat8': ($('.img-preview [sat="landsat8"]').first().attr('img-date'))? $('.img-preview [sat="landsat8"]').first().attr('img-date') : moment.utc().subtract(15,'days').format('YYYY-MM-DD'),
+        'sentinel2': ($('.img-preview [sat="sentinel2"]').first().attr('img-date'))? $('.img-preview [sat="sentinel2"]').first().attr('img-date') : moment.utc().subtract(15,'days').format('YYYY-MM-DD'),
+        'sentinel1': ($('.img-preview [sat="sentinel1"]').first().attr('img-date'))? $('.img-preview [sat="sentinel1"]').first().attr('img-date') : moment.utc().subtract(15,'days').format('YYYY-MM-DD'),
     };
 
     $.ajax ({
