@@ -107,6 +107,9 @@ $(".disaster-images .sat-filter input").change(function () {
 function resetForm() {
     "use strict";
     // $(".dropdown-toggle").empty();
+
+    $('.disaster-info div[type="submit"]').attr('disabled', false);
+
     $('#disasterType span[type="dtype"]').remove()
     $(".disaster-info .dropdown-menu i").each(function () {
         $(this).removeClass('right-block-in');

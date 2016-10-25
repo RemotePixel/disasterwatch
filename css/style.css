@@ -997,9 +997,6 @@ body {
 
 .leftblock .main-section .disaster-info {
     color: #393939;
-}
-
-.leftblock .main-section .disaster-info {
     overflow-y: scroll;
 }
 
@@ -1583,7 +1580,7 @@ body {
     top: 0;
     right: -100%;
     z-index: 10;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.95);
     -o-transition: all .5s ease;
     -webkit-transition: all .5s ease;
     -moz-transition: all .5s ease;

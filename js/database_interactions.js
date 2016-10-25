@@ -36,6 +36,8 @@ function getDisasterdb(callback) {
 function addDisastTodb() {
     "use strict";
 
+    $('.disaster-info div[type="submit"]').attr('disabled', true);
+
     $('.disaster-info .spin').removeClass('display-none');
     $('.map .spin').removeClass('display-none');
 
@@ -96,6 +98,8 @@ function addDisastTodb() {
 
 function updateDisastTodb() {
     "use strict";
+
+    $('.disaster-info div[type="submit"]').attr('disabled', true);
 
     $('.disaster-info .spin').removeClass('display-none');
     $('.map .spin').removeClass('display-none');
@@ -223,83 +227,97 @@ function removeEvt(id) {
 function seeEvtDBimages(id) {
     "use strict";
 
-    draw.deleteAll();
-    openleftBlock();
-
-    $(".tab-selector-1").addClass('out');
-    $(".tab-selector-2").addClass('out');
-
-    if (draw.getMode() !== 'static'){
-        draw.changeMode('static');
-    }
-
     var features = map.getSource("disasterdb")._data.features.filter(function(e){
         return (e.properties.uuid === id);
-    }),
-        featureId = draw.add(features[0]),
-        features = draw.getAll();
+    });
 
-    if (features.features[0].geometry.type === "LineString") {
-        var bbox = turf.extent(features.features[0].geometry);
-        map.fitBounds(bbox, {padding: 20});
+    if (features.length === 0) {
+        $("#modalError").modal();
+    } else {
+
+        draw.deleteAll();
+        openleftBlock();
+
+        $(".tab-selector-1").addClass('out');
+        $(".tab-selector-2").addClass('out');
+
+        if (draw.getMode() !== 'static'){
+            draw.changeMode('static');
+        }
+
+        var featureId = draw.add(features[0]),
+            features = draw.getAll();
+
+        if (features.features[0].geometry.type === "LineString") {
+            var bbox = turf.extent(features.features[0].geometry);
+            map.fitBounds(bbox, {padding: 20});
+        }
+
+        if (features.features[0].geometry.type === "Point") {
+            var round = turf.buffer(features.features[0], 100, 'kilometers'),
+                bbox = turf.extent(round);
+            map.fitBounds(bbox, {padding: 20});
+        }
+
+        getImages();
     }
-
-    if (features.features[0].geometry.type === "Point") {
-        var round = turf.buffer(features.features[0], 100, 'kilometers'),
-            bbox = turf.extent(round);
-        map.fitBounds(bbox, {padding: 20});
-    }
-
-    getImages();
 }
 
 
 function editEvt(id) {
-    openleftBlock();
-    resetForm();
-    closePopup();
-
-    draw.deleteAll();
-    if (draw.getMode() !== 'simple_select'){
-        draw.changeMode('simple_select');
-    }
-    $(".tab-selector-2").prop( "checked", true);
-    $(".tab-selector-1").addClass('out');
-    $(".tab-selector-2").addClass('out');
 
     var features = map.getSource("disasterdb")._data.features.filter(function(e){
         return (e.properties.uuid === id);
-    }),
-        featureId = draw.add(features[0]);
+    });
 
-    if (features[0].geometry.type === "LineString") {
-        var bbox = turf.extent(features[0].geometry);
-        map.fitBounds(bbox, {padding: 20});
-    }
+    if (features.length === 0) {
 
-    if (features[0].geometry.type === "Point") {
-        var round = turf.buffer(features[0], 100, 'kilometers'),
-            bbox = turf.extent(round);
-        map.fitBounds(bbox, {padding: 20});
-    }
+        $("#modalError").modal();
 
-    document.getElementById("uuid").textContent = 'UUID: ' + id;
-
-    features[0].properties.dtype.forEach(function(e){
-        addType(document.getElementById('dropdown-menu').getElementsByClassName(e)[0].parentElement);
-    })
-
-    document.getElementById("disasterName").value = features[0].properties.name;
-    document.getElementById("disasterPlace").value = features[0].properties.place;
-
-    $("#disasterStartDate").datepicker("setDate", features[0].properties.dateStart);
-    if (features[0].properties.dateEnd === ''){
-        $("#dateCheckbox").prop('checked', true).change();
     } else {
-        $("#disasterEndDate").datepicker("setDate", features[0].properties.dateEnd);
-    }
+        openleftBlock();
+        resetForm();
+        closePopup();
 
-    document.getElementById("disasterComments").value = features[0].properties.comments.replace(/<br\s?\/?>/g,"\n");
+        draw.deleteAll();
+        if (draw.getMode() !== 'simple_select'){
+            draw.changeMode('simple_select');
+        }
+        $(".tab-selector-2").prop( "checked", true);
+        $(".tab-selector-1").addClass('out');
+        $(".tab-selector-2").addClass('out');
+
+        var featureId = draw.add(features[0]);
+
+        if (features[0].geometry.type === "LineString") {
+            var bbox = turf.extent(features[0].geometry);
+            map.fitBounds(bbox, {padding: 20});
+        }
+
+        if (features[0].geometry.type === "Point") {
+            var round = turf.buffer(features[0], 100, 'kilometers'),
+                bbox = turf.extent(round);
+            map.fitBounds(bbox, {padding: 20});
+        }
+
+        document.getElementById("uuid").textContent = 'UUID: ' + id;
+
+        features[0].properties.dtype.forEach(function(e){
+            addType(document.getElementById('dropdown-menu').getElementsByClassName(e)[0].parentElement);
+        })
+
+        document.getElementById("disasterName").value = features[0].properties.name;
+        document.getElementById("disasterPlace").value = features[0].properties.place;
+
+        $("#disasterStartDate").datepicker("setDate", features[0].properties.dateStart);
+        if (features[0].properties.dateEnd === ''){
+            $("#dateCheckbox").prop('checked', true).change();
+        } else {
+            $("#disasterEndDate").datepicker("setDate", features[0].properties.dateEnd);
+        }
+
+        document.getElementById("disasterComments").value = features[0].properties.comments.replace(/<br\s?\/?>/g,"\n");
+    }
 }
 
 function mapFlyToDisaster(id) {

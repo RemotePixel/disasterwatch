@@ -72,7 +72,8 @@
 			<!-- <img class="img-responsive center" src="img/help_satsearch.gif"> -->
 			<h4>Info</h4>
 			<p>Landsat-8 and Sentinel-2 image search results is powered by
-				<a href="https://github.com/sat-utils/sat-api" target="_blank">Developmentseed new Satellite API</a>. Sentinel-1 image search is done through ESA scihub API.</p>
+				<a href="https://github.com/sat-utils/sat-api" target="_blank">Developmentseed new Satellite API</a>.
+				Sentinel-1 image search is done through ESA scihub API.</p>
 
 			<p>Landsat and Sentinel images previews are from <a href="https://earthexplorer.usgs.gov" target="_blank">USGS Earth Explorer</a>
 				and <a href="http://sentinel-pds.s3-website.eu-central-1.amazonaws.com" target="_blank"> Sentinel on AWS S3</a>
@@ -269,8 +270,8 @@
 									added please contact me or open a ticket on <a href="https://github.com/RemotePixel/disasterwatch/issues" target="_blank">Github</a></p>
 							</div>
 
-							<div id="addEVT" type="submit" class="btn btn-default" onclick="addDisastTodb()" tabindex="10">Add</div>
-							<div id="updateEVT" type="submit" class="btn btn-default" onclick="updateDisastTodb()">Update</div>
+							<button id="addEVT" type="submit" class="btn btn-default" onclick="addDisastTodb()" tabindex="10">Add</button>
+							<button id="updateEVT" type="submit" class="btn btn-default" onclick="updateDisastTodb()">Update</button>
 						</form>
 						<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
 					</section>
@@ -640,7 +641,7 @@
     </div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="modalUnderConstruction" tabindex="-1" role="dialog"
+	<div class="modal fade" id="modalError" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -651,12 +652,8 @@
 				</div>
 				   <div class="modal-body">
 						<div class="hmodal-info">
-							<p>This project is under development!</p>
-
-							<p>If you want to learn more about it or contribute
-								please check its
-								<a href="https://github.com/vincentsarago/disasterwatch" target="_blank">Github repo</a></p>
-
+							<p>Error: Invalid Event ID</p>
+							<p>The Event your trying to see don't exist!</p>
 							<p>Questions or comments to <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></p>
 						</div>
 				</div>
