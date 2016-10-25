@@ -5,22 +5,6 @@
 /*global console, console, alert*/
 
 
-//Disaster-info Form Interaction
-function addType(elem) {
-    "use strict";
-    var type = elem.childNodes[0],
-        dTypelist = document.getElementById("disasterType");
-
-    if (dTypelist.getElementsByClassName(type.className).length !== 0) {
-        var onList = dTypelist.getElementsByClassName(type.className);
-        dTypelist.removeChild(onList[0]);
-        elem.childNodes[1].className = "fa fa-check right-block";
-    } else {
-        elem.childNodes[1].className = "fa fa-check right-block-in";
-        dTypelist.appendChild(type.cloneNode(true));
-    }
-}
-
 $("#dateCheckbox").change(function () {
     "use strict";
     if (this.checked) {
@@ -41,28 +25,76 @@ $("#mailCheckbox").change(function () {
     }
 });
 
-function filterListDisaster() {
+//Disaster-info Form Interaction
+function addType(elem) {
     "use strict";
-    document.getElementsByClassName('list-disasters')[0].childNodes.forEach(function (e) {
-        if (e.getAttribute('date-end') !== '' && document.getElementById('event-checkbox').checked) {
-            e.className = 'list-element display-none';
-        } else {
-            e.className = 'list-element';
-        }
-    });
+    var type = elem.childNodes[0],
+        dTypelist = document.getElementById("disasterType");
 
-    if (document.getElementById('event-checkbox').checked) {
-        var ptFilter = ["all", ["==", "$type", "Point"], ["==", "dateEnd", ""]],
-            pgFilter = ["all", ["==", "$type", "Polygon"], ["==", "dateEnd", ""]];
+    if (dTypelist.getElementsByClassName(type.className).length !== 0) {
+        var onList = dTypelist.getElementsByClassName(type.className);
+        dTypelist.removeChild(onList[0]);
+        elem.childNodes[1].className = "fa fa-check right-block";
     } else {
-        var ptFilter = ["==", "$type", "Point"],
-            pgFilter = ["==", "$type", "Polygon"];
+        elem.childNodes[1].className = "fa fa-check right-block-in";
+        dTypelist.appendChild(type.cloneNode(true));
     }
-
-    map.setFilter("disasterdb-points", ptFilter);
-    map.setFilter("disasterdb-polygons", pgFilter);
 }
 
+function filterType(elem) {
+    "use strict";
+    var type = elem.childNodes[0],
+        dTypelist = document.getElementById("disasterType2");
+    dTypelist.innerHTML = '<span class="caret"></span>' + type.outerHTML;
+    filterListDisaster();
+}
+
+function filterListDisaster() {
+    "use strict";
+    var filterClass = $("#disasterType2 span[type='dtype']")[0].className;
+    if (filterClass === 'all') {
+        document.getElementsByClassName('list-disasters')[0].childNodes.forEach(function (e) {
+            if (e.getAttribute('date-end') !== '' && document.getElementById('event-checkbox').checked) {
+                e.className = 'list-element display-none';
+            } else {
+                e.className = 'list-element';
+            }
+        });
+    } else {
+        document.getElementsByClassName('list-disasters')[0].childNodes.forEach(function (e) {
+            if ((e.getAttribute('date-end') !== '' && document.getElementById('event-checkbox').checked) || (e.getAttribute('dw-type') !== filterClass)) {
+                e.className = 'list-element display-none';
+            } else {
+                e.className = 'list-element';
+            }
+        });
+    }
+}
+
+function filterListImage() {
+    "use strict";
+    var sat2show = $.map($(".disaster-images .sat-filter input:checked"), function (e) {
+        return e.getAttribute('data');
+    }),
+    sat2check = $.map($(".disaster-images .sat-filter input"), function (e) {
+        return e.getAttribute('data');
+    });
+
+    sat2check.forEach(function(e){
+        if (sat2show.indexOf(e) === -1) {
+            $('.img-preview div[sat="' + e + '"]').addClass('display-none');
+        } else {
+            $('.img-preview div[sat="' + e + '"]').removeClass('display-none');
+        }
+    });
+}
+
+function sortListImage() {
+    "use strict";
+    var list = $(".img-preview").children();
+    list.sort(sortScenes);
+    list.detach().appendTo($(".img-preview"));
+}
 
 $("#event-checkbox").change(function () {
     "use strict";
@@ -70,20 +102,6 @@ $("#event-checkbox").change(function () {
     filterListDisaster();
 });
 
-function filterListImage() {
-    "use strict";
-    var sat = $.map($(".disaster-images .sat-filter input:checked"), function (e) {
-        return e.getAttribute('data');
-    });
-
-    document.getElementsByClassName('img-preview')[0].childNodes.forEach(function (e) {
-        if (sat.indexOf(e.getAttribute('sat')) === -1) {
-            e.className += ' display-none';
-        } else {
-            e.className = 'item';
-        }
-    });
-}
 
 $(".disaster-images .sat-filter input").change(function () {
     "use strict";
@@ -93,6 +111,9 @@ $(".disaster-images .sat-filter input").change(function () {
 function resetForm() {
     "use strict";
     // $(".dropdown-toggle").empty();
+
+    $('.disaster-info button[type="submit"]').attr('disabled', false);
+
     $('#disasterType span[type="dtype"]').remove()
     $(".disaster-info .dropdown-menu i").each(function () {
         $(this).removeClass('right-block-in');
@@ -108,8 +129,12 @@ function resetForm() {
     $('.disaster-info .uuid').text('');
     $('.disaster-info textarea').val('');
 
+    $('.disaster-info .error').removeClass('on');
+
     $("#disasterStartDate").datepicker('clearDates');
     $("#disasterEndDate").datepicker('clearDates');
+
+    $('.disaster-info').scrollTop(0);
 }
 
 function openleftBlock() {
@@ -136,6 +161,9 @@ function openImagesSettings() {
 
 function closeleftblock() {
     "use strict";
+
+    $('.disaster-images .spin').addClass('display-none');
+
     $(".leftblock").removeClass('in');
     $("button[dwmenu]").each(function () {
         $(this).attr('disabled', false);
@@ -150,18 +178,30 @@ function closeleftblock() {
     $(".disaster-images .sat-filter").removeClass('active');
 
     $('.img-preview').empty();
+
     resetForm();
+
     map.resize();
     draw.deleteAll();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+function toggleHelp() {
+    $(".dwhelp-block").toggleClass('on');
+}
+
 function toggleImageryOption() {
     $(".bottom-right-control").toggleClass('on');
 }
 
-function toggleSubscribe(){
+function toggleSubscribe() {
     $(".subscribe-section").toggleClass('display-none');
+}
+
+function toggleSearch() {
+    $('.geocoder-container').toggleClass('in');
+    $('.geocoder-container input').focus();
 }
 
 function toggleParam(setting) {

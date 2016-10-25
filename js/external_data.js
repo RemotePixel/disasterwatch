@@ -96,6 +96,10 @@ function getEONETEvents() {
 function getL8S2Images(feature, callback) {
     "use strict";
 
+    var sat = $.map($(".disaster-images .sat-filter input:checked"), function (e) {
+        return e.getAttribute('data');
+    });
+
     var jsonRequest = {
             intersects: feature,
             date_from: "2016-01-01",
@@ -105,7 +109,7 @@ function getL8S2Images(feature, callback) {
         results = [];
 
     $.ajax({
-        url: 'https://api.developmentseed.org/satellites',
+        url: 'https://api.developmentseed.org/satellites/',
         type: "POST",
         data: JSON.stringify(jsonRequest),
         dataType: "json",
@@ -117,10 +121,9 @@ function getL8S2Images(feature, callback) {
                 return callback(null);
             }
             if (data.meta.found !== 0) {
-                var i,
-                    scene = {};
+                var scene = {};
 
-                for (i = 0; i < data.results.length; i += 1) {
+                for (var i = 0; i < data.results.length; i += 1) {
                     scene = {};
                     scene.date = data.results[i].date;
                     scene.cloud = data.results[i].cloud_coverage;
@@ -150,7 +153,62 @@ function getL8S2Images(feature, callback) {
                     }
                 }
             }
-            return callback(null, results);
+
+
+
+            for (var i = 0; i < results.length; i += 1) {
+
+                var imgMeta = results[i],
+                    className;
+
+                if (imgMeta.sat === 'landsat-8') {
+
+                    if (sat.indexOf('landsat8') === -1) {
+                        className = 'item display-none';
+                    } else {
+                        className = 'item';
+                    }
+
+                    var hoverstr = "['all', ['==', 'PATH', " + imgMeta.path + "], ['==', 'ROW', " + imgMeta.row + "]]";
+                    $('.img-preview').append(
+                        '<div sat="landsat8" img-date="' + imgMeta.date + '" class="' + className + '" onmouseover="hoverL8(' + hoverstr + ')" onmouseout="hoverL8(' + "['all', ['==', 'PATH', ''], ['==', 'ROW', '']]" + ')">' +
+                            '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '">' +
+                            '<div class="result-overlay">' +
+                                '<span>' + imgMeta.sceneID + '</span>' +
+                                '<span><i class="fa fa-calendar-o"></i> ' + imgMeta.date + '</span>' +
+                                '<span><i class="fa fa-cloud"></i> ' + imgMeta.cloud + '%</span>' +
+                                '<span>Link:</span>' +
+                                '<div class="btnDD" onclick="feeddownloadL8(\'' + imgMeta.AWSurl + '\',\'' + imgMeta.sceneID + '\')"><i class="fa fa-download"></i></div>' +
+                                // '<a target="_blank" href="' + imgMeta.AWSurl + 'index.html"><img src="/img/aws.png"> </a>' +
+                                '<a target="_blank" href="' + imgMeta.sumAWSurl + '"><img src="/img/aws.png"> </a>' +
+                                '<a target="_blank" href="' + imgMeta.usgsURL + '"><img src="/img/usgs.jpg"></a>' +
+                            '</div>' +
+                            '</div>'
+                    );
+                } else {
+                    if (sat.indexOf('sentinel2') === -1) {
+                        className = 'item display-none';
+                    } else {
+                        className = 'item';
+                    }
+                    var hoverstr = "['==', 'Name', '" + imgMeta.grid + "']";
+                    $('.img-preview').append(
+                        '<div sat="sentinel2" img-date="' + imgMeta.date + '" class="' + className + '" onmouseover="hoverS2(' + hoverstr + ')" onmouseout="hoverS2(' + "['in', 'Name', '']" + ')">' +
+                            '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '">' +
+                            '<div class="result-overlay">' +
+                                '<span>' + imgMeta.sceneID + '</span>' +
+                                '<span><i class="fa fa-calendar-o"></i> ' + imgMeta.date + '</span>' +
+                                '<span><i class="fa fa-cloud"></i> ' + imgMeta.cloud + '%</span>' +
+                                '<span>Link:</span>' +
+                                '<div class="btnDD" onclick="feeddownloadS2(\'' + imgMeta.path.replace('#tiles', "tiles") + '\',\'' + imgMeta.browseURL + '\')"><i class="fa fa-download"></i></div>' +
+                                '<a target="_blank" href="' + imgMeta.AWSurl + '"><img src="/img/aws.png"> </a>' +
+                            '</div>' +
+                            '</div>'
+                    );
+                }
+            }
+
+            return callback(null, results.length);
         })
         .fail(function () {
             console.log('DevSeed Sat-API servers Error');
@@ -160,8 +218,13 @@ function getL8S2Images(feature, callback) {
 
 function getS1Images(feature, callback) {
     "use strict";
+
+    var sat = $.map($(".disaster-images .sat-filter input:checked"), function (e) {
+        return e.getAttribute('data');
+    });
+
     $.ajax ({
-        url: "https://eri3bguxzd.execute-api.us-west-2.amazonaws.com/prod/getS1images",
+        url: "https://fzzc9dpwij.execute-api.us-west-2.amazonaws.com/prod/getS1images",
         type: "POST",
         data: JSON.stringify(feature),
         dataType: "json",
@@ -172,7 +235,48 @@ function getS1Images(feature, callback) {
             console.log('DisasterWatch API servers Error');
             return callback(null);
         }
-        return callback(null, data.scenes);
+
+        var geojsonS1 = {
+                "type": "FeatureCollection",
+                "features": []
+            };
+
+        for (var i = 0; i < data.length; i += 1) {
+
+            var imgMeta = data[i],
+                className;
+
+            var feat = {
+                properties: {"id": imgMeta.sceneID},
+                type: "Feature",
+                geometry: imgMeta.geometry
+            };
+            geojsonS1.features.push(feat);
+
+            if (sat.indexOf('sentinel1') === -1) {
+                className = 'item display-none';
+            } else {
+                className = 'item';
+            }
+
+            var hoverstr = "['in', 'id', '" + imgMeta.sceneID + "']";
+            $('.img-preview').append(
+                '<div sat="sentinel1" img-date="' + imgMeta.date + '" class="' + className + '" onmouseover="hoverS1(' + hoverstr + ')" onmouseout="hoverS1(' + "['==', 'id', '']" + ')">' +
+                    '<img class="lazy img-responsive" src="/img/sentinel1.jpg">' +
+                    '<div class="result-overlay">' +
+                        '<span> S1A_IW_SLC' + moment(imgMeta.fullDate).utc().format('YYYYMMDD_hhmmss') + '</span>' +
+                        '<span><i class="fa fa-calendar-o"></i> ' + imgMeta.date + '</span>' +
+                        '<span><i class="ms ms-satellite"></i> ' + imgMeta.orbType.slice(0,4) + ' | ' + imgMeta.refOrbit + '</span>' +
+                        '<span> Pol: ' + imgMeta.polarisation + ' | SLC </span>' +
+                        '<span>Link:</span>' +
+                        '<a target="_blank" href="' + imgMeta.esaURL + '"><img src="/img/esa.png"> </a>' +
+                    '</div>' +
+                    '</div>'
+            );
+        }
+        map.getSource('sentinel-1').setData(geojsonS1);
+
+        return callback(null, data.length);
     })
     .fail(function(err) {
         console.log('DisasterWatch API servers Error');
@@ -182,8 +286,7 @@ function getS1Images(feature, callback) {
 
 function getImages() {
     "use strict";
-    $('.disaster-images .spin').removeClass('display-none');
-    $('.map .spin').removeClass('display-none');
+    $('.disaster-images .spin-load').removeClass('display-none');
     $('.img-preview').empty();
 
     //Need to modulateGeometry
@@ -201,105 +304,32 @@ function getImages() {
         .defer(getL8S2Images, features.features[0])
         .defer(getS1Images, features.features[0])
         .awaitAll(function(error, images) {
-            $('.disaster-images .spin').addClass('display-none');
-            $('.map .spin').addClass('display-none');
-
-            console.log(images);
+            $('.disaster-images .spin-load').addClass('display-none');
+            sortListImage();
 
             if (!images[0] && !images[1]) {
-                $('.img-preview').append('<span class="serv-error">Error: Cannot connect to APIs</span>');
+                $('.img-preview').append('<div class="serv-error">' +
+                    '<span>Error: Cannot connect to APIs</span>' +
+                    '<div class="center-block"><button class="btn btn-default" onclick="getImages()">Retry</button></div>'
+                );
             } else {
-                var results = [];
+                var results = 0;
                 if (images.length !== 0) {
                     for (var j = 0; j <images.length; j++) {
                         if (images[j]) {
-                            results = results.concat(images[j]);
+                            results += images[j];
                         }
                     }
                 }
 
-                var geojsonS1 = {
-                        "type": "FeatureCollection",
-                        "features": []
-                    },
-                    i;
-
-                if (results.length === 0) {
+                if (results === 0) {
                     $('.img-preview').append('<span class="nodata-error">No image found</span>');
-                } else {
-                    results.sort(sortScenes);
-
-                    for (i = 0; i < results.length; i += 1) {
-
-                        var imgMeta = results[i];
-                        switch (imgMeta.sat) {
-                            case 'landsat-8':
-                                var hoverstr = "['all', ['==', 'PATH', " + imgMeta.path + "], ['==', 'ROW', " + imgMeta.row + "]]";
-                                $('.img-preview').append(
-                                    '<div sat="landsat8" img-date="' + imgMeta.date + '" class="item" onmouseover="hoverL8(' + hoverstr + ')" onmouseout="hoverL8(' + "['all', ['==', 'PATH', ''], ['==', 'ROW', '']]" + ')">' +
-                                        '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '">' +
-                                        '<div class="result-overlay">' +
-                                            '<span>' + imgMeta.sceneID + '</span>' +
-                                            '<span><i class="fa fa-calendar-o"></i> ' + imgMeta.date + '</span>' +
-                                            '<span><i class="fa fa-cloud"></i> ' + imgMeta.cloud + '%</span>' +
-                                            '<span>Link:</span>' +
-                                            '<div class="btnDD" onclick="feeddownloadL8(\'' + imgMeta.AWSurl + '\',\'' + imgMeta.sceneID + '\')"><i class="fa fa-download"></i></div>' +
-                                            // '<a target="_blank" href="' + imgMeta.AWSurl + 'index.html"><img src="/img/aws.png"> </a>' +
-                                            '<a target="_blank" href="' + imgMeta.sumAWSurl + '"><img src="/img/aws.png"> </a>' +
-                                            '<a target="_blank" href="' + imgMeta.usgsURL + '"><img src="/img/usgs.jpg"></a>' +
-                                        '</div>' +
-                                        '</div>'
-                                );
-                                break;
-                            case 'sentinel-2':
-                                var hoverstr = "['==', 'Name', '" + imgMeta.grid + "']";
-                                $('.img-preview').append(
-                                    '<div sat="sentinel2" img-date="' + imgMeta.date + '" class="item" onmouseover="hoverS2(' + hoverstr + ')" onmouseout="hoverS2(' + "['in', 'Name', '']" + ')">' +
-                                        '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '">' +
-                                        '<div class="result-overlay">' +
-                                            '<span>' + imgMeta.sceneID + '</span>' +
-                                            '<span><i class="fa fa-calendar-o"></i> ' + imgMeta.date + '</span>' +
-                                            '<span><i class="fa fa-cloud"></i> ' + imgMeta.cloud + '%</span>' +
-                                            '<span>Link:</span>' +
-                                            '<div class="btnDD" onclick="feeddownloadS2(\'' + imgMeta.path.replace('#tiles', "tiles") + '\',\'' + imgMeta.browseURL + '\')"><i class="fa fa-download"></i></div>' +
-                                            '<a target="_blank" href="' + imgMeta.AWSurl + '"><img src="/img/aws.png"> </a>' +
-                                        '</div>' +
-                                        '</div>'
-                                );
-                                break;
-                            case 'sentinel-1':
-
-                                var feat = {
-                                    properties: {"id": imgMeta.sceneID},
-                                    type: "Feature",
-                                    geometry: imgMeta.geometry
-                                };
-                                geojsonS1.features.push(feat);
-                                var hoverstr = "['in', 'id', '" + imgMeta.sceneID + "']";
-                                $('.img-preview').append(
-                                    '<div sat="sentinel1" img-date="' + imgMeta.date + '" class="item" onmouseover="hoverS1(' + hoverstr + ')" onmouseout="hoverS1(' + "['==', 'id', '']" + ')">' +
-                                        '<img class="lazy img-responsive" src="/img/sentinel1.jpg">' +
-                                        '<div class="result-overlay">' +
-                                            '<span> S1A_IW_SLC' + moment(imgMeta.fullDate).utc().format('YYYYMMDD_hhmmss') + '</span>' +
-                                            '<span><i class="fa fa-calendar-o"></i> ' + imgMeta.date + '</span>' +
-                                            '<span><i class="ms ms-satellite"></i> ' + imgMeta.orbType.slice(0,4) + ' | ' + imgMeta.refOrbit + '</span>' +
-                                            '<span> Pol: ' + imgMeta.polarisation + ' | SLC </span>' +
-                                            '<span>Link:</span>' +
-                                            '<a target="_blank" href="' + imgMeta.esaURL + '"><img src="/img/esa.png"> </a>' +
-                                        '</div>' +
-                                        '</div>'
-                                );
-                                break;
-                        }
-                    }
-
-                    filterListImage();
-
-                    map.getSource('sentinel-1').setData(geojsonS1);
                 }
+                // else {
+                //     filterListImage();
+                // }
             }
         });
-    closePopup();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -326,10 +356,17 @@ function seeEQimages(urlusgs) {
                 map.fitBounds(bbox, {padding: 20});
             }
 
-            $(".tab-selector-1").addClass('out');
-            $(".tab-selector-2").addClass('out');
+            addType(document.getElementById('dropdown-menu').getElementsByClassName('earthquake')[0].parentElement);
+
+            document.getElementById("disasterName").value = data.properties.title;
+            document.getElementById("disasterPlace").value = data.properties.place;
+            document.getElementById("disasterStartDate").value = moment(data.properties.time).utc().format('YYYY-MM-DD');
+            document.getElementById("disasterEndDate").value = moment(data.properties.time).utc().format('YYYY-MM-DD');
+            document.getElementById("disasterComments").value = data.properties.url;
+
             openleftBlock();
             getImages();
+            $('.map .spin').addClass('display-none');
         });
     closePopup();
 }
@@ -372,10 +409,19 @@ function seeEONETimages(id) {
                 map.fitBounds(bbox, {padding: 20});
             }
 
+            // addType(document.getElementById('dropdown-menu').getElementsByClassName('earthquake')[0].parentElement);
+            //
+            // document.getElementById("disasterName").value = data.properties.title;
+            // document.getElementById("disasterPlace").value = data.properties.place;
+            // document.getElementById("disasterStartDate").value = moment(data.properties.time).utc().format('YYYY-MM-DD');
+            // document.getElementById("disasterEndDate").value = moment(data.properties.time).utc().format('YYYY-MM-DD');
+            // document.getElementById("disasterComments").value = data.properties.url;
+
             $(".tab-selector-1").addClass('out');
             $(".tab-selector-2").addClass('out');
             openleftBlock();
             getImages();
+            $('.map .spin').addClass('display-none');
         });
     closePopup();
 }

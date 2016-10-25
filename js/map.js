@@ -10,7 +10,7 @@ var map = new mapboxgl.Map({
         container: 'map',
         center: [0, 10],
         zoom: 1,
-        style: 'mapbox://styles/vincentsarago/ciu1lp37x00ag2ilfp9vhb7cw',
+        style: 'mapbox://styles/vincentsarago/ciuknp8en007g2io2qc4bbh7x',
         attributionControl: true,
         minZoom: 0,
         maxZoom: 8
@@ -22,8 +22,27 @@ var map = new mapboxgl.Map({
 map.dragRotate.disable();
 map.touchZoomRotate.disableRotation();
 
+var geocoder = new mapboxgl.Geocoder({
+     container: 'geocoder-container'
+});
+map.addControl(geocoder);
+
 map.addControl(draw);
 map.addControl(new mapboxgl.Navigation());
+
+var btnsearch = document.createElement('button');
+btnsearch.className = 'mapboxgl-ctrl-icon';
+btnsearch.setAttribute("onclick", "toggleSearch()");
+var icnsearch = document.createElement('i');
+icnsearch.className = 'fa fa-search ';
+btnsearch.appendChild(icnsearch);
+
+var grp = document.createElement('div');
+grp.className = 'mapboxgl-ctrl-group mapboxgl-ctrl';
+grp.appendChild(btnsearch);
+
+var control = document.getElementsByClassName("mapboxgl-ctrl-top-right");
+control[0].appendChild(grp.cloneNode(true));
 
 map.on('style.load', function () {
     "use strict";
@@ -100,13 +119,13 @@ map.on('style.load', function () {
         "id": "disasterdb-points",
         "type": "circle",
         "source": "disasterdb",
-        "filter": ["==", "$type", "Point"],
+        "filter": ["all", ["==", "$type", "Point"], ["!=", "dateEnd", ""]],
         "paint": {
-            "circle-color": '#da7979',
+            "circle-color": '#3293ed',
             'circle-radius': {
-                "base": 1.8,
+                "base": 4,
                 'stops': [
-                    [0, 2],
+                    [0, 4],
                     [9, 10]
                 ]
             }
@@ -117,11 +136,52 @@ map.on('style.load', function () {
         "id": "disasterdb-polygons",
         "type": "fill",
         "source": "disasterdb",
-        "filter": ["==", "$type", "Polygon"],
+        "filter": ["all", ["==", "$type", "Polygon"], ["!=", "dateEnd", ""]],
+        "paint": {
+            "fill-outline-color": "#3293ed",
+            "fill-color": "#454545",
+            "fill-opacity": {
+                "base": 1,
+                'stops': [
+                    [0, 1],
+                    [9, 0.4]
+                ]
+            }
+        }
+    });
+
+    map.addLayer({
+        "id": "disasterdb-points-ongoing",
+        "type": "circle",
+        "source": "disasterdb",
+        "filter": ["all", ["==", "$type", "Point"], ["==", "dateEnd", ""]],
+        "paint": {
+            "circle-color": '#da7979',
+            'circle-radius': {
+                "base": 4,
+                'stops': [
+                    [0, 4],
+                    [9, 10]
+                ]
+            }
+        }
+    });
+
+    map.addLayer({
+        "id": "disasterdb-polygons-ongoing",
+        "type": "fill",
+        "source": "disasterdb",
+        "filter": ["all", ["==", "$type", "Polygon"], ["==", "dateEnd", ""]],
         "paint": {
             "fill-outline-color": "#da7979",
             "fill-color": "#ba3e3e",
-            "fill-opacity": 0.4
+            "fill-opacity": {
+                "base": 1,
+                'stops': [
+                    [0, 1],
+                    [9, 0.4]
+                ]
+            }
         }
     });
 
@@ -213,7 +273,7 @@ map.on('style.load', function () {
             feature = map.queryRenderedFeatures([
                 [e.point.x - mouseRadius, e.point.y - mouseRadius],
                 [e.point.x + mouseRadius, e.point.y + mouseRadius]
-            ], {layers: ["eonet-point", "earthquakes-point", "disasterdb-points", "disasterdb-polygons"]})[0];
+            ], {layers: ["eonet-point", "earthquakes-point", "disasterdb-points", "disasterdb-polygons", "disasterdb-points-ongoing", "disasterdb-polygons-ongoing"]})[0];
 
         if (feature) {
             map.getCanvas().style.cursor = 'pointer';
@@ -233,7 +293,8 @@ map.on('style.load', function () {
             if (feature) {
                 var popup = new mapboxgl.Popup()
                     .setLngLat(e.lngLat)
-                    .setHTML('<div class="linetab bold">Name: ' + feature.properties.title + '</div>' +
+                    .setHTML('<div class="dtypeImage"><div class="icon icon-earthquake" title="earthquake"></div></div>' +
+                                '<div class="linetab bold">Name: ' + feature.properties.title + '</div>' +
                                 '<div class="linetab">Date: ' + moment(feature.properties.time).utc().format('YYYY-MM-DD HH:mm:ss') + '(UTC)</div>' +
                                 '<div class="linetab">Magnitude: ' + feature.properties.mag + '</div>' +
                                 '<div class="linetab">Felt: ' + ((feature.properties.felt === null) ? 'No' : 'Yes') + '</div>' +
@@ -274,11 +335,12 @@ map.on('style.load', function () {
         var feature = map.queryRenderedFeatures([
             [e.point.x - mouseRadius, e.point.y - mouseRadius],
             [e.point.x + mouseRadius, e.point.y + mouseRadius]
-        ], {layers: ["disasterdb-points", "disasterdb-polygons"]})[0];
+        ], {layers: ["disasterdb-points", "disasterdb-polygons","disasterdb-points-ongoing", "disasterdb-polygons-ongoing"]})[0];
 
         if (feature) {
             var dtype = '',
-                disasterType = JSON.parse(feature.properties.dtype);
+                disasterType = JSON.parse(feature.properties.dtype),
+                maindType;
 
             for (var j = 0; j < disasterType.length; j++) {
                 dtype += '<span type="dtype" class="' + disasterType[j] + '">' + disasterType[j] + '</span> ';
@@ -286,7 +348,11 @@ map.on('style.load', function () {
 
             if (disasterType.length === 0) {
                 dtype = '<span type="dtype" class="unclassified">unclassified</span>';
+                maindType = 'unclassified';
+            } else {
+                maindType = disasterType[0];
             }
+
             var comments = feature.properties.comments.split('<br />').map(function(e){
                 return textTolink(e);
             })
@@ -298,8 +364,7 @@ map.on('style.load', function () {
 
             var popup = new mapboxgl.Popup()
                 .setLngLat(e.lngLat)
-                .setHTML('<div class="dtypeImage"><img src="img/dw.png" class="img-responsive"></div>' +
-                            '<div class="delim"></div>' +
+                .setHTML('<div class="dtypeImage"><div class="icon icon-' + maindType + '" title="' + maindType + '"></div></div>' +
                             '<div class="linetab bold">Name: ' + feature.properties.name + '</div>' +
                             '<div class="linetab uuid">uuid: ' + feature.properties.uuid + '</div>' +
                             '<div class="linetab disasterType">Type: ' + dtype + '</div>' +
@@ -318,6 +383,7 @@ map.on('style.load', function () {
                                 '<a onclick="removeEvt(\'' + feature.properties.uuid + '\')">Remove</a> | ' +
                                 '<a onclick="toggleSubscribe()">Subscribe</a>' +
                             '</div>' +
+                            '<span class="db-error red">Error...Cannot remove this event from database</span>' +
                             '<div data-uuid="' + feature.properties.uuid + '" class="subscribe-section display-none">' +
                                 '<div class="delim"></div>' +
                                 '<div class="sat-filter">' +
@@ -345,23 +411,25 @@ map.on('style.load', function () {
     });
 
     getDisasterdb(function(err, res){
-        if (err) throw err;
+        if (err) {
+            $('#modalDBerror').modal();
+            console.log('Could not retrieve updated database');
+            return;
+        };
         var keys = getUrlVars();
         if (keys.hasOwnProperty('update')) {
             editEvt(keys.update);
+            $(".dwhelp-block").removeClass('on');
         } else if (keys.hasOwnProperty('images')) {
+            $(".dwhelp-block").removeClass('on');
             seeEvtDBimages(keys.images)
-        } else {
-            $('#modalUnderConstruction').modal();
         }
-        $('.map .spin2').addClass('display-none');
     });
     getEarthquake();
     getEONETEvents();
 });
 
 ////////////////////////////////////////////////////////////////////////////////
-//Check if User
 map.on('draw.selectionchange', function (e) {
     "use strict";
     if (!$(".leftblock").hasClass('in')) {
@@ -384,8 +452,37 @@ map.on('draw.selectionchange', function (e) {
 //     $("#map").click();
 // });
 
+
+map.on('draw.update', function (e) {
+    "use strict";
+
+    // Check if the geometry is in the database - HACK: check if feature as properties uuid!
+
+    if (!e.features[0].properties.hasOwnProperty('uuid')) {
+        getImages();
+        // re-do geocoding ?
+
+        if (e.features[0].geometry.type === "Polygon") {
+            var centroid = turf.centroid(e.features[0]);
+            getPlace(centroid.geometry.coordinates);
+        }
+        if (e.features[0].geometry.type === "Point") {
+            getPlace(e.features[0].geometry.coordinates);
+        }
+
+    }
+    // getImages();
+});
+
 map.on('draw.create', function (e) {
     "use strict";
+
+    if (e.features[0].geometry.type === "Polygon") {
+
+        var area = turf.area(e.features[0]);
+        console.log(area);
+        // return;
+    }
 
     // limit draw Polygons size ??
     openleftBlock();
@@ -393,16 +490,41 @@ map.on('draw.create', function (e) {
 
     if (e.features[0].geometry.type === "Polygon") {
         var bbox = turf.extent(e.features[0].geometry);
+
+        var centroid = turf.centroid(e.features[0]);
+        getPlace(centroid.geometry.coordinates);
+
         map.fitBounds(bbox, {padding: 20});
     }
 
     if (e.features[0].geometry.type === "Point") {
         var round = turf.buffer(e.features[0], 100, 'kilometers'),
             bbox = turf.extent(round);
+
+        getPlace(e.features[0].geometry.coordinates);
+
         map.fitBounds(bbox, {padding: 20});
     }
 });
 
+geocoder.on('result', function(ev) {
+    $('.geocoder-container').toggleClass('in');
+
+    var feature = {
+        geometry: ev.result.geometry,
+        properties: {},
+        type: "Feature"
+    };
+
+    var featureId = draw.add(feature);
+    // edit place information
+    document.getElementById("disasterPlace").value = ev.result.place_name;
+
+    openleftBlock();
+    getImages();
+});
+
+////////////////////////////////////////////////////////////////////////////////
 
 function setStyle(basename) {
     "use strict";
@@ -435,7 +557,7 @@ function setStyle(basename) {
                 basemaps_url
             ],
             'attribution' : [
-                '<a href="https://earthdata.nasa.gov/about/science-system-description/eosdis-components/global-imagery-browse-services-gibs" >NASA EOSDIS GIBS</a>'
+                '<a href="https://earthdata.nasa.gov/about/science-system-description/eosdis-components/global-imagery-browse-services-gibs"> NASA EOSDIS GIBS</a>'
             ],
             'tileSize': 256
         });
@@ -489,6 +611,27 @@ function drawOnMap(type) {
 
     case null:
         break;
+    }
+}
+
+function mapFlyToDisaster(id) {
+    "use strict";
+
+    var features = map.getSource("disasterdb")._data.features.filter(function(e){
+        return (e.properties.uuid === id);
+    });
+
+    if (features){
+        if (features[0].geometry.type === "Polygon") {
+            var bbox = turf.extent(features[0].geometry);
+            map.fitBounds(bbox, {padding: 20});
+        }
+
+        if (features[0].geometry.type === "Point") {
+            var round = turf.buffer(features[0], 100, 'kilometers'),
+                bbox = turf.extent(round);
+            map.fitBounds(bbox, {padding: 20});
+        }
     }
 }
 

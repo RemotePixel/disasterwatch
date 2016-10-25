@@ -29,6 +29,7 @@
 	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.css' rel='stylesheet' />
 	<!-- <link rel="stylesheet" type="text/css" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.11.18/mapbox-gl-draw.css" /> -->
 	<link href="/css/mapbox-gl-draw.css" rel="stylesheet"/>
+	<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.1/mapbox-gl-geocoder.css' type='text/css' />
 
 	<!-- Custom Fonts -->
 	<link href="/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -56,8 +57,66 @@
 </head>
 
 <body>
-	<div class="content">
 
+	<div class="dwhelp-block on">
+		<div class="close-help" onclick="toggleHelp()">
+			<div class="lr">
+				<div class="rl"></div>
+			</div>
+		</div>
+
+		<div class="help-content">
+			<h2>DisasterWatch</h2>
+			<h6>Monitor disasters areas with satellite imagery</h6>
+
+			<h4>Info</h4>
+			<p>DisasterWatch is a crowdsourced plateform for event localisation and monitoring via remote sensed data.</p>
+			<p>Landsat-8 and Sentinel-2 image search results is powered by
+				<a href="https://github.com/sat-utils/sat-api" target="_blank">Developmentseed new Satellite API</a>.
+				Sentinel-1 image search is done via ESA <a href="https://scihub.copernicus.eu/twiki/do/view/SciHubWebPortal/APIHubDescription" target="_blank">scihub API</a>.</p>
+
+			<p>Landsat and Sentinel images previews are from <a href="https://earthexplorer.usgs.gov" target="_blank">USGS Earth Explorer</a>
+				and <a href="http://sentinel-pds.s3-website.eu-central-1.amazonaws.com" target="_blank"> Sentinel on AWS S3</a>
+				(via <a href="http://www.sinergise.com" target="_blank">Sinergise</a>).
+			</p>
+
+			<p>Continue reading: <a href="https://remotepixel.ca/blog/disasterwatch_version1_20161026.html" target="_blank">Blog post</a> on RemotePixel.ca</p>
+
+			<h4>HowTo</h4>
+			<ul>
+				<li>Check the events database (<i class="ms ms-database-o"></i>)</li>
+				<li>Use the <i class="fa fa-plus"></i> to add an event or search for imagery</li>
+				<li>Use <i class="ms ms-map-folded-o"></i> button to display MODIS/VIIRS daily/worldwide basemap</li>
+				<li>Latest EarthQuakes or Natural Events <a href="http://eonet.sci.gsfc.nasa.gov" target="_blank">EONET</i></a> available in <i class="ms ms-layers-o"></i></li>
+				<li>In anytime you can subscrive to an event to receive E-mail update when new images become available</li>
+			</ul>
+
+			<h4>Legend</h4>
+			<p class="red-round">: On-Going Events</p>
+			<p class="blue-round">: Past Events</p>
+
+			<h4>Contribute</h4>
+			<p>This project is openly developed on <a href="https://github.com/RemotePixel/disasterwatch" target="_blank"><i class="fa fa-github"></i> GitHub</a>.</p>
+
+			<h4>Contact</h4>
+			<p>Questions or comments to <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></p>
+
+			<h4>Thanks</h4>
+			<p>Special thanks to <a href="https://twitter.com/CodeMacabre" target="_blank">@CodeMacabre</a> for designing a perfect set of icons for each event.</p>
+			<p>Others icons form <a href="http://fontawesome.io" target="_blank">FontAwesome</a> and <a href="http://mapsk.in" target="_blank">mapskin</a>.</p>
+
+			<div class="thanks-images row">
+				<a href="https://www.mapbox.com" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/mapbox.png"></a>
+				<a href="http://www.sinergise.com" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/sinergise.png"></a>
+				<a href="https://developmentseed.org" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/devseed.png"></a>
+				<a href="https://aws.amazon.com/" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/awservice.png"></a>
+			</div>
+
+			<div class="site-version">Version: 1.0</div>
+		</div>
+	</div>
+
+	<div class="content">
 		<div class="menu-bar-left">
             <div class="NavButtonGroup">
 
@@ -65,13 +124,11 @@
 					<img src="img/dw.png" class="img-responsive">
 				</a>
 
-                <!-- Basemaps Button -->
                 <button id="basemaps-btn" type="button" dwmenu="basemap" class="btn btn-default black" onclick="toggleParam('basemaps')">
                     <i class="ms ms-map-folded-o ms-2x"></i>
                     <span class="buttonTitle">Basemaps</span>
                 </button>
 
-                <!-- Setting Button -->
                 <button id="layers-btn" type="button" dwmenu="layers" class="btn btn-default" onclick="toggleParam('layers')">
                     <i class="ms ms-layers-o ms-2x"></i>
                     <span class="buttonTitle">Layers</span>
@@ -82,14 +139,12 @@
                     <span class="buttonTitle">Events</span>
                 </button>
 
-                <!-- Add Disaster Button -->
                 <button id="add-btn" type="button" dwmenu="add" class="btn btn-default" data-toggle="modal" data-target="#modalDraw">
                     <i class="fa fa-plus fa-2x"></i>
                     <span class="buttonTitle">Add</span>
                 </button>
 
-                <!-- Info Button -->
-                <div id="info-btn" class="float-bottom" data-toggle="modal" data-target="#modalAbout">
+                <div id="info-btn" class="float-bottom" onclick="toggleHelp()">
                     <i class="fa fa-info fa-2x"></i>
                 </div>
             </div>
@@ -108,7 +163,8 @@
 
 					<div class="right-top-button">
 						<div class="closeleftblock" onclick="closeleftblock()"><i class="fa fa-times fa-2x"></i></div>
-						<div class="opensettings" onclick="openImagesSettings()"><i class="fa fa-cog fa-2x"></i></div>
+						<div class="opensettings" onclick="openImagesSettings()"><i class="fa fa-cog"></i></div>
+						<div class="refreshimages" onclick="getImages()"><i class="fa fa-refresh"></i></div>
 					</div>
 
 					<section class="disaster-images">
@@ -124,7 +180,7 @@
 							</label>
 						</div>
 						<div class="img-preview"></div>
-						<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
+						<span title="Searching for images" class="spin-load display-none"><i class="fa fa-spinner fa-spin"></i></span>
 					</section>
 
 					<section class="disaster-info">
@@ -145,14 +201,16 @@
 									<ul id="dropdown-menu" class="dropdown-menu disasterType" aria-labelledby="dropdownMenu1">
 										<li><a onclick="addType(this)"><span type="dtype" class="fire">fire</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="earthquake">earthquake</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
-										<li><a onclick="addType(this)"><span type="dtype" class="tsunami">tsunami</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="weather">weather</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="avalanche">avalanche</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="tornado">tornado</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="volcano">volcano</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="floods">floods</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="landslide">landslide</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="tsunami">tsunami</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="sandstorm">sandstorm</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="manmade">manmade</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
+										<li><a onclick="addType(this)"><span type="dtype" class="disease">disease</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 										<li><a onclick="addType(this)"><span type="dtype" class="other">other</span><i class="fa fa-check right-block" aria-hidden="true"></i></a></li>
 									</ul>
 								</div>
@@ -210,21 +268,17 @@
 									added please contact me or open a ticket on <a href="https://github.com/RemotePixel/disasterwatch/issues" target="_blank">Github</a></p>
 							</div>
 
-							<div id="addEVT" type="submit" class="btn btn-default" onclick="addDisastTodb()" tabindex="10">Add</div>
-							<div id="updateEVT" type="submit" class="btn btn-default" onclick="updateDisastTodb()">Update</div>
+							<span class="error red">Error...Cannot Add/Update this event</span>
+
+							<button id="addEVT" type="submit" class="btn btn-default" onclick="addDisastTodb()" tabindex="10">Add</button>
+							<button id="updateEVT" type="submit" class="btn btn-default" onclick="updateDisastTodb()">Update</button>
 						</form>
-						<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
 					</section>
 				</div>
 			</div><!--
 			WhiteSpace
 		--><div id="map" class="map">
 				<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
-
-				<span class="spin2">
-					<i class="fa fa-spinner fa-spin"></i>
-					<span>Loading events</span>
-				</span>
 
 				<div class="bottom-right-control display-none">
 					<div class="close-block" onclick="toggleImageryOption()">
@@ -243,18 +297,19 @@
 					</div>
 				</div>
 			</div>
-
-
+			<div id="geocoder-container" class="geocoder-container" tabindex="1"></div>
 
 			<div id="SideViewCtrl" class="side-view">
 				<div id="basemaps-panel" class="navpanel side-view-container">
 
-                    <button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('basemaps')">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
-                    </button>
-                    <div class="title">Basemaps</div>
+					<div class="row side-view-header">
+	                    <button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('basemaps')">
+	                        <span class="glyphicon glyphicon-chevron-left"></span>
+	                    </button>
+	                    <div class="title">Basemaps</div>
+					</div>
 
-					<div class="side-view-content">
+					<div class="row side-view-content">
 						<div class="side-element">
 							<div id="MapboxMap" class="link" onclick="changeOverlay('MapboxMap')">
 								<div class="link-hover">
@@ -314,18 +369,55 @@
 							</div>
 							<span>Aqua True Color (CR)</span>
 						</div>
+
+						<div class="delim"></div>
+
+						<p>VIIRS: 2015/11/24 -> Today</p>
+						<p>MODIS Terra: 2012/05/08 -> Today</p>
+						<p>MODIS Aqua: 2012/05/08 -> Today</p>
+
+						<p>MODIS instruments (Moderate-Resolution Imaging Spectroradiometer) on-board Terra and
+							Aqua satellites provide a global view
+							of earth on a daily basis since 1999 and 2002.
+							With a resolution up to 250m per pixel and 36 spectral bands,
+							MODIS images can produce stunning view of earth.</p>
+
+						<p>Only data produced after May 2012 are available on-line.</p>
+
+						<p>Late 2015 (Nov. 25), VIIRS imagery from SUOMI NPP spacecraft
+							was also added to available global and daily dataset.</p>
+
+						<p>Data are available 3-4 hours after acquisition.
+							if the map appears black, it means the data are not yet available.</p>
+
+						<p>Terra satellite local equatorial crossing time is approximately 10:30 a.m. in a
+							descending orbit.</p>
+
+						<p>Aqua satellite local equatorial crossing time is approximately 1:30 p.m.
+							in an ascending orbit.</p>
+
+						<p>SUOMI NPP satellite local equatorial crossing time is approximately 1:30 p.m.
+							in an ascending orbit.</p>
+
+						<p>Sources:<br>
+							<a href="http://modis.gsfc.nasa.gov" target="_blanck">MODIS website</a><br>
+							<a href="https://nsidc.org/data/modis/terra_aqua_differences" target="_blanck">National Snow & Ice Data Center</a><br>
+							<a href="http://npp.gsfc.nasa.gov/viirs.html" target="_blanck">Visible Infrared Imaging Radiometer Suite (VIIRS)</a>
+						</p>
+
 					</div>
                 </div>
 
                 <div id="layers-panel" class="navpanel side-view-container">
 
-                    <button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('layers')">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
-                    </button>
-                    <div class="title">Layers</div>
+					<div class="row side-view-header">
+	                    <button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('layers')">
+	                        <span class="glyphicon glyphicon-chevron-left"></span>
+	                    </button>
+	                    <div class="title">Layers</div>
+					</div>
 
-                    <div class="side-view-content">
-
+					<div class="row side-view-content">
 						<!-- <div class="block-control">
 							<div class="text-align-left">Volcanoes</div>
 							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary" >
@@ -334,11 +426,11 @@
 						</div> -->
 
 						<div class="block-control">
-                            <div class="text-align-left">Earthquakes (Magnitude > 4.5):</div>
+							<div class="text-align-left">Earthquakes (Magnitude > 4.5):</div>
 							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary" >
-                                <input id="earthquake-checkbox" type="checkbox"/><span></span>
-                            </label>
-                        </div>
+								<input id="earthquake-checkbox" type="checkbox"/><span></span>
+							</label>
+						</div>
 
 						<div class="block-control">
 							<div class="text-align-left">EONET Events:</div>
@@ -346,26 +438,65 @@
 								<input id="eonet-checkbox" type="checkbox"/><span></span>
 							</label>
 						</div>
-                    </div>
+
+						<div class="delim"></div>
+
+						<p>Latest earthquakes from USGS (<a href="http://earthquake.usgs.gov/earthquakes/map/" target="_blank">link</a>).</p>
+						<p>NASA Earth Observatory Natural Event Tracker (EONET) is "a repository of metadata about natural events" (<a href="http://eonet.sci.gsfc.nasa.gov" target="_blank">link</a>).</p>
+
+					</div>
                 </div>
 
 				<div id="disasters-panel" class="navpanel side-view-container">
 
-					<button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('disasterslist')">
-						<span class="glyphicon glyphicon-chevron-left"></span>
-					</button>
-					<div class="title">Events</div>
-					<div class="block-control">
-						<div class="text-align-left">Show only On-Going</div>
-						<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary" >
-							<input id="event-checkbox" type="checkbox"/><span></span>
-						</label>
+					<span class="spin2 display-none">
+						<i class="fa fa-spinner fa-spin"></i>
+						<span>Loading events</span>
+					</span>
+
+					<div class="row side-view-header">
+						<button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('disasterslist')">
+							<span class="glyphicon glyphicon-chevron-left"></span>
+						</button>
+						<div class="title">Events</div>
+						<div class="block-control">
+							<div class="text-align-left">Show only On-Going</div>
+							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary" >
+								<input id="event-checkbox" type="checkbox"/><span></span>
+							</label>
+						</div>
 					</div>
 
-					<div class="side-view-content list-disasters"></div>
+					<div class="row side-view-content">
+						<div class="list-disasters"></div>
+					</div>
+
+					<div class="row side-view-footer">
+						<div class="dropup">
+						  <span id="disasterType2" class="dropdown-toggle disasterType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							<span class="caret"></span>
+							<span type="dtype" class="all">All</span>
+						  </span>
+						  <ul id="dropdown-menu2" class="dropdown-menu disasterType" aria-labelledby="dropdownMenu2">
+							<li><a onclick="filterType(this)"><span type="dtype" class="all">All</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="fire">fire</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="earthquake">earthquake</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="weather">weather</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="avalanche">avalanche</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="tornado">tornado</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="volcano">volcano</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="floods">floods</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="landslide">landslide</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="tsunami">tsunami</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="sandstorm">sandstorm</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="manmade">manmade</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="disease">disease</span></a></li>
+						  	<li><a onclick="filterType(this)"><span type="dtype" class="other">other</span></a></li>
+						  </ul>
+						</div>
+					</div>
+
 				</div>
-
-
             </div>
         </div>
 
@@ -389,7 +520,7 @@
 						<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4 drawbox">
 							<div class="drawsel" onclick="drawOnMap('point')" data-dismiss="modal">
 								<i class="ms ms-points ms-2x"></i>
-								<span>Add a marker</span>
+								<span>Add a point</span>
 							</div>
 						</div>
 						<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4 drawbox">
@@ -482,49 +613,46 @@
 	</div>
 	<!-- /.modal -->
 
-    <!-- Modal -->
-    <div class="modal fade" id="modalAbout" tabindex="-1" role="dialog"
-        aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" style="text-align:center; color:#000;">Disaster Watch</h4>
-                </div>
-                   <div class="modal-body">
-                        <div class="hmodal-info">
-	                        <p>Disaster watch is an open-source tool to visualize the latest satellite imagery in disaster areas.</p>
-
-		                    <p><a href="https://github.com/vincentsarago/disasterwatch" target="_blank">Check out this project on GitHub</a></p>
-
-		                    <p>Questions or comments? Contact <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></p>
-
-                        </div>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-
 	<!-- Modal -->
-	<div class="modal fade" id="modalUnderConstruction" tabindex="-1" role="dialog"
+	<div class="modal fade" id="modalError" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true">&times;</button>
-					<h4 class="modal-title" style="text-align:center; color:#000;">Disaster Watch</h4>
+					<h4 class="modal-title" style="text-align:center; color:#000;">Error</h4>
 				</div>
 				   <div class="modal-body">
 						<div class="hmodal-info">
-							<p>This project is under development!</p>
+							<p>Error: Invalid Event ID</p>
+							<p>The Event your trying to see don't exist!</p>
+							<p>Questions or comments to <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></p>
+						</div>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+    <!-- /.modal -->
 
-							<p>If you want to learn more about it or contribute
-								please check its
-								<a href="https://github.com/vincentsarago/disasterwatch" target="_blank">Github repo</a></p>
+	<!-- Modal -->
+	<div class="modal fade" id="modalDBerror" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" style="text-align:center; color:#000;">Error</h4>
+				</div>
+				   <div class="modal-body">
+						<div class="hmodal-info">
+							<p>Error: Could not retrieve disaster Events</p>
+							<p>This is unexpected! Please try to reload the database manually</p>
+
+							<button type="button" class="btn btn-default" onclick="getDisasterdb()" tabindex="10">Reload</button>
 
 							<p>Questions or comments to <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></p>
 						</div>
@@ -558,6 +686,7 @@
 	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.js'></script>
 	<!-- <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.11.18/mapbox-gl-draw.js"></script> -->
 	<script src="/js/mapbox-gl-draw.js"></script>
+	<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.1/mapbox-gl-geocoder.js'></script>
 
 	<script src="https://d3js.org/d3-queue.v3.min.js"></script>
 

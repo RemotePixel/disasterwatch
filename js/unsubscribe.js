@@ -33,12 +33,8 @@ if (keys.hasOwnProperty('uuid') && keys.hasOwnProperty('mail') ) {
         $("#name i").text(data.features[0].properties.name);
 
         if (data.features[0].geometry.type === "Polygon") {
-            // var bbox = turf.extent(data.features[0].geometry);
-            // map.fitBounds(bbox, {padding: 20});
             var centroid = turf.centroid(data);
-            console.log(centroid)
             var llstr = centroid.geometry.coordinates[0] + ',' + centroid.geometry.coordinates[1] + ',6';
-
         }
 
         if (data.features[0].geometry.type === "Point") {
