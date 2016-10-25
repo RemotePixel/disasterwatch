@@ -1182,7 +1182,7 @@ body {
 }
 
 .tsunami {
-    background-color: rgb(72, 175, 176);
+    background-color: rgb(41, 124, 137);
     color: #FFF;
 }
 
@@ -1192,7 +1192,7 @@ body {
 }
 
 .tornado {
-    background-color: rgb(92, 122, 145);
+    background-color: rgb(62, 78, 89);
     color: #FFF;
 }
 
@@ -1202,7 +1202,7 @@ body {
 }
 
 .floods {
-    background-color: rgb(82, 168, 204);
+    background-color: rgb(63, 171, 183);
     color: #FFF;
 }
 
@@ -1217,17 +1217,17 @@ body {
 }
 
 .manmade {
-    background-color: rgb(102, 151, 48);
+    background-color: rgb(38, 38, 38);
     color: #FFF;
 }
 
 .avalanche {
-    background-color: rgb(115, 152, 168);
+    background-color: rgb(93, 159, 179);
     color: #FFF;
 }
 
 .disease {
-    background-color: rgb(52, 152, 56);
+    background-color: rgb(115, 162, 46);
     color: #FFF;
 }
 
