@@ -457,11 +457,16 @@ map.on('draw.update', function (e) {
     "use strict";
 
     // Check if the geometry is in the database - HACK: check if feature as properties uuid!
+    if (e.features[0].geometry.type === "Polygon") {
+        if (turf.area(e.features[0]) >= 1e11) {
+            $("#modalPolySize").modal();
+            return;
+        }
+    }
 
     if (!e.features[0].properties.hasOwnProperty('uuid')) {
         getImages();
         // re-do geocoding ?
-
         if (e.features[0].geometry.type === "Polygon") {
             var centroid = turf.centroid(e.features[0]);
             getPlace(centroid.geometry.coordinates);
@@ -469,19 +474,18 @@ map.on('draw.update', function (e) {
         if (e.features[0].geometry.type === "Point") {
             getPlace(e.features[0].geometry.coordinates);
         }
-
     }
-    // getImages();
 });
 
 map.on('draw.create', function (e) {
     "use strict";
 
     if (e.features[0].geometry.type === "Polygon") {
-
-        var area = turf.area(e.features[0]);
-        console.log(area);
-        // return;
+        if (turf.area(e.features[0]) >= 1e11) {
+            $("#modalPolySize").modal();
+            draw.deleteAll();
+            return;
+        }
     }
 
     // limit draw Polygons size ??

@@ -1245,7 +1245,6 @@ body {
     margin: 0 0 3px;
 }
 
-
 .disaster-info .error {
     display: none;
     font-size: 12px;
@@ -1253,6 +1252,16 @@ body {
 
 .disaster-info .error.on {
     display: block;
+}
+
+.disaster-info button[type="submit"]:disabled span,
+.disaster-info button[type="submit"] .fa {
+    display: none;
+}
+
+.disaster-info button[type="submit"] span,
+.disaster-info button[type="submit"]:disabled .fa {
+    display: inherit;
 }
 
 /* ----------- DISASTER TYPE ----------- */

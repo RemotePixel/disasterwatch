@@ -270,8 +270,8 @@
 
 							<span class="error red">Error...Cannot Add/Update this event</span>
 
-							<button id="addEVT" type="submit" class="btn btn-default" onclick="addDisastTodb()" tabindex="10">Add</button>
-							<button id="updateEVT" type="submit" class="btn btn-default" onclick="updateDisastTodb()">Update</button>
+							<button id="addEVT" type="submit" class="btn btn-default" onclick="addDisastTodb()" tabindex="10"><span>Add</span><i class="fa fa-spinner fa-spin"></i></button>
+							<button id="updateEVT" type="submit" class="btn btn-default" onclick="updateDisastTodb()"><span>Update</span><i class="fa fa-spinner fa-spin"></i></button>
 						</form>
 					</section>
 				</div>
@@ -663,6 +663,31 @@
 		<!-- /.modal-dialog -->
 	</div>
     <!-- /.modal -->
+
+	<!-- Modal -->
+	<div class="modal fade" id="modalPolySize" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" style="text-align:center; color:#000;">Error</h4>
+				</div>
+				   <div class="modal-body">
+						<div class="hmodal-info">
+							<p>Error: Polygon size exceed 100 000 km<sup>2</sup></p>
+							<p>Please define a smaller polygon</p>
+							<p>Questions or comments to <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></p>
+						</div>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+    <!-- /.modal -->
+
 
     <!-- jQuery -->
     <script src="/js/jquery.min.js"></script>

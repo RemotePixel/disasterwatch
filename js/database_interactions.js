@@ -48,14 +48,21 @@ function getDisasterdb(callback) {
 function addDisastTodb() {
     "use strict";
 
-    $('.disaster-info button[type="submit"]').attr('disabled', true);
-    $('.map .spin').removeClass('display-none');
-
     //Check for info validity
     //Error Handling
 
     var features = draw.getAll(),
         geojson = features.features[0];
+
+    if (geojson.geometry.type === "Polygon") {
+        if (turf.area(geojson) >= 1e11) {
+            $("#modalPolySize").modal();
+            return;
+        }
+    }
+
+    $('.disaster-info button[type="submit"]').attr('disabled', true);
+    $('.map .spin').removeClass('display-none');
 
     delete geojson['id'];
 
@@ -115,11 +122,18 @@ function addDisastTodb() {
 function updateDisastTodb() {
     "use strict";
 
-    $('.disaster-info button[type="submit"]').attr('disabled', true);
-    $('.map .spin').removeClass('display-none');
-
     var features = draw.getAll(),
         geojson = features.features[0];
+
+    if (geojson.geometry.type === "Polygon") {
+        if (turf.area(geojson) >= 1e11) {
+            $("#modalPolySize").modal();
+            return;
+        }
+    }
+
+    $('.disaster-info button[type="submit"]').attr('disabled', true);
+    $('.map .spin').removeClass('display-none');
 
     delete geojson['id'];
 
