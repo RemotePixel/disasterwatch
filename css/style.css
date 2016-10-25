@@ -1652,6 +1652,26 @@ body {
     text-align: right;
 }
 
+.dwhelp-block .help-content .red-round:before {
+    content: ' ';
+    background-color: #da7979;
+    border-radius: 50%;
+    font-size: 0;
+    padding: 5px;
+    line-height: 12px;
+    margin-right: 3px;
+    vertical-align: middle;
+}
+.dwhelp-block .help-content .blue-round:before {
+    content: ' ';
+    background-color: #3293ed;
+    border-radius: 50%;
+    font-size: 0;
+    padding: 5px;
+    line-height: 12px;
+    margin-right: 3px;
+    vertical-align: middle;
+}
 
 .close-help {
     position: absolute;

@@ -121,11 +121,11 @@ map.on('style.load', function () {
         "source": "disasterdb",
         "filter": ["all", ["==", "$type", "Point"], ["!=", "dateEnd", ""]],
         "paint": {
-            "circle-color": '#ed9d32',
+            "circle-color": '#3293ed',
             'circle-radius': {
-                "base": 1.8,
+                "base": 4,
                 'stops': [
-                    [0, 2],
+                    [0, 4],
                     [9, 10]
                 ]
             }
@@ -138,9 +138,15 @@ map.on('style.load', function () {
         "source": "disasterdb",
         "filter": ["all", ["==", "$type", "Polygon"], ["!=", "dateEnd", ""]],
         "paint": {
-            "fill-outline-color": "#ed9d32",
+            "fill-outline-color": "#3293ed",
             "fill-color": "#454545",
-            "fill-opacity": 0.4
+            "fill-opacity": {
+                "base": 1,
+                'stops': [
+                    [0, 1],
+                    [9, 0.4]
+                ]
+            }
         }
     });
 
@@ -152,9 +158,9 @@ map.on('style.load', function () {
         "paint": {
             "circle-color": '#da7979',
             'circle-radius': {
-                "base": 1.8,
+                "base": 4,
                 'stops': [
-                    [0, 2],
+                    [0, 4],
                     [9, 10]
                 ]
             }
@@ -169,7 +175,13 @@ map.on('style.load', function () {
         "paint": {
             "fill-outline-color": "#da7979",
             "fill-color": "#ba3e3e",
-            "fill-opacity": 0.4
+            "fill-opacity": {
+                "base": 1,
+                'stops': [
+                    [0, 1],
+                    [9, 0.4]
+                ]
+            }
         }
     });
 
