@@ -96,6 +96,10 @@ function getEONETEvents() {
 function getL8S2Images(feature, callback) {
     "use strict";
 
+    var sat = $.map($(".disaster-images .sat-filter input:checked"), function (e) {
+        return e.getAttribute('data');
+    });
+
     var jsonRequest = {
             intersects: feature,
             date_from: "2016-01-01",
@@ -150,12 +154,24 @@ function getL8S2Images(feature, callback) {
                 }
             }
 
+
+
             for (var i = 0; i < results.length; i += 1) {
-                var imgMeta = results[i];
+
+                var imgMeta = results[i],
+                    className;
+
                 if (imgMeta.sat === 'landsat-8') {
+
+                    if (sat.indexOf('landsat8') === -1) {
+                        className = 'item display-none';
+                    } else {
+                        className = 'item';
+                    }
+
                     var hoverstr = "['all', ['==', 'PATH', " + imgMeta.path + "], ['==', 'ROW', " + imgMeta.row + "]]";
                     $('.img-preview').append(
-                        '<div sat="landsat8" img-date="' + imgMeta.date + '" class="item" onmouseover="hoverL8(' + hoverstr + ')" onmouseout="hoverL8(' + "['all', ['==', 'PATH', ''], ['==', 'ROW', '']]" + ')">' +
+                        '<div sat="landsat8" img-date="' + imgMeta.date + '" class="' + className + '" onmouseover="hoverL8(' + hoverstr + ')" onmouseout="hoverL8(' + "['all', ['==', 'PATH', ''], ['==', 'ROW', '']]" + ')">' +
                             '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '">' +
                             '<div class="result-overlay">' +
                                 '<span>' + imgMeta.sceneID + '</span>' +
@@ -170,9 +186,14 @@ function getL8S2Images(feature, callback) {
                             '</div>'
                     );
                 } else {
+                    if (sat.indexOf('sentinel2') === -1) {
+                        className = 'item display-none';
+                    } else {
+                        className = 'item';
+                    }
                     var hoverstr = "['==', 'Name', '" + imgMeta.grid + "']";
                     $('.img-preview').append(
-                        '<div sat="sentinel2" img-date="' + imgMeta.date + '" class="item" onmouseover="hoverS2(' + hoverstr + ')" onmouseout="hoverS2(' + "['in', 'Name', '']" + ')">' +
+                        '<div sat="sentinel2" img-date="' + imgMeta.date + '" class="' + className + '" onmouseover="hoverS2(' + hoverstr + ')" onmouseout="hoverS2(' + "['in', 'Name', '']" + ')">' +
                             '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '">' +
                             '<div class="result-overlay">' +
                                 '<span>' + imgMeta.sceneID + '</span>' +
@@ -198,6 +219,10 @@ function getL8S2Images(feature, callback) {
 function getS1Images(feature, callback) {
     "use strict";
 
+    var sat = $.map($(".disaster-images .sat-filter input:checked"), function (e) {
+        return e.getAttribute('data');
+    });
+
     $.ajax ({
         url: "https://fzzc9dpwij.execute-api.us-west-2.amazonaws.com/prod/getS1images",
         type: "POST",
@@ -218,7 +243,8 @@ function getS1Images(feature, callback) {
 
         for (var i = 0; i < data.length; i += 1) {
 
-            var imgMeta = data[i];
+            var imgMeta = data[i],
+                className;
 
             var feat = {
                 properties: {"id": imgMeta.sceneID},
@@ -227,9 +253,15 @@ function getS1Images(feature, callback) {
             };
             geojsonS1.features.push(feat);
 
+            if (sat.indexOf('sentinel1') === -1) {
+                className = 'item display-none';
+            } else {
+                className = 'item';
+            }
+
             var hoverstr = "['in', 'id', '" + imgMeta.sceneID + "']";
             $('.img-preview').append(
-                '<div sat="sentinel1" img-date="' + imgMeta.date + '" class="item" onmouseover="hoverS1(' + hoverstr + ')" onmouseout="hoverS1(' + "['==', 'id', '']" + ')">' +
+                '<div sat="sentinel1" img-date="' + imgMeta.date + '" class="' + className + '" onmouseover="hoverS1(' + hoverstr + ')" onmouseout="hoverS1(' + "['==', 'id', '']" + ')">' +
                     '<img class="lazy img-responsive" src="/img/sentinel1.jpg">' +
                     '<div class="result-overlay">' +
                         '<span> S1A_IW_SLC' + moment(imgMeta.fullDate).utc().format('YYYYMMDD_hhmmss') + '</span>' +
@@ -292,12 +324,12 @@ function getImages() {
 
                 if (results === 0) {
                     $('.img-preview').append('<span class="nodata-error">No image found</span>');
-                } else {
-                    filterListImage();
                 }
+                // else {
+                //     filterListImage();
+                // }
             }
         });
-    closePopup();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -452,8 +452,37 @@ map.on('draw.selectionchange', function (e) {
 //     $("#map").click();
 // });
 
+
+map.on('draw.update', function (e) {
+    "use strict";
+
+    // Check if the geometry is in the database - HACK: check if feature as properties uuid!
+
+    if (!e.features[0].properties.hasOwnProperty('uuid')) {
+        getImages();
+        // re-do geocoding ?
+
+        if (e.features[0].geometry.type === "Polygon") {
+            var centroid = turf.centroid(e.features[0]);
+            getPlace(centroid.geometry.coordinates);
+        }
+        if (e.features[0].geometry.type === "Point") {
+            getPlace(e.features[0].geometry.coordinates);
+        }
+
+    }
+    // getImages();
+});
+
 map.on('draw.create', function (e) {
     "use strict";
+
+    if (e.features[0].geometry.type === "Polygon") {
+
+        var area = turf.area(e.features[0]);
+        console.log(area);
+        // return;
+    }
 
     // limit draw Polygons size ??
     openleftBlock();

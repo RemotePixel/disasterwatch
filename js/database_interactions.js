@@ -278,9 +278,9 @@ function seeEvtDBimages(id) {
         }
 
         getImages();
+        closePopup();
     }
 }
-
 
 function editEvt(id) {
 
@@ -293,7 +293,6 @@ function editEvt(id) {
     } else {
         resetForm();
         openleftBlock();
-        closePopup();
 
         draw.deleteAll();
         if (draw.getMode() !== 'simple_select'){
@@ -333,5 +332,6 @@ function editEvt(id) {
         }
 
         document.getElementById("disasterComments").value = features[0].properties.comments.replace(/<br\s?\/?>/g,"\n");
+        closePopup();
     }
 }
