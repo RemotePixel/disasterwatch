@@ -10,13 +10,20 @@ var disasterwatchAPI = 'https://tcuraimo51.execute-api.us-east-1.amazonaws.com/t
 function getDisasterdb(callback) {
     "use strict";
 
+    $('#disasters-panel .spin2').removeClass('display-none');
+    $('.list-disasters').scrollTop(0);
+    $('.list-disasters').empty();
+
     $.get(disasterwatchAPI + "toGEOJSON")
-        .done(function(data){
+        .fail(function() {
+            if (typeof callback === "function") {
+                return callback('Could not retrieve the database')
+            }
+        })
+        .success(function(data){
             map.getSource('disasterdb').setData(data);
-            $('.list-disasters').scrollTop(0);
-            $('.list-disasters').empty();
             for(var i = 0; i < data.features.length; i++) {
-                var disasterType = (data.features[i].properties.dtype.length !== 0) ? data.features[i].properties.dtype[0] : 'unclassified';
+                var disasterType = (data.features[i].properties.dtype.length !== 0)? data.features[i].properties.dtype[0] : 'unclassified';
                 $('.list-disasters').append(
                     '<div class="list-element" dw-type="' + disasterType + '" date-start="' +  data.features[i].properties.dateStart + '" date-end="' + data.features[i].properties.dateEnd + '" target="_blank" onclick="mapFlyToDisaster(\'' + data.features[i].properties.uuid + '\')">'+
                         '<div class="col">' +
@@ -29,19 +36,24 @@ function getDisasterdb(callback) {
                     '</div>');
             }
             filterListDisaster();
-            return callback(null, 'ready');
+
+            $('#disasters-panel .spin2').addClass('display-none');
+
+            if (typeof callback === "function") {
+                return callback(null, 'ready');
+            }
         });
 }
 
 function addDisastTodb() {
     "use strict";
 
-    $('.disaster-info div[type="submit"]').attr('disabled', true);
-
-    $('.disaster-info .spin').removeClass('display-none');
+    $('.disaster-info button[type="submit"]').attr('disabled', true);
     $('.map .spin').removeClass('display-none');
 
-    //Check for info validity ??N
+    //Check for info validity
+    //Error Handling
+
     var features = draw.getAll(),
         geojson = features.features[0];
 
@@ -75,7 +87,7 @@ function addDisastTodb() {
         'sentinel1': ($('.img-preview [sat="sentinel1"]').first().attr('img-date'))? $('.img-preview [sat="sentinel1"]').first().attr('img-date') : moment.utc().subtract(15,'days').format('YYYY-MM-DD'),
     };
 
-    $.ajax ({
+    $.ajax({
         url: disasterwatchAPI + "add",
         type: "POST",
         data: JSON.stringify(geojson),
@@ -84,14 +96,18 @@ function addDisastTodb() {
     })
     .success(function(data){
         getDisasterdb(function(err, res){
-            if (err) throw error;
+            if (err) {
+                $('#modalDBerror').modal();
+                console.log('Could not retrieve updated database');
+            }
+            closeleftblock();
+            $('.map .spin').addClass('display-none');
         });
     })
-    .always(function () {
-        resetForm();
-        closeleftblock();
-    })
     .fail(function () {
+        $('.disaster-info .error').addClass('on');
+        $('.disaster-info button[type="submit"]').attr('disabled', false);
+        $('.map .spin').addClass('display-none');
         console.log('Could not add Disaster Event to database');
     });
 }
@@ -99,9 +115,7 @@ function addDisastTodb() {
 function updateDisastTodb() {
     "use strict";
 
-    $('.disaster-info div[type="submit"]').attr('disabled', true);
-
-    $('.disaster-info .spin').removeClass('display-none');
+    $('.disaster-info button[type="submit"]').attr('disabled', true);
     $('.map .spin').removeClass('display-none');
 
     var features = draw.getAll(),
@@ -121,7 +135,7 @@ function updateDisastTodb() {
         geojson.properties.mail = null;
     }
 
-    delete geojson['nbfollowers'];
+    delete geojson.properties['nbfollowers'];
 
     geojson.properties.dtype = $('#disasterType span[type="dtype"]').map(function () {
         return this.className
@@ -132,7 +146,7 @@ function updateDisastTodb() {
     geojson.properties.dateEnd = (document.getElementById("dateCheckbox").checked)? '' : document.getElementById("disasterEndDate").value;
     geojson.properties.comments  = document.getElementById("disasterComments").value.replace(/\n\r?/g, '<br />');
 
-    $.ajax ({
+    $.ajax({
         url: disasterwatchAPI + "update",
         type: "POST",
         data: JSON.stringify(geojson),
@@ -141,19 +155,20 @@ function updateDisastTodb() {
     })
     .success(function(data){
         getDisasterdb(function(err, res){
-            if (err) throw error;
+            if (err) {
+                $('#modalDBerror').modal();
+                console.log('Could not retrieve updated database');
+            }
+            closeleftblock();
+            $('.map .spin').addClass('display-none');
         });
     })
-    .always(function () {
-        $('.disaster-info .spin').addClass('display-none');
-        $('.map .spin').addClass('display-none');
-    })
     .fail(function () {
+        $('.disaster-info .error').addClass('on');
+        $('.disaster-info button[type="submit"]').attr('disabled', false);
+        $('.map .spin').addClass('display-none');
         console.log('Could not update Disaster Event to database');
     });
-
-    resetForm();
-    closeleftblock();
 }
 
 function subscribeEvt(elem) {
@@ -175,7 +190,7 @@ function subscribeEvt(elem) {
             "mail" : mail
         }
 
-    $.ajax ({
+    $.ajax({
         url: disasterwatchAPI + "subscribe",
         type: "POST",
         data: JSON.stringify(request),
@@ -183,16 +198,17 @@ function subscribeEvt(elem) {
         contentType: "application/json",
     })
     .success(function(data){
-        getDisasterdb(function(err, res){
-            if (err) throw error;
-        });
         closePopup();
-        $('.mapboxgl-popup-content .subscribe-section .error').removeClass('on');
-    })
-    .always(function () {
-        $('.map .spin').addClass('display-none');
+        getDisasterdb(function(err, res){
+            if (err) {
+                $('#modalDBerror').modal();
+                console.log('Could not retrieve updated database');
+            }
+            $('.map .spin').addClass('display-none');
+        });
     })
     .fail(function () {
+        $('.map .spin').addClass('display-none');
         $('.mapboxgl-popup-content .subscribe-section .error').addClass('on');
         console.log('Could not update Disaster Event to database');
     });
@@ -203,7 +219,7 @@ function removeEvt(id) {
     "use strict";
 
     $('.map .spin').removeClass('display-none');
-    $.ajax ({
+    $.ajax({
         url: disasterwatchAPI + "remove",
         type: "POST",
         data: JSON.stringify({"uuid": id}),
@@ -212,16 +228,18 @@ function removeEvt(id) {
     })
     .success(function(data){
         getDisasterdb(function(err, res){
-            if (err) throw error;
+            if (err) {
+                $('#modalDBerror').modal();
+                console.log('Could not retrieve updated database');
+            }
+            closePopup();
+            $('.map .spin').addClass('display-none');
         });
     })
-    .always(function () {
-        $('.map .spin').addClass('display-none');
-    })
     .fail(function () {
+        $('.mapboxgl-popup-content .db-error').addClass('on');
         console.log('Could not remove Disaster Event to database');
     });
-    closePopup();
 }
 
 function seeEvtDBimages(id) {
@@ -271,12 +289,10 @@ function editEvt(id) {
     });
 
     if (features.length === 0) {
-
         $("#modalError").modal();
-
     } else {
-        openleftBlock();
         resetForm();
+        openleftBlock();
         closePopup();
 
         draw.deleteAll();
@@ -317,26 +333,5 @@ function editEvt(id) {
         }
 
         document.getElementById("disasterComments").value = features[0].properties.comments.replace(/<br\s?\/?>/g,"\n");
-    }
-}
-
-function mapFlyToDisaster(id) {
-    "use strict";
-
-    var features = map.getSource("disasterdb")._data.features.filter(function(e){
-        return (e.properties.uuid === id);
-    });
-
-    if (features){
-        if (features[0].geometry.type === "Polygon") {
-            var bbox = turf.extent(features[0].geometry);
-            map.fitBounds(bbox, {padding: 20});
-        }
-
-        if (features[0].geometry.type === "Point") {
-            var round = turf.buffer(features[0], 100, 'kilometers'),
-                bbox = turf.extent(round);
-            map.fitBounds(bbox, {padding: 20});
-        }
     }
 }

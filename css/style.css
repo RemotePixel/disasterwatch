@@ -844,7 +844,15 @@ body {
 
 .mapboxgl-popup-content .subscribe-section .error.on {
     display: block;
+}
+
+.mapboxgl-popup-content .db-error {
+    display: none;
     font-size: 10px;
+}
+
+.mapboxgl-popup-content .db-error.on {
+    display: block;
 }
 
 .mapboxgl-popup-content .subscribe-section .sat-filter label {
@@ -1237,6 +1245,16 @@ body {
     margin: 0 0 3px;
 }
 
+
+.disaster-info .error {
+    display: none;
+    font-size: 12px;
+}
+
+.disaster-info .error.on {
+    display: block;
+}
+
 /* ----------- DISASTER TYPE ----------- */
 
 /*.fire:before {
@@ -1395,10 +1413,14 @@ body {
 
 .disaster-images .spin-load {
     position: absolute;
-    bottom: 5px;
-    right: 5px;
+    top: 2px;
+    left: 2px;
+    padding: 5px;
     font-size: 20px;
     z-index: 1000;
+    color: #000;
+    border-radius: 4px;
+    background-color: #FFF;
 }
 
 .spin2 .span,

@@ -25,7 +25,6 @@ map.touchZoomRotate.disableRotation();
 var geocoder = new mapboxgl.Geocoder({
      container: 'geocoder-container'
 });
-
 map.addControl(geocoder);
 
 map.addControl(draw);
@@ -328,7 +327,8 @@ map.on('style.load', function () {
 
         if (feature) {
             var dtype = '',
-                disasterType = JSON.parse(feature.properties.dtype);
+                disasterType = JSON.parse(feature.properties.dtype),
+                maindType;
 
             for (var j = 0; j < disasterType.length; j++) {
                 dtype += '<span type="dtype" class="' + disasterType[j] + '">' + disasterType[j] + '</span> ';
@@ -336,7 +336,11 @@ map.on('style.load', function () {
 
             if (disasterType.length === 0) {
                 dtype = '<span type="dtype" class="unclassified">unclassified</span>';
+                maindType = 'unclassified';
+            } else {
+                maindType = disasterType[0];
             }
+
             var comments = feature.properties.comments.split('<br />').map(function(e){
                 return textTolink(e);
             })
@@ -348,7 +352,7 @@ map.on('style.load', function () {
 
             var popup = new mapboxgl.Popup()
                 .setLngLat(e.lngLat)
-                .setHTML('<div class="dtypeImage"><div class="icon icon-' + disasterType + '" title="' + disasterType + '"></div></div>' +
+                .setHTML('<div class="dtypeImage"><div class="icon icon-' + maindType + '" title="' + maindType + '"></div></div>' +
                             '<div class="linetab bold">Name: ' + feature.properties.name + '</div>' +
                             '<div class="linetab uuid">uuid: ' + feature.properties.uuid + '</div>' +
                             '<div class="linetab disasterType">Type: ' + dtype + '</div>' +
@@ -367,6 +371,7 @@ map.on('style.load', function () {
                                 '<a onclick="removeEvt(\'' + feature.properties.uuid + '\')">Remove</a> | ' +
                                 '<a onclick="toggleSubscribe()">Subscribe</a>' +
                             '</div>' +
+                            '<span class="db-error red">Error...Cannot remove this event from database</span>' +
                             '<div data-uuid="' + feature.properties.uuid + '" class="subscribe-section display-none">' +
                                 '<div class="delim"></div>' +
                                 '<div class="sat-filter">' +
@@ -394,7 +399,11 @@ map.on('style.load', function () {
     });
 
     getDisasterdb(function(err, res){
-        if (err) throw err;
+        if (err) {
+            $('#modalDBerror').modal();
+            console.log('Could not retrieve updated database');
+            return;
+        };
         var keys = getUrlVars();
         if (keys.hasOwnProperty('update')) {
             editEvt(keys.update);
@@ -403,7 +412,6 @@ map.on('style.load', function () {
             $(".dwhelp-block").removeClass('on');
             seeEvtDBimages(keys.images)
         }
-        $('.map .spin2').addClass('display-none');
     });
     getEarthquake();
     getEONETEvents();
@@ -562,6 +570,27 @@ function drawOnMap(type) {
 
     case null:
         break;
+    }
+}
+
+function mapFlyToDisaster(id) {
+    "use strict";
+
+    var features = map.getSource("disasterdb")._data.features.filter(function(e){
+        return (e.properties.uuid === id);
+    });
+
+    if (features){
+        if (features[0].geometry.type === "Polygon") {
+            var bbox = turf.extent(features[0].geometry);
+            map.fitBounds(bbox, {padding: 20});
+        }
+
+        if (features[0].geometry.type === "Point") {
+            var round = turf.buffer(features[0], 100, 'kilometers'),
+                bbox = turf.extent(round);
+            map.fitBounds(bbox, {padding: 20});
+        }
     }
 }
 

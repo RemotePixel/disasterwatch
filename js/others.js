@@ -108,7 +108,7 @@ function resetForm() {
     "use strict";
     // $(".dropdown-toggle").empty();
 
-    $('.disaster-info div[type="submit"]').attr('disabled', false);
+    $('.disaster-info button[type="submit"]').attr('disabled', false);
 
     $('#disasterType span[type="dtype"]').remove()
     $(".disaster-info .dropdown-menu i").each(function () {
@@ -125,8 +125,12 @@ function resetForm() {
     $('.disaster-info .uuid').text('');
     $('.disaster-info textarea').val('');
 
+    $('.disaster-info .error').removeClass('on');
+
     $("#disasterStartDate").datepicker('clearDates');
     $("#disasterEndDate").datepicker('clearDates');
+
+    $('.disaster-info').scrollTop(0);
 }
 
 function openleftBlock() {
@@ -155,7 +159,6 @@ function closeleftblock() {
     "use strict";
 
     $('.disaster-images .spin').addClass('display-none');
-    $('.map .spin').addClass('display-none');
 
     $(".leftblock").removeClass('in');
     $("button[dwmenu]").each(function () {
@@ -171,7 +174,9 @@ function closeleftblock() {
     $(".disaster-images .sat-filter").removeClass('active');
 
     $('.img-preview').empty();
+
     resetForm();
+
     map.resize();
     draw.deleteAll();
 }

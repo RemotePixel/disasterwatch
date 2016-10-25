@@ -69,7 +69,6 @@
 			<h2>DisasterWatch</h2>
 			<h6>Monitor disasters areas with satellite imagery</h6>
 
-			<!-- <img class="img-responsive center" src="img/help_satsearch.gif"> -->
 			<h4>Info</h4>
 			<p>Landsat-8 and Sentinel-2 image search results is powered by
 				<a href="https://github.com/sat-utils/sat-api" target="_blank">Developmentseed new Satellite API</a>.
@@ -84,7 +83,7 @@
 
 			<p>Special thanks to <a href="https://twitter.com/CodeMacabre" target="_blank">@CodeMacabre</a> for designing a perfect set of icons for each event.</p>
 			<p>Others icons form <a href="http://fontawesome.io" target="_blank">FontAwesome</a> and <a href="http://mapsk.in" target="_blank">mapskin</a>.</p>
-			<p>Continue reading: <a href="/blog/satellitesearch_20160610.html">Blog post</a> on RemotePixel.ca</p>
+			<p>Continue reading: <a href="https://remotepixel.ca/blog/disasterwatch_version1_20161026.html" target="_blank">Blog post</a> on RemotePixel.ca</p>
 
 			<h4>HowTo</h4>
 			<ul>
@@ -122,13 +121,11 @@
 					<img src="img/dw.png" class="img-responsive">
 				</a>
 
-                <!-- Basemaps Button -->
                 <button id="basemaps-btn" type="button" dwmenu="basemap" class="btn btn-default black" onclick="toggleParam('basemaps')">
                     <i class="ms ms-map-folded-o ms-2x"></i>
                     <span class="buttonTitle">Basemaps</span>
                 </button>
 
-                <!-- Setting Button -->
                 <button id="layers-btn" type="button" dwmenu="layers" class="btn btn-default" onclick="toggleParam('layers')">
                     <i class="ms ms-layers-o ms-2x"></i>
                     <span class="buttonTitle">Layers</span>
@@ -139,13 +136,11 @@
                     <span class="buttonTitle">Events</span>
                 </button>
 
-                <!-- Add Disaster Button -->
                 <button id="add-btn" type="button" dwmenu="add" class="btn btn-default" data-toggle="modal" data-target="#modalDraw">
                     <i class="fa fa-plus fa-2x"></i>
                     <span class="buttonTitle">Add</span>
                 </button>
 
-                <!-- Info Button -->
                 <div id="info-btn" class="float-bottom" onclick="toggleHelp()">
                     <i class="fa fa-info fa-2x"></i>
                 </div>
@@ -270,21 +265,17 @@
 									added please contact me or open a ticket on <a href="https://github.com/RemotePixel/disasterwatch/issues" target="_blank">Github</a></p>
 							</div>
 
+							<span class="error red">Error...Cannot Add/Update this event</span>
+
 							<button id="addEVT" type="submit" class="btn btn-default" onclick="addDisastTodb()" tabindex="10">Add</button>
 							<button id="updateEVT" type="submit" class="btn btn-default" onclick="updateDisastTodb()">Update</button>
 						</form>
-						<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
 					</section>
 				</div>
 			</div><!--
 			WhiteSpace
 		--><div id="map" class="map">
 				<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
-
-				<span class="spin2">
-					<i class="fa fa-spinner fa-spin"></i>
-					<span>Loading events</span>
-				</span>
 
 				<div class="bottom-right-control display-none">
 					<div class="close-block" onclick="toggleImageryOption()">
@@ -454,6 +445,11 @@
                 </div>
 
 				<div id="disasters-panel" class="navpanel side-view-container">
+
+					<span class="spin2 display-none">
+						<i class="fa fa-spinner fa-spin"></i>
+						<span>Loading events</span>
+					</span>
 
 					<div class="row side-view-header">
 						<button class="btn btn-lg btn-primary side-view-close" onclick="toggleParam('disasterslist')">
@@ -654,6 +650,33 @@
 						<div class="hmodal-info">
 							<p>Error: Invalid Event ID</p>
 							<p>The Event your trying to see don't exist!</p>
+							<p>Questions or comments to <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></p>
+						</div>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+    <!-- /.modal -->
+
+	<!-- Modal -->
+	<div class="modal fade" id="modalDBerror" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" style="text-align:center; color:#000;">Error</h4>
+				</div>
+				   <div class="modal-body">
+						<div class="hmodal-info">
+							<p>Error: Could not retrieve disaster Events</p>
+							<p>This is unexpected! Please try to reload the database manually</p>
+
+							<button type="button" class="btn btn-default" onclick="getDisasterdb()" tabindex="10">Reload</button>
+
 							<p>Questions or comments to <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></p>
 						</div>
 				</div>
