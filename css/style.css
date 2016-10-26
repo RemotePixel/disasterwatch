@@ -1190,6 +1190,25 @@ body {
     padding: 5px;
 }
 
+.disaster-images .api-status {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+.disaster-images .api-status .status {
+    width: 100%;
+    background-color: rgba(85, 85, 85, 0.8);
+    color: #FFF;
+    padding: 5px;
+    display: none;
+}
+
+.disaster-images .api-status .status.on {
+    display: block;
+}
+
 .disasterType span[type=dtype] {
     padding: 1px 3px;
     border-radius: 3px;
