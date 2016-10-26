@@ -1266,30 +1266,13 @@ body {
 
 /* ----------- DISASTER TYPE ----------- */
 
-/*.fire:before {
-  display: block;
-  content: ' ';
-  background-image: url('../img/fire.svg');
-  background-size: 28px 28px;
-  height: 28px;
-  width: 28px;
-}
-
-.fire:before {
-  display: inline-block;
-  content: url('../img/fire.svg');
-  height: 28px;
-  width: 28px;
-}
-*/
-
 .fire {
     background-color: rgb(165, 57, 53);
     color: #FFF;
 }
 
 .icon-fire {
-    background-image: url('../img/fire.svg');
+    content: url('../img/fire.svg');
 }
 
 .earthquake {
