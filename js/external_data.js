@@ -117,6 +117,7 @@ function getL8S2Images(feature, callback) {
     })
         .success(function (data) {
             if (data.hasOwnProperty('errorMessage')) {
+                $('.disaster-images .api-status .sat-api-status').addClass('on');
                 console.log('DevSeed Sat-API servers Error');
                 return callback(null);
             }
@@ -153,8 +154,6 @@ function getL8S2Images(feature, callback) {
                     }
                 }
             }
-
-
 
             for (var i = 0; i < results.length; i += 1) {
 
@@ -211,6 +210,7 @@ function getL8S2Images(feature, callback) {
             return callback(null, results.length);
         })
         .fail(function () {
+            $('.disaster-images .api-status .sat-api-status').addClass('on');
             console.log('DevSeed Sat-API servers Error');
             return callback(null);
         });
@@ -232,6 +232,7 @@ function getS1Images(feature, callback) {
     })
     .success(function(data){
         if (data.hasOwnProperty('errorMessage')) {
+            $('.disaster-images .api-status .scihub-status').addClass('on');
             console.log('DisasterWatch API servers Error');
             return callback(null);
         }
@@ -279,6 +280,7 @@ function getS1Images(feature, callback) {
         return callback(null, data.length);
     })
     .fail(function(err) {
+        $('.disaster-images .api-status .scihub-status').addClass('on');
         console.log('DisasterWatch API servers Error');
         return callback(null);
     });
@@ -286,6 +288,7 @@ function getS1Images(feature, callback) {
 
 function getImages() {
     "use strict";
+    $('.disaster-images .api-status .status').removeClass('on');
     $('.disaster-images .spin-load').removeClass('display-none');
     $('.img-preview').empty();
 
