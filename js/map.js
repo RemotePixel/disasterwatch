@@ -419,11 +419,14 @@ map.on('style.load', function () {
         var keys = getUrlVars();
         if (keys.hasOwnProperty('update')) {
             editEvt(keys.update);
-            $(".dwhelp-block").removeClass('on');
         } else if (keys.hasOwnProperty('images')) {
-            $(".dwhelp-block").removeClass('on');
-            seeEvtDBimages(keys.images)
+            seeEvtDBimages(keys.images);
+        } else if (keys.hasOwnProperty('event')){
+            mapFlyToDisaster(keys.event);
+        } else {
+            $(".dwhelp-block").addClass('on');
         }
+        $(".main-spin").addClass('display-none');
     });
     getEarthquake();
     getEONETEvents();
@@ -621,21 +624,85 @@ function drawOnMap(type) {
 function mapFlyToDisaster(id) {
     "use strict";
 
+    closePopup();
+
     var features = map.getSource("disasterdb")._data.features.filter(function(e){
         return (e.properties.uuid === id);
     });
 
     if (features){
         if (features[0].geometry.type === "Polygon") {
-            var bbox = turf.extent(features[0].geometry);
+            var bbox = turf.extent(features[0].geometry),
+                lngLat = mapboxgl.LngLat.convert(turf.centroid(features[0]).geometry.coordinates);
             map.fitBounds(bbox, {padding: 20});
         }
 
         if (features[0].geometry.type === "Point") {
             var round = turf.buffer(features[0], 100, 'kilometers'),
-                bbox = turf.extent(round);
+                bbox = turf.extent(round),
+                lngLat = mapboxgl.LngLat.convert(features[0].geometry.coordinates);
             map.fitBounds(bbox, {padding: 20});
         }
+
+        var dtype = '',
+            disasterType = features[0].properties.dtype,
+            maindType;
+
+        for (var j = 0; j < disasterType.length; j++) {
+            dtype += '<span type="dtype" class="' + disasterType[j] + '">' + disasterType[j] + '</span> ';
+        }
+
+        if (disasterType.length === 0) {
+            dtype = '<span type="dtype" class="unclassified">unclassified</span>';
+            maindType = 'unclassified';
+        } else {
+            maindType = disasterType[0];
+        }
+
+        var comments = features[0].properties.comments.split('<br />').map(function(e){
+            return textTolink(e);
+        })
+
+        var commentsBlock = '';
+        for (var j = 0; j < comments.length; j++) {
+            commentsBlock += comments[j];
+        }
+
+        var popup = new mapboxgl.Popup()
+            .setLngLat(lngLat)
+            .setHTML('<div class="dtypeImage"><div class="icon icon-' + maindType + '" title="' + maindType + '"></div></div>' +
+                        '<div class="linetab bold">Name: ' + features[0].properties.name + '</div>' +
+                        '<div class="linetab uuid">uuid: ' + features[0].properties.uuid + '</div>' +
+                        '<div class="linetab disasterType">Type: ' + dtype + '</div>' +
+                        '<div class="linetab">Location: ' + features[0].properties.place + '</div>' +
+                        '<div class="linetab">Start Date: ' + features[0].properties.dateStart + '</div>' +
+                        '<div class="linetab">End Date: ' + features[0].properties.dateEnd + '</div>' +
+                        '<div class="linetab">Followers: ' + features[0].properties.nbfollowers + '</div>' +
+                        '<div class="linetab">Comments:</div>' +
+                        '<div class="linetab comments">' +
+                            commentsBlock +
+                        '</div>' +
+                        '<div class="delim"></div>' +
+                        '<div class="linetab"><a onclick="seeEvtDBimages(\'' + features[0].properties.uuid + '\')">Search Images</a></div>' +
+                        '<div class="linetab">' +
+                            '<a onclick="editEvt(\'' + features[0].properties.uuid + '\')">Update</a> | ' +
+                            '<a onclick="removeEvt(\'' + features[0].properties.uuid + '\')">Remove</a> | ' +
+                            '<a onclick="toggleSubscribe()">Subscribe</a>' +
+                        '</div>' +
+                        '<span class="db-error red">Error...Cannot remove this event from database</span>' +
+                        '<div data-uuid="' + features[0].properties.uuid + '" class="subscribe-section display-none">' +
+                            '<div class="delim"></div>' +
+                            '<div class="sat-filter">' +
+                                '<label><input data="landsat8" type="checkbox" checked> Landsat-8</label>' +
+                                '<label><input data="sentinel2" type="checkbox" checked> Sentinel-2</label>' +
+                                '<label><input data="sentinel1" type="checkbox" checked> Sentinel-1</label>' +
+                            '</div>' +
+                            '<input type="email" class="form-control" placeholder="Email">' +
+                            '<div class="btn btn-default" onclick="subscribeEvt(this)">Subscribe</div>' +
+                            '<span class="error red">Error...</span>' +
+                        '</div>'
+                    )
+            .addTo(map);
     }
 }
 

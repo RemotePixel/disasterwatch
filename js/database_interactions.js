@@ -16,9 +16,7 @@ function getDisasterdb(callback) {
 
     $.get(disasterwatchAPI + "toGEOJSON")
         .fail(function() {
-            if (typeof callback === "function") {
-                return callback('Could not retrieve the database')
-            }
+            return callback('Could not retrieve the database')
         })
         .success(function(data){
             map.getSource('disasterdb').setData(data);
@@ -39,9 +37,7 @@ function getDisasterdb(callback) {
 
             $('#disasters-panel .spin2').addClass('display-none');
 
-            if (typeof callback === "function") {
-                return callback(null, 'ready');
-            }
+            return callback(null, 'ready');
         });
 }
 

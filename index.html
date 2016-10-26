@@ -58,7 +58,7 @@
 
 <body>
 
-	<div class="dwhelp-block on">
+	<div class="dwhelp-block">
 		<div class="close-help" onclick="toggleHelp()">
 			<div class="lr">
 				<div class="rl"></div>
@@ -115,6 +115,8 @@
 			<div class="site-version">Version: 1.0</div>
 		</div>
 	</div>
+
+	<span class="spin main-spin"><i class="fa fa-spinner fa-spin"></i></span>
 
 	<div class="content">
 		<div class="menu-bar-left">
@@ -656,7 +658,7 @@
 							<p>Error: Could not retrieve disaster Events</p>
 							<p>This is unexpected! Please try to reload the database manually</p>
 
-							<button type="button" class="btn btn-default" onclick="getDisasterdb()" tabindex="10">Reload</button>
+							<button type="button" class="btn btn-default" onclick="getDisasterdb(function(err,res){console.log('done');})" tabindex="10">Reload</button>
 
 							<p>Questions or comments to <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></p>
 						</div>

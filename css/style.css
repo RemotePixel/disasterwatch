@@ -1209,6 +1209,25 @@ body {
     display: block;
 }
 
+.disaster-images .api-status {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+.disaster-images .api-status .status {
+    width: 100%;
+    background-color: rgba(85, 85, 85, 0.8);
+    color: #FFF;
+    padding: 5px;
+    display: none;
+}
+
+.disaster-images .api-status .status.on {
+    display: block;
+}
+
 .disasterType span[type=dtype] {
     padding: 1px 3px;
     border-radius: 3px;
@@ -1291,7 +1310,7 @@ body {
 }
 
 .icon-fire {
-    content: url('../img/fire.svg');
+    background-image: url('/img/fire.svg');
 }
 
 .earthquake {
@@ -1300,7 +1319,7 @@ body {
 }
 
 .icon-earthquake {
-    content: url('../img/earthquake.svg');
+    background-image: url('/img/earthquake.svg');
 }
 
 .tsunami {
@@ -1309,7 +1328,7 @@ body {
 }
 
 .icon-tsunami {
-    content: url('../img/tsunami.svg');
+    background-image: url('/img/tsunami.svg');
 }
 
 .weather {
@@ -1318,7 +1337,7 @@ body {
 }
 
 .icon-weather {
-    content: url('../img/weather.svg');
+    background-image: url('/img/weather.svg');
 }
 
 .tornado {
@@ -1327,7 +1346,7 @@ body {
 }
 
 .icon-tornado {
-    content: url('../img/tornado.svg');
+    background-image: url('/img/tornado.svg');
 }
 
 .volcano {
@@ -1336,7 +1355,7 @@ body {
 }
 
 .icon-volcano {
-    content: url('../img/volcano.svg');
+    background-image: url('/img/volcano.svg');
 }
 
 .floods {
@@ -1345,7 +1364,7 @@ body {
 }
 
 .icon-floods {
-    content: url('../img/floods.svg');
+    background-image: url('/img/floods.svg');
 }
 
 .sandstorm {
@@ -1354,7 +1373,7 @@ body {
 }
 
 .icon-sandstorm {
-    content: url('../img/sandstorm.svg');
+    background-image: url('/img/sandstorm.svg');
 }
 
 .landslide {
@@ -1363,7 +1382,7 @@ body {
 }
 
 .icon-landslide {
-    content: url('../img/landslide.svg');
+    background-image: url('/img/landslide.svg');
 }
 
 .manmade {
@@ -1372,7 +1391,7 @@ body {
 }
 
 .icon-manmade {
-    content: url('../img/manmade.svg');
+    background-image: url('/img/manmade.svg');
 }
 
 .avalanche {
@@ -1381,7 +1400,7 @@ body {
 }
 
 .icon-avalanche {
-    content: url('../img/avalanche.svg');
+    background-image: url('/img/avalanche.svg');
 }
 
 .disease {
@@ -1390,7 +1409,7 @@ body {
 }
 
 .icon-disease {
-    content: url('../img/disease.svg');
+    background-image: url('/img/disease.svg');
 }
 
 .other,
@@ -1401,7 +1420,7 @@ body {
 
 .icon-other,
 .icon-unclassified {
-    content: url('../img/other.svg');
+    background-image: url('/img/other.svg');
 }
 
 /* ----------- DISASTER TYPE ----------- */
