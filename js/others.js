@@ -51,23 +51,21 @@ function filterType(elem) {
 
 function filterListDisaster() {
     "use strict";
+
+    $('.list-disasters .list-element').removeClass('display-none');
+
     var filterClass = $("#disasterType2 span[type='dtype']")[0].className;
     if (filterClass === 'all') {
-        document.getElementsByClassName('list-disasters')[0].childNodes.forEach(function (e) {
-            if (e.getAttribute('date-end') !== '' && document.getElementById('event-checkbox').checked) {
-                e.className = 'list-element display-none';
-            } else {
-                e.className = 'list-element';
-            }
-        });
+        if (document.getElementById('event-checkbox').checked) {
+            $('.list-disasters .list-element[date-end!=""]').addClass('display-none');
+        }
     } else {
-        document.getElementsByClassName('list-disasters')[0].childNodes.forEach(function (e) {
-            if ((e.getAttribute('date-end') !== '' && document.getElementById('event-checkbox').checked) || (e.getAttribute('dw-type') !== filterClass)) {
-                e.className = 'list-element display-none';
-            } else {
-                e.className = 'list-element';
-            }
-        });
+        if (document.getElementById('event-checkbox').checked) {
+            $('.list-disasters .list-element[date-end!=""]').addClass('display-none');
+            $('.list-disasters .list-element[dw-type!="' + filterClass + '"]').addClass('display-none');
+        } else {
+            $('.list-disasters .list-element[dw-type!="' + filterClass + '"]').addClass('display-none');
+        }
     }
 }
 

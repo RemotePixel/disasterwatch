@@ -657,7 +657,7 @@
 							<p>Error: Could not retrieve disaster Events</p>
 							<p>This is unexpected! Please try to reload the database manually</p>
 
-							<button type="button" class="btn btn-default" onclick="getDisasterdb()" tabindex="10">Reload</button>
+							<button type="button" class="btn btn-default" onclick="getDisasterdb(function(err,res){console.log('done');})" tabindex="10">Reload</button>
 
 							<p>Questions or comments to <a href="mailto:contact@remotepixel.ca">contact@remotepixel.ca</a></p>
 						</div>
