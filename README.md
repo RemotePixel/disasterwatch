@@ -1,5 +1,5 @@
 
-master branch is live on [http://disasterwatch.remotepixel.ca](http://disasterwatch.remotepixel.ca)
+v1 branch is live on [http://disasterwatch.remotepixel.ca](http://disasterwatch.remotepixel.ca)
 
 [disasterwatch](http://disasterwatch.remotepixel.ca) is the new RemotePixel.ca project ( [post](http://remotepixel.ca/blog/disasterwatch-20151231.html)).
 
