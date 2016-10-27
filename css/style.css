@@ -861,6 +861,28 @@ body {
     padding: 5px;
 }
 
+.mapboxgl-popup-content .share-section {
+    padding-top: 10px;
+}
+
+.mapboxgl-popup-content .share-section .sharebutt {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.mapboxgl-popup-content .share-section .sharebutt .fa{
+    height: 23px;
+    width: 23px;
+    line-height: 23px;
+    color: white;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-color: black;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 8px;
+}
+
 .bold {
     font-weight: bold;
 }

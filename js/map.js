@@ -340,7 +340,8 @@ map.on('style.load', function () {
         if (feature) {
             var dtype = '',
                 disasterType = JSON.parse(feature.properties.dtype),
-                maindType;
+                maindType,
+                url = 'https://disasterwatch.remotepixel.ca/?event=' + feature.properties.uuid;
 
             for (var j = 0; j < disasterType.length; j++) {
                 dtype += '<span type="dtype" class="' + disasterType[j] + '">' + disasterType[j] + '</span> ';
@@ -394,6 +395,17 @@ map.on('style.load', function () {
 								'<input type="email" class="form-control" placeholder="Email">' +
                                 '<div class="btn btn-default" onclick="subscribeEvt(this)">Subscribe</div>' +
                                 '<span class="error red">Error...</span>' +
+                            '</div>' +
+                            '<div class="share-section">' +
+                                '<a id="twitter" class="sharebutt" href="http://twitter.com/share?url=' + url + '&via=RemotePixel" title="Share on Twitter" target="_blank">' +
+                                    '<i class="fa fa-twitter"></i>' +
+                                '</a>' +
+                                '<a id="linkedin" class="sharebutt" href="http://www.linkedin.com/shareArticle?mini=true&url=' + url + '&source=https://remotepixel.ca" title="Share on LinkedIn" target="_blank">' +
+                                    '<i class="fa fa-linkedin"></i>' +
+                                '</a>' +
+                                '<a id="facebook" class="sharebutt" href="https://www.facebook.com/sharer/sharer.php?u=' + url + '" title="Share on Facebook" target="_blank">' +
+                                    '<i class="fa fa-facebook"></i>' +
+                                '</a>' +
                             '</div>'
                         )
                 .addTo(map);
@@ -646,7 +658,9 @@ function mapFlyToDisaster(id) {
 
         var dtype = '',
             disasterType = features[0].properties.dtype,
-            maindType;
+            maindType,
+            url = 'https://disasterwatch.remotepixel.ca/?event=' + features[0].properties.uuid;
+
 
         for (var j = 0; j < disasterType.length; j++) {
             dtype += '<span type="dtype" class="' + disasterType[j] + '">' + disasterType[j] + '</span> ';
@@ -700,6 +714,17 @@ function mapFlyToDisaster(id) {
                             '<input type="email" class="form-control" placeholder="Email">' +
                             '<div class="btn btn-default" onclick="subscribeEvt(this)">Subscribe</div>' +
                             '<span class="error red">Error...</span>' +
+                        '</div>' +
+                        '<div class="share-section">' +
+                            '<a id="twitter" class="sharebutt" href="http://twitter.com/share?url=' + url + '&via=RemotePixel" title="Share on Twitter" target="_blank">' +
+                                '<i class="fa fa-twitter"></i>' +
+                            '</a>' +
+                            '<a id="linkedin" class="sharebutt" href="http://www.linkedin.com/shareArticle?mini=true&url=' + url + '&source=https://remotepixel.ca" title="Share on LinkedIn" target="_blank">' +
+                                '<i class="fa fa-linkedin"></i>' +
+                            '</a>' +
+                            '<a id="facebook" class="sharebutt" href="https://www.facebook.com/sharer/sharer.php?u=' + url + '" title="Share on Facebook" target="_blank">' +
+                                '<i class="fa fa-facebook"></i>' +
+                            '</a>' +
                         '</div>'
                     )
             .addTo(map);
