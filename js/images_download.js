@@ -21,8 +21,8 @@ function feeddownloadS2(elem, preview) {
             '<a id="b8" target="_blank" href="' + s2prefix + elem + '/B08.jp2" download>B8 - Near Infrared (10m)</a>' +
             '<a id="b9" target="_blank" href="' + s2prefix + elem + '/B09.jp2" download>B9 - Water vapour (60m)</a>' +
             '<a id="b10" target="_blank" href="' + s2prefix + elem + '/B10.jp2" download>B10 - Cirrus (60m)</a>' +
-            '<a id="b11" target="_blank" href="' + s2prefix + elem + '/B11.jp2" download>B11 - Thermal Infrared 1 (20m)</a>' +
-            '<a id="b12" target="_blank" href="' + s2prefix + elem + '/B12.jp2" download>B12 - Thermal Infrared 2 (20m)</a>' +
+            '<a id="b11" target="_blank" href="' + s2prefix + elem + '/B11.jp2" download>B11 - Shortwave Infrared 1 (20m)</a>' +
+            '<a id="b12" target="_blank" href="' + s2prefix + elem + '/B12.jp2" download>B12 - Shortwave Infrared 2 (20m)</a>' +
             '<a id="mtl" target="_blank" href="' + s2prefix + elem + '/productInfo.json" download>Metadata</a>'
     );
     $('#modalDownloadS2 .overview').html('<img src="' + preview + '">');
