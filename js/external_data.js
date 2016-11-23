@@ -16,9 +16,9 @@
 function getEarthquake() {
     "use strict";
     var urlusgs = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson';
-    $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + urlusgs)
+    $.get("https://i5njsxz8fk.execute-api.us-west-2.amazonaws.com/prod/toHTTPS?url=" + urlusgs)
         .done(function (data) {
-            map.getSource('earthquakes').setData(data);
+            map.getSource('earthquakes').setData(JSON.parse(data));
         });
 }
 

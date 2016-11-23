@@ -431,12 +431,13 @@ map.on('style.load', function () {
         var keys = getUrlVars();
         if (keys.hasOwnProperty('update')) {
             editEvt(keys.update);
+            $(".dwhelp-block").removeClass('on');
         } else if (keys.hasOwnProperty('images')) {
             seeEvtDBimages(keys.images);
+            $(".dwhelp-block").removeClass('on');
         } else if (keys.hasOwnProperty('event')){
             mapFlyToDisaster(keys.event);
-        } else {
-            $(".dwhelp-block").addClass('on');
+            $(".dwhelp-block").removeClass('on');
         }
         $(".main-spin").addClass('display-none');
     });
