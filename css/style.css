@@ -1480,6 +1480,10 @@ body {
     display: block;
 }
 
+.dwhelp-block.on ~ .main-spin {
+   left: 25%;
+}
+
 .img-preview {
     position: relative;
     height: 100%;
