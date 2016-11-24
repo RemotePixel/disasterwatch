@@ -73,7 +73,7 @@
 			<p>DisasterWatch is a crowdsourced plateform for event localisation and monitoring via remote sensed data.</p>
 			<p>Landsat-8 and Sentinel-2 image search results is powered by
 				<a href="https://github.com/sat-utils/sat-api" target="_blank">Developmentseed new Satellite API</a>.
-				Sentinel-1 image search is done via ESA <a href="https://scihub.copernicus.eu/twiki/do/view/SciHubWebPortal/APIHubDescription" target="_blank">scihub API</a>.</p>
+				Sentinel-1 image search is done via the excellent CNES <a href="https://peps.cnes.fr/rocket/#/home" target="_blank">PEPS API</a>.</p>
 
 			<p>Landsat and Sentinel images previews are from <a href="https://earthexplorer.usgs.gov" target="_blank">USGS Earth Explorer</a>
 				and <a href="http://sentinel-pds.s3-website.eu-central-1.amazonaws.com" target="_blank"> Sentinel on AWS S3</a>
@@ -110,6 +110,7 @@
 				<a href="http://www.sinergise.com" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/sinergise.png"></a>
 				<a href="https://developmentseed.org" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/devseed.png"></a>
 				<a href="https://aws.amazon.com/" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/awservice.png"></a>
+				<a href="https://peps.cnes.fr/rocket/#/home" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/cnes.png"></a>
 			</div>
 
 			<div class="site-version">Version: 1.0</div>
@@ -184,8 +185,8 @@
 						<div class="img-preview"></div>
 						<span title="Searching for images" class="spin-load display-none"><i class="fa fa-spinner fa-spin"></i></span>
 						<div class="api-status">
- 							<span class="status scihub-status"><i class="fa fa-exclamation-circle"></i> ESA scihub API Error!</span>
- 							<span class="status sat-api-status"><i class="fa fa-exclamation-circle"></i> SAT-API Error!</span>
+ 							<span class="status peps-status"><i class="fa fa-exclamation-circle"></i> PEPS API Error (S1)!</span>
+ 							<span class="status sat-api-status"><i class="fa fa-exclamation-circle"></i> SAT-API Error (S2-L8)!</span>
  						</div>
 					</section>
 
@@ -713,7 +714,8 @@
 	<script src="/js/lazysizes.min.js" async=""></script>
 
     <!--  mapbox-->
-	<script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
+
+	<script src='https://npmcdn.com/@turf/turf@3.5.1/turf.min.js'></script>
 	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.js'></script>
 	<!-- <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.11.18/mapbox-gl-draw.js"></script> -->
 	<script src="/js/mapbox-gl-draw.js"></script>

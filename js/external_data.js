@@ -223,16 +223,33 @@ function getS1Images(feature, callback) {
         return e.getAttribute('data');
     });
 
-    $.ajax ({
-        url: "https://fzzc9dpwij.execute-api.us-west-2.amazonaws.com/prod/getS1images",
+    var jsonRequest = {
+            start_date: "2016-01-01",
+            end_date: moment.utc().format('YYYY-MM-DD'),
+            productType: 'SLC',
+            maxRecords: 200
+        },
+        results = [];
+
+    if (feature.geometry.type === "Point") {
+        jsonRequest.lat = feature.geometry.coordinates[1];
+        jsonRequest.lon = feature.geometry.coordinates[0];
+    } else {
+        var bbox = turf.bbox(feature);
+        jsonRequest.box = bbox[0] + ',' + bbox[1] + ',' + bbox[2] + ',' + bbox[3];
+    }
+
+    $.ajax({
+        url: 'https://yrj49dw0zg.execute-api.us-west-2.amazonaws.com/prod/api/getS1Images',
         type: "POST",
-        data: JSON.stringify(feature),
+        data: JSON.stringify(jsonRequest),
         dataType: "json",
-        contentType: "application/json",
+        contentType: "application/json"
     })
     .success(function(data){
+
         if (data.hasOwnProperty('errorMessage')) {
-            $('.disaster-images .api-status .scihub-status').addClass('on');
+            $('.disaster-images .api-status .peps-status').addClass('on');
             console.log('DisasterWatch API servers Error');
             return callback(null);
         }
@@ -242,9 +259,9 @@ function getS1Images(feature, callback) {
                 "features": []
             };
 
-        for (var i = 0; i < data.length; i += 1) {
+        for (var i = 0; i < data.results.length; i += 1) {
 
-            var imgMeta = data[i],
+            var imgMeta = data.results[i],
                 className;
 
             var feat = {
@@ -263,14 +280,14 @@ function getS1Images(feature, callback) {
             var hoverstr = "['in', 'id', '" + imgMeta.sceneID + "']";
             $('.img-preview').append(
                 '<div sat="sentinel1" img-date="' + imgMeta.date + '" class="' + className + '" onmouseover="hoverS1(' + hoverstr + ')" onmouseout="hoverS1(' + "['==', 'id', '']" + ')">' +
-                    '<img class="lazy img-responsive" src="/img/sentinel1.jpg">' +
+                    '<img class="img-item img-responsive lazy lazyload" data-src="' + imgMeta.browseURL + '">' +
                     '<div class="result-overlay">' +
                         '<span> S1A_IW_SLC' + moment(imgMeta.fullDate).utc().format('YYYYMMDD_hhmmss') + '</span>' +
                         '<span><i class="fa fa-calendar-o"></i> ' + imgMeta.date + '</span>' +
                         '<span><i class="ms ms-satellite"></i> ' + imgMeta.orbType.slice(0,4) + ' | ' + imgMeta.refOrbit + '</span>' +
                         '<span> Pol: ' + imgMeta.polarisation + ' | SLC </span>' +
                         '<span>Link:</span>' +
-                        '<a target="_blank" href="' + imgMeta.esaURL + '"><img src="/img/esa.png"> </a>' +
+                        '<a target="_blank" href="' + imgMeta.pepsURL + '"><img src="/img/peps.png"> </a>' +
                     '</div>' +
                     '</div>'
             );
@@ -280,7 +297,7 @@ function getS1Images(feature, callback) {
         return callback(null, data.length);
     })
     .fail(function(err) {
-        $('.disaster-images .api-status .scihub-status').addClass('on');
+        $('.disaster-images .api-status .peps-status').addClass('on');
         console.log('DisasterWatch API servers Error');
         return callback(null);
     });
@@ -355,7 +372,7 @@ function seeEQimages(urlusgs) {
 
             if (features.features[0].geometry.type === "Point") {
                 var round = turf.buffer(features.features[0], 100, 'kilometers'),
-                    bbox = turf.extent(round);
+                    bbox = turf.bbox(round);
                 map.fitBounds(bbox, {padding: 20});
             }
 
@@ -402,13 +419,13 @@ function seeEONETimages(id) {
                 features = draw.getAll();
 
             if (features.features[0].geometry.type === "LineString") {
-                var bbox = turf.extent(features.features[0].geometry);
+                var bbox = turf.bbox(features.features[0].geometry);
                 map.fitBounds(bbox, {padding: 20});
             }
 
             if (features.features[0].geometry.type === "Point") {
                 var round = turf.buffer(features.features[0], 100, 'kilometers'),
-                    bbox = turf.extent(round);
+                    bbox = turf.bbox(round);
                 map.fitBounds(bbox, {padding: 20});
             }
 

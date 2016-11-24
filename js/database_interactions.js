@@ -277,13 +277,13 @@ function seeEvtDBimages(id) {
             features = draw.getAll();
 
         if (features.features[0].geometry.type === "LineString") {
-            var bbox = turf.extent(features.features[0].geometry);
+            var bbox = turf.bbox(features.features[0].geometry);
             map.fitBounds(bbox, {padding: 20});
         }
 
         if (features.features[0].geometry.type === "Point") {
             var round = turf.buffer(features.features[0], 100, 'kilometers'),
-                bbox = turf.extent(round);
+                bbox = turf.bbox(round);
             map.fitBounds(bbox, {padding: 20});
         }
 
@@ -315,13 +315,13 @@ function editEvt(id) {
         var featureId = draw.add(features[0]);
 
         if (features[0].geometry.type === "LineString") {
-            var bbox = turf.extent(features[0].geometry);
+            var bbox = turf.bbox(features[0].geometry);
             map.fitBounds(bbox, {padding: 20});
         }
 
         if (features[0].geometry.type === "Point") {
             var round = turf.buffer(features[0], 100, 'kilometers'),
-                bbox = turf.extent(round);
+                bbox = turf.bbox(round);
             map.fitBounds(bbox, {padding: 20});
         }
 

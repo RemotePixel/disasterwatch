@@ -509,7 +509,7 @@ map.on('draw.create', function (e) {
     getImages();
 
     if (e.features[0].geometry.type === "Polygon") {
-        var bbox = turf.extent(e.features[0].geometry);
+        var bbox = turf.bbox(e.features[0].geometry);
 
         var centroid = turf.centroid(e.features[0]);
         getPlace(centroid.geometry.coordinates);
@@ -519,7 +519,7 @@ map.on('draw.create', function (e) {
 
     if (e.features[0].geometry.type === "Point") {
         var round = turf.buffer(e.features[0], 100, 'kilometers'),
-            bbox = turf.extent(round);
+            bbox = turf.bbox(round);
 
         getPlace(e.features[0].geometry.coordinates);
 
@@ -645,14 +645,14 @@ function mapFlyToDisaster(id) {
 
     if (features){
         if (features[0].geometry.type === "Polygon") {
-            var bbox = turf.extent(features[0].geometry),
+            var bbox = turf.bbox(features[0].geometry),
                 lngLat = mapboxgl.LngLat.convert(turf.centroid(features[0]).geometry.coordinates);
             map.fitBounds(bbox, {padding: 20});
         }
 
         if (features[0].geometry.type === "Point") {
             var round = turf.buffer(features[0], 100, 'kilometers'),
-                bbox = turf.extent(round),
+                bbox = turf.bbox(round),
                 lngLat = mapboxgl.LngLat.convert(features[0].geometry.coordinates);
             map.fitBounds(bbox, {padding: 20});
         }

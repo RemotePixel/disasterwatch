@@ -30,6 +30,7 @@ body {
 .black {
     color: #000;
 }
+
 .white {
     color: #FFF;
 }
@@ -699,7 +700,7 @@ body {
 }
 
 .img-thumb-modal {
-    width:50%;
+    width: 50%;
     padding-top: 5px;
     height:auto;
 }
@@ -1530,8 +1531,8 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-	width: 80%;
-    height: auto;
+	max-width: 90%;
+    max-height: 90%;
 }
 
 .lazy2 {
