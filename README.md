@@ -25,28 +25,6 @@ and low cost imagery service (UrtheCast, Planet...), I believe it could
 help if we build a platform that ease the access to all the available
 imagery ressources.
 
-TimeFrame
--------
-
-- V1 will show only Landsat-8, Sentinel-2, Sentinel-1 images
-
-###### UI Preview
-![preview](https://cloud.githubusercontent.com/assets/10407788/18424407/409061fe-787d-11e6-950c-5615274a3222.gif)
-
-To Do
--------
-
-##### Front End:
-- [x] UI to visualize imagery quicklook and metadata.
-- [x] UI to add disaster to the database.
-
-##### Back End (AWS Lambda based):
-- [x] Create a database (Geojson) read/write/update functions
-- [ ] Mailing function
-
-##### Things to be added after V1:
-- add Other imagery sources (UrtheCast, Planet, ...)
-
 ##### Ressources
 - [Global Disaster Alert and Coordination System](http://www.gdacs.org)
 - [globaldisasterwatch.blogspot.com](http://globaldisasterwatch.blogspot.ca)
