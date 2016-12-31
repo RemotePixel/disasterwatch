@@ -19,13 +19,13 @@ function getDisasterdb(callback) {
             return callback('Could not retrieve the database')
         })
         .success(function(data){
+
             map.getSource('disasterdb').setData(data);
             for(var i = 0; i < data.features.length; i++) {
-                var disasterType = (data.features[i].properties.dtype.length !== 0)? data.features[i].properties.dtype[0] : 'unclassified';
                 $('.list-disasters').append(
-                    '<div class="list-element" dw-type="' + disasterType + '" date-start="' +  data.features[i].properties.dateStart + '" date-end="' + data.features[i].properties.dateEnd + '" target="_blank" onclick="mapFlyToDisaster(\'' + data.features[i].properties.uuid + '\')">'+
+                    '<div class="list-element" dw-type="' + data.features[i].properties.icon + '" date-start="' +  data.features[i].properties.dateStart + '" date-end="' + data.features[i].properties.dateEnd + '" target="_blank" onclick="mapFlyToDisaster(\'' + data.features[i].properties.uuid + '\')">'+
                         '<div class="col">' +
-                            '<div class="disaster-descr"><div class="icon icon-' + disasterType + '" title="' + disasterType + '"></div></div>' +
+                            '<div class="disaster-descr"><div class="icon icon-' + data.features[i].properties.icon + '" title="' + data.features[i].properties.icon + '"></div></div>' +
                             '<div class="disaster-descr">'+
                                 '<span class="dtitle">'+ data.features[i].properties.name +'</span>' +
                                 '<span class="dplace">' + data.features[i].properties.place + '</span>' +
@@ -78,6 +78,8 @@ function addDisastTodb() {
     geojson.properties.dtype = $('#disasterType span[type="dtype"]').map(function () {
         return this.className
     }).toArray();
+
+    geojson.properties.icon = (geojson.properties.dtype.length !== 0) ? geojson.properties.dtype[0] : 'unclassified';
     geojson.properties.name = document.getElementById("disasterName").value;
     geojson.properties.place = document.getElementById("disasterPlace").value;
     geojson.properties.dateStart = document.getElementById("disasterStartDate").value;
@@ -150,6 +152,8 @@ function updateDisastTodb() {
     geojson.properties.dtype = $('#disasterType span[type="dtype"]').map(function () {
         return this.className
     }).toArray();
+
+    geojson.properties.icon = (geojson.properties.dtype.length !== 0) ? geojson.properties.dtype[0] : 'unclassified';
     geojson.properties.name = document.getElementById("disasterName").value;
     geojson.properties.place = document.getElementById("disasterPlace").value;
     geojson.properties.dateStart = document.getElementById("disasterStartDate").value;

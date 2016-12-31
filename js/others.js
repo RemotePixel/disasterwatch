@@ -52,19 +52,33 @@ function filterType(elem) {
 function filterListDisaster() {
     "use strict";
 
+    //reset
     $('.list-disasters .list-element').removeClass('display-none');
+    map.setFilter("disasterdb-points", ["==", "$type", "Point"]);
+    map.setFilter("disasterdb-polygons", ["==", "$type", "Polygon"]);
+    map.setFilter("disasterdb-polygons-symbol", ["==", "$type", "Polygon"]);
 
     var filterClass = $("#disasterType2 span[type='dtype']")[0].className;
     if (filterClass === 'all') {
         if (document.getElementById('event-checkbox').checked) {
             $('.list-disasters .list-element[date-end!=""]').addClass('display-none');
+            map.setFilter("disasterdb-points", ["all", ["==", "$type", "Point"], ["==", "dateEnd", ""]]);
+            map.setFilter("disasterdb-polygons", ["all", ["==", "$type", "Polygon"], ["==", "dateEnd", ""]]);
+            map.setFilter("disasterdb-polygons-symbol", ["all", ["==", "$type", "Polygon"], ["==", "dateEnd", ""]]);
         }
     } else {
         if (document.getElementById('event-checkbox').checked) {
             $('.list-disasters .list-element[date-end!=""]').addClass('display-none');
             $('.list-disasters .list-element[dw-type!="' + filterClass + '"]').addClass('display-none');
+
+            map.setFilter("disasterdb-points", ["all", ["==", "$type", "Point"], ["==", "dateEnd", ""], ["==", "icon", filterClass]]);
+            map.setFilter("disasterdb-polygons", ["all", ["==", "$type", "Polygon"], ["==", "dateEnd", ""], ["==", "icon", filterClass]]);
+            map.setFilter("ddisasterdb-polygons-symbol", ["all", ["==", "$type", "Polygon"], ["==", "dateEnd", ""], ["==", "icon", filterClass]]);
         } else {
             $('.list-disasters .list-element[dw-type!="' + filterClass + '"]').addClass('display-none');
+            map.setFilter("disasterdb-points", ["all", ["==", "$type", "Point"], ["==", "icon", filterClass]]);
+            map.setFilter("disasterdb-polygons", ["all", ["==", "$type", "Polygon"], ["==", "icon", filterClass]]);
+            map.setFilter("disasterdb-polygons-symbol", ["all", ["==", "$type", "Polygon"], ["==", "icon", filterClass]]);
         }
     }
 }

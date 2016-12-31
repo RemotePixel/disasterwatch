@@ -24,12 +24,17 @@
 	<link href="/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link href="/js/bootstrap-datepicker/bootstrap-datepicker3.css" rel="stylesheet">
 
+	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.js'></script>
+	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.css' rel='stylesheet' />
+
+	<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.js'></script>
+	<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.css' type='text/css' />
+
+	<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.16.0/mapbox-gl-draw.js'></script>
+	<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.16.0/mapbox-gl-draw.css' type='text/css' />
+
 	<link href="/css/checkbox-slider.css" rel="stylesheet">
-    <link href="/css/style.css" rel="stylesheet">
-	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.css' rel='stylesheet' />
-	<!-- <link rel="stylesheet" type="text/css" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.11.18/mapbox-gl-draw.css" /> -->
-	<link href="/css/mapbox-gl-draw.css" rel="stylesheet"/>
-	<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.1/mapbox-gl-geocoder.css' type='text/css' />
+  <link href="/css/style.css" rel="stylesheet">
 
 	<!-- Custom Fonts -->
 	<link href="/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -90,10 +95,6 @@
 				<li>Latest EarthQuakes or Natural Events <a href="http://eonet.sci.gsfc.nasa.gov" target="_blank">EONET</i></a> available in <i class="ms ms-layers-o"></i></li>
 				<li>In anytime you can subscrive to an event to receive E-mail update when new images become available</li>
 			</ul>
-
-			<h4>Legend</h4>
-			<p class="red-round">: On-Going Events</p>
-			<p class="blue-round">: Past Events</p>
 
 			<h4>Contribute</h4>
 			<p>This project is openly developed on <a href="https://github.com/RemotePixel/disasterwatch" target="_blank"><i class="fa fa-github"></i> GitHub</a>.</p>
@@ -425,12 +426,12 @@
 					</div>
 
 					<div class="row side-view-content">
-						<!-- <div class="block-control">
+						<div class="block-control">
 							<div class="text-align-left">Volcanoes</div>
 							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary" >
 								<input id="volcanoes-checkbox" type="checkbox"/><span></span>
 							</label>
-						</div> -->
+						</div>
 
 						<div class="block-control">
 							<div class="text-align-left">Earthquakes (Magnitude > 4.5):</div>
@@ -448,9 +449,9 @@
 
 						<div class="delim"></div>
 
+						<p>Active Volcanoes courtesy of Volcanodiscovery.com (<a href="https://www.volcanodiscovery.com/daily-map-of-active-volcanoes.html" target="_blank">link</a>).</p>
 						<p>Latest earthquakes from USGS (<a href="http://earthquake.usgs.gov/earthquakes/map/" target="_blank">link</a>).</p>
 						<p>NASA Earth Observatory Natural Event Tracker (EONET) is "a repository of metadata about natural events" (<a href="http://eonet.sci.gsfc.nasa.gov" target="_blank">link</a>).</p>
-
 					</div>
                 </div>
 
@@ -705,22 +706,15 @@
 	<script src="/js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 
 	<script>
-        window.lazySizesConfig = window.lazySizesConfig || {};
-        window.lazySizesConfig.lazyClass = 'img-item';
-		window.lazySizesConfig.expand = 500;
-        window.lazySizesConfig.loadMode = 2;
-    </script>
+      window.lazySizesConfig = window.lazySizesConfig || {};
+      window.lazySizesConfig.lazyClass = 'img-item';
+			window.lazySizesConfig.expand = 500;
+      window.lazySizesConfig.loadMode = 2;
+  </script>
 
 	<script src="/js/lazysizes.min.js" async=""></script>
 
-    <!--  mapbox-->
-
 	<script src='https://npmcdn.com/@turf/turf@3.5.1/turf.min.js'></script>
-	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.js'></script>
-	<!-- <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.11.18/mapbox-gl-draw.js"></script> -->
-	<script src="/js/mapbox-gl-draw.js"></script>
-	<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.1/mapbox-gl-geocoder.js'></script>
-
 	<script src="https://d3js.org/d3-queue.v3.min.js"></script>
 
 	<!-- DisasterWatch JS -->

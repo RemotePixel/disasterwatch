@@ -22,13 +22,13 @@ function getEarthquake() {
         });
 }
 
-// function getVolcanoes() {
-//     'use strict';
-//     $.getJSON('https://data.remotepixel.ca/disasterwatch/ActiveVolcanoes.geojson')
-//         .done(function (data) {
-//             map.getSource('volcanoes').setData(data);
-//         });
-// }
+function getVolcanoes() {
+    'use strict';
+    $.get("https://joqhmu5n9g.execute-api.us-east-1.amazonaws.com/production/api/getVolcanoes")
+        .done(function (data) {
+            map.getSource('volcanoes').setData(data);
+        });
+}
 
 function getEONETEvents() {
     "use strict";
@@ -46,9 +46,10 @@ function getEONETEvents() {
             for (i = 0; i < data.events.length; i++) {
                 var e = data.events[i],
                     iconName = 'marker';
+
                 switch (e.categories[0].title) {
                 case 'Volcanoes':
-                    iconName = 'volcano';
+                    iconName = 'volcano-red';
                     break;
                 default:
                     iconName = 'marker';
@@ -312,7 +313,7 @@ function getImages() {
     //Need to modulateGeometry
     var features = draw.getAll();
     if (features.features[0].geometry.type === "Point") {
-        var ll = mapboxgl.LngLat.convert(features.features[0].geometry.coordinates).wrap().toArray();
+        var ll = mapboxgl.LngLat.convert(features.features[0].geometry.coordinates.slice(0,2)).wrap().toArray();
         features.features[0].geometry.coordinates = ll;
     } else {
         features.features[0].geometry.coordinates[0] = features.features[0].geometry.coordinates[0].map(function (e) {
@@ -404,13 +405,14 @@ function seeEONETimages(id) {
 
     $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + url)
         .done(function (data) {
-
             if (data.geometries.length > 1) {
                 var feature = { "type": 'LineString', "coordinates": []},
                     j;
                 for (j = 0; j < data.geometries.length; j++) {
                     feature.coordinates.push(data.geometries[j].coordinates);
                 }
+                var feature = turf.buffer(feature, 100, 'meters');
+
             } else {
                 var feature = { "type": 'Point', "coordinates": data.geometries[0].coordinates};
             }
@@ -418,31 +420,54 @@ function seeEONETimages(id) {
             var featureId = draw.add(feature),
                 features = draw.getAll();
 
-            if (features.features[0].geometry.type === "LineString") {
-                var bbox = turf.bbox(features.features[0].geometry);
-                map.fitBounds(bbox, {padding: 20});
-            }
-
             if (features.features[0].geometry.type === "Point") {
                 var round = turf.buffer(features.features[0], 100, 'kilometers'),
                     bbox = turf.bbox(round);
                 map.fitBounds(bbox, {padding: 20});
+            } else {
+                var bbox = turf.bbox(features.features[0].geometry);
+                map.fitBounds(bbox, {padding: 20});
             }
 
-            // addType(document.getElementById('dropdown-menu').getElementsByClassName('earthquake')[0].parentElement);
-            //
-            // document.getElementById("disasterName").value = data.properties.title;
-            // document.getElementById("disasterPlace").value = data.properties.place;
-            // document.getElementById("disasterStartDate").value = moment(data.properties.time).utc().format('YYYY-MM-DD');
-            // document.getElementById("disasterEndDate").value = moment(data.properties.time).utc().format('YYYY-MM-DD');
-            // document.getElementById("disasterComments").value = data.properties.url;
+            document.getElementById("disasterName").value = data.title;
+            document.getElementById("disasterComments").value = data.description;
+            document.getElementById("disasterStartDate").value = moment(data.geometries[0].date).format('YYYY-MM-DD');
+            document.getElementById("disasterEndDate").value = moment(data.geometries[data.geometries.length - 1].date).format('YYYY-MM-DD');
 
-            $(".tab-selector-1").addClass('out');
-            $(".tab-selector-2").addClass('out');
             openleftBlock();
             getImages();
             $('.map .spin').addClass('display-none');
         });
+    closePopup();
+}
+
+function seeVolcimages(name) {
+    "use strict";
+
+    $('.map .spin').removeClass('display-none');
+
+    var feat = map.getSource("volcanoes")._data.features.filter(function(e){
+        return (e.properties.Name === name);
+    })[0];
+
+    draw.deleteAll();
+    if (draw.getMode() !== 'static') {
+        draw.changeMode('static');
+    }
+
+    var featureId = draw.add(feat.geometry),
+        features = draw.getAll(),
+        round = turf.buffer(features.features[0], 100, 'kilometers'),
+        bbox = turf.bbox(round);
+
+    map.fitBounds(bbox, {padding: 20});
+
+    document.getElementById("disasterName").value = feat.properties.Name;
+
+    openleftBlock();
+    getImages();
+
+    $('.map .spin').addClass('display-none');
     closePopup();
 }
 

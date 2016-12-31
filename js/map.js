@@ -14,21 +14,19 @@ var map = new mapboxgl.Map({
         attributionControl: true,
         minZoom: 0,
         maxZoom: 8
-    }),
-    draw = mapboxgl.Draw({
-        displayControlsDefault: false
     });
 
 map.dragRotate.disable();
 map.touchZoomRotate.disableRotation();
 
-var geocoder = new mapboxgl.Geocoder({
-     container: 'geocoder-container'
-});
-map.addControl(geocoder);
+map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
+var arbitraryDOMNode = document.getElementsByClassName('geocoder-container')[0];
+var geocoder = new MapboxGeocoder({accessToken: mapboxgl.accessToken });
+arbitraryDOMNode.appendChild(geocoder.onAdd(map));
+
+var draw = new MapboxDraw({displayControlsDefault: false});
 map.addControl(draw);
-map.addControl(new mapboxgl.Navigation());
 
 var btnsearch = document.createElement('button');
 btnsearch.className = 'mapboxgl-ctrl-icon';
@@ -117,16 +115,17 @@ map.on('style.load', function () {
 
     map.addLayer({
         "id": "disasterdb-points",
-        "type": "circle",
+        "type": "symbol",
         "source": "disasterdb",
-        "filter": ["all", ["==", "$type", "Point"], ["!=", "dateEnd", ""]],
-        "paint": {
-            "circle-color": '#3293ed',
-            'circle-radius': {
-                "base": 4,
+        "filter": ["==", "$type", "Point"],
+        "layout": {
+            "icon-image": "dw-{icon}-15",
+            "icon-allow-overlap": true,
+            "icon-size": {
+                "base": 1,
                 'stops': [
-                    [0, 4],
-                    [9, 10]
+                    [0, 1.2],
+                    [9, 1]
                 ]
             }
         }
@@ -136,50 +135,33 @@ map.on('style.load', function () {
         "id": "disasterdb-polygons",
         "type": "fill",
         "source": "disasterdb",
-        "filter": ["all", ["==", "$type", "Polygon"], ["!=", "dateEnd", ""]],
+        "filter": ["==", "$type", "Polygon"],
         "paint": {
-            "fill-outline-color": "#3293ed",
+            "fill-outline-color": "#454545",
             "fill-color": "#454545",
             "fill-opacity": {
                 "base": 1,
                 'stops': [
                     [0, 1],
-                    [9, 0.4]
+                    [9, 0.1]
                 ]
             }
         }
     });
 
     map.addLayer({
-        "id": "disasterdb-points-ongoing",
-        "type": "circle",
+        "id": "disasterdb-polygons-symbol",
+        "type": "symbol",
         "source": "disasterdb",
-        "filter": ["all", ["==", "$type", "Point"], ["==", "dateEnd", ""]],
-        "paint": {
-            "circle-color": '#da7979',
-            'circle-radius': {
-                "base": 4,
-                'stops': [
-                    [0, 4],
-                    [9, 10]
-                ]
-            }
-        }
-    });
-
-    map.addLayer({
-        "id": "disasterdb-polygons-ongoing",
-        "type": "fill",
-        "source": "disasterdb",
-        "filter": ["all", ["==", "$type", "Polygon"], ["==", "dateEnd", ""]],
-        "paint": {
-            "fill-outline-color": "#da7979",
-            "fill-color": "#ba3e3e",
-            "fill-opacity": {
+        "filter": ["==", "$type", "Polygon"],
+        "layout": {
+            "icon-image": "dw-{icon}-15",
+            "icon-allow-overlap": true,
+            "icon-size": {
                 "base": 1,
                 'stops': [
-                    [0, 1],
-                    [9, 0.4]
+                    [0, 1.2],
+                    [9, 1]
                 ]
             }
         }
@@ -248,32 +230,42 @@ map.on('style.load', function () {
         "source": "eonet",
         "layout": {
             "visibility" : "none",
+            "icon-allow-overlap": true,
             "icon-image": "{icon}-15"
         }
     });
 
     // Volcanoes
-    // map.addSource('volcanoes', {
-    //     'type': 'geojson',
-    //     'data': geojson
-    // });
-    //
-    // map.addLayer({
-    //     "id": "volcanoes",
-    //     "type": "symbol",
-    //     "source": "volcanoes",
-    //     "layout": {
-    //         "visibility" : "none",
-    //         "icon-image": "volcano-15"
-    //     }
-    // });
+    map.addSource('volcanoes', {
+        'type': 'geojson',
+        'data': geojson
+    });
+
+    map.addLayer({
+        "id": "volcanoes",
+        "type": "symbol",
+        "source": "volcanoes",
+        "layout": {
+            "visibility" : "none",
+            "icon-allow-overlap": true,
+            "icon-image": "volcano-red-15",
+            "icon-size": {
+                "base": 1,
+                'stops': [
+                    [0, 0.7],
+                    [9, 1]
+                ]
+            }
+
+        }
+    });
 
     map.on('mousemove', function (e) {
         var mouseRadius = 1,
             feature = map.queryRenderedFeatures([
                 [e.point.x - mouseRadius, e.point.y - mouseRadius],
                 [e.point.x + mouseRadius, e.point.y + mouseRadius]
-            ], {layers: ["eonet-point", "earthquakes-point", "disasterdb-points", "disasterdb-polygons", "disasterdb-points-ongoing", "disasterdb-polygons-ongoing"]})[0];
+            ], {layers: ["eonet-point", "earthquakes-point", "disasterdb-points", "disasterdb-polygons", "volcanoes"]})[0];
 
         if (feature) {
             map.getCanvas().style.cursor = 'pointer';
@@ -301,7 +293,7 @@ map.on('style.load', function () {
                                 '<div class="linetab">Duration (min): ' + feature.properties.dmin + '</div>' +
                                 '<div class="linetab">Tsunami: ' + ((feature.properties.tsunami === 0) ? 'No' : 'Yes') + '</div>' +
                                 '<div class="linetab"><a target="_blank" href="' + feature.properties.url + '">Info</a></div>' +
-                                '<div class="linetab"><a class="link" onclick="seeEQimages(\'' + feature.properties.detail + '\')">Search Images</a></div>')
+                                '<div class="linetab"><a class="link" onclick="seeEQimages(\'' + feature.properties.detail + '\')">Search Images/Add to Database</a></div>')
                     .addTo(map);
             }
         }
@@ -326,16 +318,33 @@ map.on('style.load', function () {
                                 '<div class="linetab">Date: ' + moment(feature.properties.date).format('YYYY-MM-DD HH:mm:ss') + '(UTC)</div>' +
                                 '<div class="linetab">Type: ' + feature.properties.dtype + '</div>' +
                                 '<div class="linetab">Description: ' + feature.properties.description + '</div>' +
-                                '<div class="linetab">Links: ' + links + '</div>') //+
-                                // '<div class="linetab"><a class="link" onclick="seeEONETimages(\'' + feature.properties.id + '\')">Search Images</a></div>')
+                                '<div class="linetab">Links: ' + links + '</div>' +
+                                '<div class="linetab"><a class="link" onclick="seeEONETimages(\'' + feature.properties.id + '\')">Search Images/Add to Database</a></div>')
                     .addTo(map);
             }
         }
 
+        if (map.getLayer("volcanoes").getLayoutProperty('visibility') !== 'none') {
+            var feature = map.queryRenderedFeatures([
+                [e.point.x - mouseRadius, e.point.y - mouseRadius],
+                [e.point.x + mouseRadius, e.point.y + mouseRadius]
+            ], {layers: ["volcanoes"]})[0];
+
+            if (feature) {
+                var popup = new mapboxgl.Popup()
+                    .setLngLat(e.lngLat)
+                    .setHTML('<div class="linetab bold">Name: ' + feature.properties.Name + '</div>' +
+                             feature.properties.Html +
+                             '<div class="linetab"><a class="link" onclick="seeVolcimages(\'' + feature.properties.Name + '\')">Search Images/Add to Database</a></div>')
+                    .addTo(map);
+            }
+        }
+
+
         var feature = map.queryRenderedFeatures([
             [e.point.x - mouseRadius, e.point.y - mouseRadius],
             [e.point.x + mouseRadius, e.point.y + mouseRadius]
-        ], {layers: ["disasterdb-points", "disasterdb-polygons","disasterdb-points-ongoing", "disasterdb-polygons-ongoing"]})[0];
+        ], {layers: ["disasterdb-points", "disasterdb-polygons"]})[0];
 
         if (feature) {
             var dtype = '',
@@ -443,6 +452,8 @@ map.on('style.load', function () {
     });
     getEarthquake();
     getEONETEvents();
+    getVolcanoes();
+
 });
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -639,42 +650,38 @@ function mapFlyToDisaster(id) {
 
     closePopup();
 
-    var features = map.getSource("disasterdb")._data.features.filter(function(e){
+    var feature = map.getSource("disasterdb")._data.features.filter(function(e){
         return (e.properties.uuid === id);
-    });
+    })[0];
 
-    if (features){
-        if (features[0].geometry.type === "Polygon") {
-            var bbox = turf.bbox(features[0].geometry),
-                lngLat = mapboxgl.LngLat.convert(turf.centroid(features[0]).geometry.coordinates);
+    if (feature){
+        if (feature.geometry.type === "Polygon") {
+            var bbox = turf.bbox(feature.geometry),
+                lngLat = mapboxgl.LngLat.convert(turf.centroid(feature).geometry.coordinates);
             map.fitBounds(bbox, {padding: 20});
         }
 
-        if (features[0].geometry.type === "Point") {
-            var round = turf.buffer(features[0], 100, 'kilometers'),
+        if (feature.geometry.type === "Point") {
+            var round = turf.buffer(feature, 100, 'kilometers'),
                 bbox = turf.bbox(round),
-                lngLat = mapboxgl.LngLat.convert(features[0].geometry.coordinates);
+                lngLat = mapboxgl.LngLat.convert(feature.geometry.coordinates.slice(0,2));
             map.fitBounds(bbox, {padding: 20});
         }
 
         var dtype = '',
-            disasterType = features[0].properties.dtype,
-            maindType,
-            url = 'https://disasterwatch.remotepixel.ca/?event=' + features[0].properties.uuid;
+            disasterType = feature.properties.dtype,
+            url = 'https://disasterwatch.remotepixel.ca/?event=' + feature.properties.uuid;
 
+
+        if (disasterType.length === 0) {
+            disasterType = ['unclassified'];
+        }
 
         for (var j = 0; j < disasterType.length; j++) {
             dtype += '<span type="dtype" class="' + disasterType[j] + '">' + disasterType[j] + '</span> ';
         }
 
-        if (disasterType.length === 0) {
-            dtype = '<span type="dtype" class="unclassified">unclassified</span>';
-            maindType = 'unclassified';
-        } else {
-            maindType = disasterType[0];
-        }
-
-        var comments = features[0].properties.comments.split('<br />').map(function(e){
+        var comments = feature.properties.comments.split('<br />').map(function(e){
             return textTolink(e);
         })
 
@@ -685,27 +692,27 @@ function mapFlyToDisaster(id) {
 
         var popup = new mapboxgl.Popup()
             .setLngLat(lngLat)
-            .setHTML('<div class="dtypeImage"><div class="icon icon-' + maindType + '" title="' + maindType + '"></div></div>' +
-                        '<div class="linetab bold">Name: ' + features[0].properties.name + '</div>' +
-                        '<div class="linetab uuid">uuid: ' + features[0].properties.uuid + '</div>' +
+            .setHTML('<div class="dtypeImage"><div class="icon icon-' + feature.properties.icon + '" title="' + feature.properties.icon + '"></div></div>' +
+                        '<div class="linetab bold">Name: ' + feature.properties.name + '</div>' +
+                        '<div class="linetab uuid">uuid: ' + feature.properties.uuid + '</div>' +
                         '<div class="linetab disasterType">Type: ' + dtype + '</div>' +
-                        '<div class="linetab">Location: ' + features[0].properties.place + '</div>' +
-                        '<div class="linetab">Start Date: ' + features[0].properties.dateStart + '</div>' +
-                        '<div class="linetab">End Date: ' + features[0].properties.dateEnd + '</div>' +
-                        '<div class="linetab">Followers: ' + features[0].properties.nbfollowers + '</div>' +
+                        '<div class="linetab">Location: ' + feature.properties.place + '</div>' +
+                        '<div class="linetab">Start Date: ' + feature.properties.dateStart + '</div>' +
+                        '<div class="linetab">End Date: ' + feature.properties.dateEnd + '</div>' +
+                        '<div class="linetab">Followers: ' + feature.properties.nbfollowers + '</div>' +
                         '<div class="linetab">Comments:</div>' +
                         '<div class="linetab comments">' +
                             commentsBlock +
                         '</div>' +
                         '<div class="delim"></div>' +
-                        '<div class="linetab"><a onclick="seeEvtDBimages(\'' + features[0].properties.uuid + '\')">Search Images</a></div>' +
+                        '<div class="linetab"><a onclick="seeEvtDBimages(\'' + feature.properties.uuid + '\')">Search Images</a></div>' +
                         '<div class="linetab">' +
-                            '<a onclick="editEvt(\'' + features[0].properties.uuid + '\')">Update</a> | ' +
-                            '<a onclick="removeEvt(\'' + features[0].properties.uuid + '\')">Remove</a> | ' +
+                            '<a onclick="editEvt(\'' + feature.properties.uuid + '\')">Update</a> | ' +
+                            '<a onclick="removeEvt(\'' + feature.properties.uuid + '\')">Remove</a> | ' +
                             '<a onclick="toggleSubscribe()">Subscribe</a>' +
                         '</div>' +
                         '<span class="db-error red">Error...Cannot remove this event from database</span>' +
-                        '<div data-uuid="' + features[0].properties.uuid + '" class="subscribe-section display-none">' +
+                        '<div data-uuid="' + feature.properties.uuid + '" class="subscribe-section display-none">' +
                             '<div class="delim"></div>' +
                             '<div class="sat-filter">' +
                                 '<label><input data="landsat8" type="checkbox" checked> Landsat-8</label>' +
