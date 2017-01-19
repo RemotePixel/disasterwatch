@@ -70,6 +70,13 @@ function feeddownloadL8(url, id) {
 
 $('#modalDownloadL8').on('shown.bs.modal', function () {
     "use strict";
+
+    $("#modalDownloadL8 .btn-download").removeClass("processing");
+    $("#modalDownloadL8 .btn-download").removeClass("error");
+    $("#modalDownloadL8 .btn-download").removeClass("ready");
+    $("#modalDownloadL8 .btn-download span").text('Download');
+    $("#modalDownloadL8 .btn-download a").attr('href', '');
+
     $("#modalDownloadL8 .dropdown-menu li a").each(function () {
         $(this).removeClass('on');
     });
@@ -141,6 +148,13 @@ $(function () {
     "use strict";
 
     $("#modalDownloadL8 .dropdown-menu li a").click(function () {
+
+        $("#modalDownloadL8 .btn-download").removeClass("processing");
+        $("#modalDownloadL8 .btn-download").removeClass("error");
+        $("#modalDownloadL8 .btn-download").removeClass("ready");
+        $("#modalDownloadL8 .btn-download span").text('Download');
+        $("#modalDownloadL8 .btn-download a").attr('href', '');
+
         $('#modalDownloadL8 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
         $("#modalDownloadL8 .dropdown .btn:first-child").html($(this).text() + ' <span class="caret"></span>');
 
@@ -167,3 +181,32 @@ $(function () {
         $(this).addClass('on');
     });
 });
+
+function landsatdownload() {
+    "use strict";
+
+    $("#modalDownloadL8 button.btn-download").addClass("processing");
+
+    var req = {
+        scene: $('#modalDownloadL8 .overview').attr("data-id"),
+        bands: $("#modalDownloadL8 .dropdown-menu li .on").parent().attr("data-bands")
+    };
+
+    $.post("https://npj2g2bwcc.execute-api.us-west-2.amazonaws.com/landsat/toa", JSON.stringify(req))
+        .done(function (data) {
+            if (!(data.hasOwnProperty('errorMessage'))) {
+                $("#modalDownloadL8 button.btn-download").removeClass("processing");
+                $("#modalDownloadL8 button.btn-download").addClass("ready");
+                $("#modalDownloadL8 a.btn-download").attr('href', data.path);
+            } else {
+                $("#modalDownloadL8 button.btn-download").removeClass("processing");
+                $("#modalDownloadL8 button.btn-download").addClass("error");
+                $("#modalDownloadL8 button.btn-download span").text('Error');
+            }
+        })
+        .fail(function (error, data) {
+            $("#modalDownloadL8 button.btn-download").removeClass("processing");
+            $("#modalDownloadL8 button.btn-download").addClass("error");
+            $("#modalDownloadL8 button.btn-download span").text('Error');
+        });
+}

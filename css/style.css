@@ -47,6 +47,14 @@ body {
     margin: auto;
 }
 
+.watermark {
+  position: absolute;
+  left: 10px;
+  bottom: 0;
+  background: none;
+  z-index: 1;
+}
+
 /* NavBar & Buttons */
 .menu-bar-left {
     display: inline-block;
@@ -1649,6 +1657,53 @@ body {
     font-size: 14px;
     text-align: center;
 }
+
+.button-inline button{
+    display: inline-block;
+}
+
+.button-inline button.btn-download {
+    color: #FFF;
+    background-color: rgb(83, 85, 85);
+}
+
+.button-inline button.btn-download i,
+.button-inline a.btn-download {
+    display: none;
+}
+
+.button-inline button.btn-download.processing {
+    cursor: default;
+    pointer-events: none;
+    color: #000;
+    background-color: rgb(157, 157, 157);
+}
+
+.button-inline button.btn-download.processing span {
+    display: none;
+}
+
+.button-inline button.btn-download.processing i {
+    display: inherit;
+}
+
+.button-inline button.btn-download.ready {
+    display: none;
+}
+
+.button-inline button.btn-download.ready ~ a.btn-download {
+    color: #FFF;
+    background-color: rgb(58, 158, 62);
+    display: inline-block;
+}
+
+.button-inline button.btn-download.error {
+    cursor: not-allowed;
+    pointer-events: none;
+    color: #FFF;
+    background-color: rgb(176, 52, 35);
+}
+
 /* ----------- Download Modals ----------- */
 
 
