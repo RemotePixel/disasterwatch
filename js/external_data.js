@@ -147,9 +147,9 @@ function getL8S2Images(feature, callback) {
                         scene.grid_square = data.results[i].grid_square;
                         scene.coverage = data.results[i].data_coverage_percentage;
                         scene.latitude_band = data.results[i].latitude_band;
-                        scene.browseURL = data.results[i].thumbnail.replace('.jp2', ".jpg");
                         scene.path = data.results[i].aws_path.replace('tiles', "#tiles");
                         scene.AWSurl = 'http://sentinel-s2-l1c.s3-website.eu-central-1.amazonaws.com/' + scene.path + '/';
+                        scene.browseURL = 'http://sentinel-s2-l1c.s3-website.eu-central-1.amazonaws.com/' + data.results[i].aws_path + '/preview.jpg';
                         scene.grid = scene.utm_zone + scene.latitude_band + scene.grid_square;
                         results.push(scene);
                     }
