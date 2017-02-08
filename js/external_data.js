@@ -13,10 +13,12 @@
 //  - Disaster database
 //  - Landsat/Sentinel Images
 
+var dwAPI = 'https://jriian4se3.execute-api.us-east-1.amazonaws.com/production/';
+
 function getEarthquake() {
     "use strict";
     var urlusgs = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson';
-    $.get("https://i5njsxz8fk.execute-api.us-west-2.amazonaws.com/prod/toHTTPS?url=" + urlusgs)
+    $.get(dwAPI + "toHTTPS?url=" + urlusgs)
         .done(function (data) {
             map.getSource('earthquakes').setData(JSON.parse(data));
         });
@@ -33,9 +35,9 @@ function getVolcanoes() {
 function getEONETEvents() {
     "use strict";
     var eoneturl = 'http://eonet.sci.gsfc.nasa.gov/api/v2.1/events';
-    $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + eoneturl)
+    $.get(dwAPI + "toHTTPS?url=" + eoneturl)
         .done(function (data) {
-
+            data = JSON.parse(data);
             var geojson = {
                 "type": "FeatureCollection",
                 "features": []
@@ -241,14 +243,13 @@ function getS1Images(feature, callback) {
     }
 
     $.ajax({
-        url: 'https://yrj49dw0zg.execute-api.us-west-2.amazonaws.com/prod/api/getS1Images',
+        url: dwAPI + 'getS1Images',
         type: "POST",
         data: JSON.stringify(jsonRequest),
         dataType: "json",
         contentType: "application/json"
     })
     .success(function(data){
-
         if (data.hasOwnProperty('errorMessage')) {
             $('.disaster-images .api-status .peps-status').addClass('on');
             console.log('DisasterWatch API servers Error');
@@ -366,8 +367,9 @@ function seeEQimages(urlusgs) {
         draw.changeMode('static');
     }
 
-    $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + urlusgs)
+    $.get(dwAPI + "toHTTPS?url=" + urlusgs)
         .done(function (data) {
+            data = JSON.parse(data);
             var featureId = draw.add(data.geometry),
                 features = draw.getAll();
 
@@ -402,9 +404,9 @@ function seeEONETimages(id) {
         draw.changeMode('static');
     }
     var url = 'http://eonet.sci.gsfc.nasa.gov/api/v2.1/events/' + id;
-
-    $.get("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + url)
+    $.get(dwAPI + "toHTTPS?url=" + url)
         .done(function (data) {
+            data = JSON.parse(data);
             if (data.geometries.length > 1) {
                 var feature = { "type": 'LineString', "coordinates": []},
                     j;

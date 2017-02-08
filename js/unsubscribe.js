@@ -18,7 +18,7 @@ var keys = getUrlVars();
 if (keys.hasOwnProperty('uuid') && keys.hasOwnProperty('mail') ) {
     $("#uuid i").text(keys.uuid);
     $("#email i").text(keys.mail);
-    var disasterwatchAPI = 'https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/';
+    var disasterwatchAPI = 'https://jriian4se3.execute-api.us-east-1.amazonaws.com/production/database/';
 
     $.ajax ({
         url: disasterwatchAPI + "getEvent",

@@ -5,7 +5,7 @@
 /*global console, console, alert*/
 
 
-var disasterwatchAPI = 'https://tcuraimo51.execute-api.us-east-1.amazonaws.com/test/';
+var disasterwatchAPI = 'https://jriian4se3.execute-api.us-east-1.amazonaws.com/production/database/';
 
 function getDisasterdb(callback) {
     "use strict";
@@ -19,7 +19,6 @@ function getDisasterdb(callback) {
             return callback('Could not retrieve the database')
         })
         .success(function(data){
-
             map.getSource('disasterdb').setData(data);
             for(var i = 0; i < data.features.length; i++) {
                 $('.list-disasters').append(

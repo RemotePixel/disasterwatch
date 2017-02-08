@@ -5,7 +5,7 @@
 /*global turf, turf, alert*/
 /*global console, console, alert*/
 
-mapboxgl.accessToken = 'pk.eyJ1IjoidmluY2VudHNhcmFnbyIsImEiOiJjaWlleG1vdmowMWhydGtrc2xqcmQzNmhlIn0.80HAFLCQ6yUWCk4mwm6zbw';
+mapboxgl.accessToken = '{YOUR-MAPBOX-TOKEN}';
 var map = new mapboxgl.Map({
         container: 'map',
         center: [0, 10],
