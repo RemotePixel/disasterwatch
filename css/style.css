@@ -370,6 +370,19 @@ body {
     color: #393939;
 }
 
+.block-control-map {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: auto;
+    height: auto;
+    padding: 10px;
+    color: #393939;
+    z-index: 10;
+    border: 3px;
+    background-color: #fff;
+}
+
 #disasters-panel .block-control {
     padding-bottom: 5px;
 }
@@ -618,11 +631,12 @@ body {
 .map .bottom-right-control {
     position: absolute;
     right: -200px;
-    bottom: 20px;
+    bottom: 0;
     width: 200px;
     height: auto;
     text-align: center;
     z-index: 1;
+    background-color: rgb(255,255,255);
     background-color: rgba(255,255,255,0.6);
     padding: 10px;
     -webkit-transition: all .4s ease;
@@ -1561,7 +1575,7 @@ body {
     width: 100%;
     color: #FFF;
     background-color: rgba(0,0,0,0.3);
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 400;
     -o-transition: all .5s ease;
     -webkit-transition: all .5s ease;
@@ -1754,6 +1768,7 @@ body {
 }
 
 .dwhelp-block .help-content  .thanks-images {
+    margin-top: 10px;
     max-width: 600px;
 }
 

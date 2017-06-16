@@ -1,160 +1,140 @@
-/*jslint browser: true*/
-/*global $, jQuery, alert*/
-/*global mapboxgl, mapboxgl, alert*/
-/*global moment, moment, alert*/
-/*global console, console, alert*/
+'use strict';
 
-
-$("#dateCheckbox").change(function () {
-    "use strict";
+$('#dateCheckbox').change(function () {
     if (this.checked) {
-        $("#disasterEndDate").attr('disabled', 'disabled');
+        $('#disasterEndDate').attr('disabled', 'disabled');
     } else {
-        $("#disasterEndDate").attr('disabled', false);
+        $('#disasterEndDate').attr('disabled', false);
     }
 });
 
-$("#mailCheckbox").change(function () {
-    "use strict";
+$('#mailCheckbox').change(function () {
+    'use strict';
     if (this.checked) {
-        $("#disastermailTo").attr('disabled', false);
-        $(".disaster-info .sat-filter input").attr('disabled', false);
+        $('#disastermailTo').attr('disabled', false);
+        $('.disaster-info .sat-filter input').attr('disabled', false);
     } else {
-        $("#disastermailTo").attr('disabled', 'disabled');
-        $(".disaster-info .sat-filter input").attr('disabled', 'disabled');
+        $('#disastermailTo').attr('disabled', 'disabled');
+        $('.disaster-info .sat-filter input').attr('disabled', 'disabled');
     }
 });
 
 //Disaster-info Form Interaction
 function addType(elem) {
-    "use strict";
-    var type = elem.childNodes[0],
-        dTypelist = document.getElementById("disasterType");
+    const type = elem.childNodes[0];
+    const dTypelist = document.getElementById('disasterType');
 
     if (dTypelist.getElementsByClassName(type.className).length !== 0) {
         var onList = dTypelist.getElementsByClassName(type.className);
         dTypelist.removeChild(onList[0]);
-        elem.childNodes[1].className = "fa fa-check right-block";
+        elem.childNodes[1].className = 'fa fa-check right-block';
     } else {
-        elem.childNodes[1].className = "fa fa-check right-block-in";
+        elem.childNodes[1].className = 'fa fa-check right-block-in';
         dTypelist.appendChild(type.cloneNode(true));
     }
 }
 
 function filterType(elem) {
-    "use strict";
-    var type = elem.childNodes[0],
-        dTypelist = document.getElementById("disasterType2");
+    const type = elem.childNodes[0];
+    const dTypelist = document.getElementById('disasterType2');
     dTypelist.innerHTML = '<span class="caret"></span>' + type.outerHTML;
     filterListDisaster();
 }
 
 function filterListDisaster() {
-    "use strict";
-
-    //reset
     $('.list-disasters .list-element').removeClass('display-none');
-    map.setFilter("disasterdb-points", ["==", "$type", "Point"]);
-    map.setFilter("disasterdb-polygons", ["==", "$type", "Polygon"]);
-    map.setFilter("disasterdb-polygons-symbol", ["==", "$type", "Polygon"]);
+    map.setFilter('disasterdb-points', ['in', '$type', 'Point', 'LineString', 'Polygon']);
+    map.setFilter('disasterdb-lines', ['==', '$type', 'LineString']);
+    map.setFilter('disasterdb-polygons', ['==', '$type', 'Polygon']);
 
-    var filterClass = $("#disasterType2 span[type='dtype']")[0].className;
+    const filterClass = $('#disasterType2 span[type="dtype"]')[0].className;
     if (filterClass === 'all') {
         if (document.getElementById('event-checkbox').checked) {
             $('.list-disasters .list-element[date-end!=""]').addClass('display-none');
-            map.setFilter("disasterdb-points", ["all", ["==", "$type", "Point"], ["==", "dateEnd", ""]]);
-            map.setFilter("disasterdb-polygons", ["all", ["==", "$type", "Polygon"], ["==", "dateEnd", ""]]);
-            map.setFilter("disasterdb-polygons-symbol", ["all", ["==", "$type", "Polygon"], ["==", "dateEnd", ""]]);
+            map.setFilter('disasterdb-points', ['all', ['in', '$type', 'Point', 'LineString', 'Polygon'], ['==', 'dateEnd', '']]);
+            map.setFilter('disasterdb-lines', ['all', ['==', '$type', 'LineString'], ['==', 'dateEnd', '']]);
+            map.setFilter('disasterdb-polygons', ['all', ['==', '$type', 'Polygon'], ['==', 'dateEnd', '']]);
         }
     } else {
+        $(`.list-disasters .list-element[dw-type!="${filterClass}"]`).addClass('display-none');
         if (document.getElementById('event-checkbox').checked) {
             $('.list-disasters .list-element[date-end!=""]').addClass('display-none');
-            $('.list-disasters .list-element[dw-type!="' + filterClass + '"]').addClass('display-none');
-
-            map.setFilter("disasterdb-points", ["all", ["==", "$type", "Point"], ["==", "dateEnd", ""], ["==", "icon", filterClass]]);
-            map.setFilter("disasterdb-polygons", ["all", ["==", "$type", "Polygon"], ["==", "dateEnd", ""], ["==", "icon", filterClass]]);
-            map.setFilter("ddisasterdb-polygons-symbol", ["all", ["==", "$type", "Polygon"], ["==", "dateEnd", ""], ["==", "icon", filterClass]]);
+            map.setFilter('disasterdb-points', ['all', ['in', '$type', 'Point', 'LineString', 'Polygon'], ['==', 'dateEnd', ''], ['==', 'icon', filterClass]]);
+            map.setFilter('disasterdb-lines', ['all', ['==', '$type', 'LineString'], ['==', 'dateEnd', ''], ['==', 'icon', filterClass]]);
+            map.setFilter('disasterdb-polygons', ['all', ['==', '$type', 'Polygon'], ['==', 'dateEnd', ''], ['==', 'icon', filterClass]]);
         } else {
-            $('.list-disasters .list-element[dw-type!="' + filterClass + '"]').addClass('display-none');
-            map.setFilter("disasterdb-points", ["all", ["==", "$type", "Point"], ["==", "icon", filterClass]]);
-            map.setFilter("disasterdb-polygons", ["all", ["==", "$type", "Polygon"], ["==", "icon", filterClass]]);
-            map.setFilter("disasterdb-polygons-symbol", ["all", ["==", "$type", "Polygon"], ["==", "icon", filterClass]]);
+            map.setFilter('disasterdb-points', ['all', ['in', '$type', 'Point', 'LineString', 'Polygon'], ['==', 'icon', filterClass]]);
+            map.setFilter('disasterdb-lines', ['all', ['==', '$type', 'LineString'], ['==', 'icon', filterClass]]);
+            map.setFilter('disasterdb-polygons', ['all', ['==', '$type', 'Polygon'], ['==', 'icon', filterClass]]);
         }
     }
 }
 
 function filterListImage() {
-    "use strict";
-    var sat2show = $.map($(".disaster-images .sat-filter input:checked"), function (e) {
+    const sat2show = $.map($('.disaster-images .sat-filter input:checked'), function (e) {
         return e.getAttribute('data');
-    }),
-    sat2check = $.map($(".disaster-images .sat-filter input"), function (e) {
+    });
+
+    const sat2check = $.map($('.disaster-images .sat-filter input'), function (e) {
         return e.getAttribute('data');
     });
 
     sat2check.forEach(function(e){
         if (sat2show.indexOf(e) === -1) {
-            $('.img-preview div[sat="' + e + '"]').addClass('display-none');
+            $(`.img-preview div[sat="${e}"]`).addClass('display-none');
         } else {
-            $('.img-preview div[sat="' + e + '"]').removeClass('display-none');
+            $(`.img-preview div[sat="${e}"]`).removeClass('display-none');
         }
     });
 }
 
 function sortListImage() {
-    "use strict";
-    var list = $(".img-preview").children();
+    const list = $('.img-preview').children();
     list.sort(sortScenes);
-    list.detach().appendTo($(".img-preview"));
+    list.detach().appendTo($('.img-preview'));
 }
 
-$("#event-checkbox").change(function () {
-    "use strict";
-    $("#event-checkbox").parent().toggleClass('green');
+$('#event-checkbox').change(function () {
+    $('#event-checkbox').parent().toggleClass('green');
     filterListDisaster();
 });
 
 
-$(".disaster-images .sat-filter input").change(function () {
-    "use strict";
+$('.disaster-images .sat-filter input').change(function () {
     filterListImage();
 });
 
 function resetForm() {
-    "use strict";
-    // $(".dropdown-toggle").empty();
-
     $('.disaster-info button[type="submit"]').attr('disabled', false);
 
-    $('#disasterType span[type="dtype"]').remove()
-    $(".disaster-info .dropdown-menu i").each(function () {
+    $('#disasterType span[type="dtype"]').remove();
+    $('.disaster-info .dropdown-menu i').each(function () {
         $(this).removeClass('right-block-in');
         $(this).addClass('right-block');
     });
 
-    $(".disaster-info input").val('');
+    $('.disaster-info input').val('');
     $('.disaster-info input[type=checkbox]').prop('checked', false);
 
-    $(".disaster-info .sat-filter input").attr('disabled', 'disabled');
-    $(".disaster-info .sat-filter input[type=checkbox]").prop('checked', true);
+    $('.disaster-info .sat-filter input').attr('disabled', 'disabled');
+    $('.disaster-info .sat-filter input[type=checkbox]').prop('checked', true);
 
     $('.disaster-info .uuid').text('');
     $('.disaster-info textarea').val('');
 
     $('.disaster-info .error').removeClass('on');
 
-    $("#disasterStartDate").datepicker('clearDates');
-    $("#disasterEndDate").datepicker('clearDates');
+    $('#disasterStartDate').datepicker('clearDates');
+    $('#disasterEndDate').datepicker('clearDates');
 
     $('.disaster-info').scrollTop(0);
 }
 
 function openleftBlock() {
-    "use strict";
 
-    $(".leftblock").addClass('in');
-    $(".tab-selector-1").prop("checked", true);
-    $("button[dwmenu]").each(function () {
+    $('.leftblock').addClass('in');
+    $('.tab-selector-1').prop('checked', true);
+    $('button[dwmenu]').each(function () {
         $(this).attr('disabled', true);
     });
 
@@ -166,28 +146,24 @@ function openleftBlock() {
 }
 
 function openImagesSettings() {
-    "use strict";
-    $(".opensettings").toggleClass('active');
-    $(".disaster-images .sat-filter").toggleClass('active');
+    $('.opensettings').toggleClass('active');
+    $('.disaster-images .sat-filter').toggleClass('active');
 }
 
 function closeleftblock() {
-    "use strict";
-
     $('.disaster-images .spin').addClass('display-none');
 
-    $(".leftblock").removeClass('in');
-    $("button[dwmenu]").each(function () {
+    $('.leftblock').removeClass('in');
+    $('button[dwmenu]').each(function () {
         $(this).attr('disabled', false);
     });
 
-    $(".tab-selector-1").prop("checked", true);
-    $(".tab-selector-1").removeClass('out');
-    $(".tab-selector-2").removeClass('out');
+    $('.tab-selector-1').prop('checked', true);
+    $('.tab-selector-1').removeClass('out');
+    $('.tab-selector-2').removeClass('out');
 
-    // $(".disaster-images .sat-filter input").prop('checked', true);
-    $(".opensettings").removeClass('active');
-    $(".disaster-images .sat-filter").removeClass('active');
+    $('.opensettings').removeClass('active');
+    $('.disaster-images .sat-filter').removeClass('active');
 
     $('.img-preview').empty();
 
@@ -200,15 +176,15 @@ function closeleftblock() {
 ////////////////////////////////////////////////////////////////////////////////
 
 function toggleHelp() {
-    $(".dwhelp-block").toggleClass('on');
+    $('.dwhelp-block').toggleClass('on');
 }
 
 function toggleImageryOption() {
-    $(".bottom-right-control").toggleClass('on');
+    $('.bottom-right-control').toggleClass('on');
 }
 
 function toggleSubscribe() {
-    $(".subscribe-section").toggleClass('display-none');
+    $('.subscribe-section').toggleClass('display-none');
 }
 
 function toggleSearch() {
@@ -217,10 +193,9 @@ function toggleSearch() {
 }
 
 function toggleParam(setting) {
-    "use strict";
     switch (setting) {
     case 'basemaps':
-        $("#basemaps-panel .side-view-content").scrollTop(0);
+        $('#basemaps-panel .side-view-content').scrollTop(0);
         $('#layers-panel').removeClass('on');
         $('#layers-btn').removeClass('on');
         $('#disasters-panel').removeClass('on');
@@ -239,7 +214,7 @@ function toggleParam(setting) {
         break;
 
     case 'disasterslist':
-        $("#disasters-panel .side-view-content").scrollTop(0);
+        $('#disasters-panel .side-view-content').scrollTop(0);
         $('#basemaps-panel').removeClass('on');
         $('#basemaps-btn').removeClass('on');
         $('#layers-panel').removeClass('on');
@@ -263,21 +238,19 @@ function toggleParam(setting) {
 }
 
 $(document).ready(function () {
-    "use strict";
-
-    $("#disasterStartDate").datepicker({
+    $('#disasterStartDate').datepicker({
         format : 'yyyy-mm-dd',
         autoclose : true,
         todayHighlight : true,
         startDate : '2016-01-01',
         endDate : moment.utc().format('YYYY-MM-DD')
-    }).on("changeDate", function (e) {
-        var dateValue = moment(e.date).format('YYYY-MM-DD');
-        $("#disasterEndDate").datepicker("setStartDate", dateValue);
-        $("#disasterEndDate").datepicker("setDate", dateValue);
+    }).on('changeDate', function (e) {
+        const dateValue = moment(e.date).format('YYYY-MM-DD');
+        $('#disasterEndDate').datepicker('setStartDate', dateValue);
+        $('#disasterEndDate').datepicker('setDate', dateValue);
     });
 
-    $("#disasterEndDate").datepicker({
+    $('#disasterEndDate').datepicker({
         format : 'yyyy-mm-dd',
         autoclose : true,
         todayHighlight : true,
@@ -285,27 +258,25 @@ $(document).ready(function () {
         endDate : moment.utc().format('YYYY-MM-DD')
     });
 
-    $(".date-button").datepicker({
+    $('.date-button').datepicker({
         format : 'yyyy-mm-dd',
         autoclose : true,
         todayHighlight : true,
         startDate : '2012-05-08',
         endDate : moment.utc().format('YYYY-MM-DD')
     }).on('changeDate', function (e) {
-        var dateValue = moment(e.date).format('YYYY-MM-DD'),
-            overlay = document.getElementsByClassName('link-on on')[0].parentElement.getAttribute('id');
+        const dateValue = moment(e.date).format('YYYY-MM-DD');
+        const overlay = document.getElementsByClassName('link-on on')[0].parentElement.getAttribute('id');
 
-        $(".date-button").text(dateValue);
+        $('.date-button').text(dateValue);
 
         if (moment(dateValue).isBefore('2015-11-24')) {
             var sat = overlay.slice(0, 5);
-            if (sat === 'VIIRS') {
-                changeOverlay('MODIS_Terra_CorrectedReflectance_TrueColor');
-            }
+            if (sat === 'VIIRS') changeOverlay('MODIS_Terra_CorrectedReflectance_TrueColor');
         }
         update_basemaps();
     });
 
-    $(".date-button").datepicker('setDate', moment.utc().subtract(1, 'days').format('YYYY-MM-DD'));
-    $("#slider").attr('disabled', 'disabled');
+    $('.date-button').datepicker('setDate', moment.utc().subtract(1, 'days').format('YYYY-MM-DD'));
+    $('#slider').attr('disabled', 'disabled');
 });
