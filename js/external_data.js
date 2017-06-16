@@ -397,7 +397,7 @@ function seeEQimages(urlusgs) {
 
     if (draw.getMode() !== 'static') draw.changeMode('static');
 
-    $.get(disasterwatch_api_url + 'toHTTPS?url=' + urlusgs)
+    $.get(`${disasterwatch_api_url}/toHTTPS?url=${urlusgs}`)
         .done(function (data) {
             data = JSON.parse(data);
             draw.add(data.geometry);
@@ -435,7 +435,7 @@ function seeEONETimages(id) {
     if (draw.getMode() !== 'static') draw.changeMode('static');
 
     var url = 'http://eonet.sci.gsfc.nasa.gov/api/v2.1/events/' + id;
-    $.get(disasterwatch_api_url + 'toHTTPS?url=' + url)
+    $.get(`${disasterwatch_api_url}/toHTTPS?url=${url}`)
         .done(function (data) {
             data = JSON.parse(data);
             let feature = { 'type': 'LineString', 'coordinates': [] };
