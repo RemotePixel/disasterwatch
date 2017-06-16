@@ -48,7 +48,7 @@ function feeddownloadL8(url, id) {
         bands: '[4,3,2]'
     };
 
-    $.get(rpix_api_us + 'l8_overview', params )
+    $.get(`${rpix_api_us}/l8_overview`, params )
         .done(function (data) {
             $('#modalDownloadL8 .overview').html('<img src="data:image/png;base64,' + data + '">');
         })
@@ -107,7 +107,7 @@ $(function () {
         if (params.bands === ['04','03','02']) {
             $('#modalDownloadS2 .overview').html('<img src="' + $('#modalDownloadS2 .overview').attr('data-prev') + '">');
         } else {
-            $.get(rpix_api_eu + 's2_overview', params)
+            $.get(`${rpix_api_eu}/s2_overview`, params)
                 .done(function (data) {
                     $('#modalDownloadS2 .overview').html('<img src="data:image/png;base64,' + data + '">');
                 })
@@ -138,7 +138,7 @@ $(function () {
             bands: $(this).parent().attr('data-bands')
         };
 
-        $.get(rpix_api_us + 'l8_overview', params )
+        $.get(`${rpix_api_us}/l8_overview`, params )
             .done(function (data) {
                 $('#modalDownloadL8 .overview').html('<img src="data:image/png;base64,' + data + '">');
             })
@@ -161,7 +161,7 @@ function landsatdownload() {
         bands: $('#modalDownloadL8 .dropdown-menu li .on').parent().attr('data-bands')
     };
 
-    $.get(rpix_api_us + 'l8_full', params)
+    $.get(`${rpix_api_us}/l8_full`, params)
         .done(function () {
             $('#modalDownloadL8 button.btn-download').removeClass('processing');
             $('#modalDownloadL8 button.btn-download').addClass('error');
