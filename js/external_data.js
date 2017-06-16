@@ -181,10 +181,10 @@ function getL8S2Images(feature, callback) {
 
                         if (moment(scene.date) < moment('2017-05-01') && !data.results[i].hasOwnProperty('LANDSAT_PRODUCT_ID')){
                             scene.awsID = scene.sceneID;
-                            scene.AWSurl = `http://landsat-pds.s3.amazonaws.com/L8/${zeroPad(data.results[i].path, 3)}/'${zeroPad(data.results[i].row, 3)}/${data.results[i].awsID}/`;
+                            scene.AWSurl = `http://landsat-pds.s3.amazonaws.com/L8/${zeroPad(data.results[i].path, 3)}/${zeroPad(data.results[i].row, 3)}/${data.results[i].awsID}/`;
                         } else {
                             scene.awsID = scene.productID;
-                            scene.AWSurl = `http://landsat-pds.s3.amazonaws.com/c1/L8/${zeroPad(data.results[i].path, 3)}/'${zeroPad(data.results[i].row, 3)}/${data.results[i].awsID}/`;
+                            scene.AWSurl = `http://landsat-pds.s3.amazonaws.com/c1/L8/${zeroPad(data.results[i].path, 3)}/${zeroPad(data.results[i].row, 3)}/${data.results[i].awsID}/`;
                         }
 
                         scene.sumAWSurl = `http://landsatonaws.com/L8/${zeroPad(data.results[i].path, 3)}/${zeroPad(data.results[i].row, 3)}/${scene.awsID}/`;
