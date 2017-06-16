@@ -1,7 +1,7 @@
 'use strict';
 
 function feeddownloadS2(elem, preview) {
-    const s2prefix = 'http://sentinel-s2-l1c.s3.amazonaws.com/';
+    const s2prefix = 'https://sentinel-s2-l1c.s3.amazonaws.com/';
     $('#modalDownloadS2 .overview').attr('data-id', elem);
     $('#modalDownloadS2 .overview').attr('data-prev', preview);
     $('#modalDownloadS2 .dwn-bands').append(

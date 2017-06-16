@@ -181,13 +181,13 @@ function getL8S2Images(feature, callback) {
 
                         if (moment(scene.date) < moment('2017-05-01')){
                             scene.awsID = scene.sceneID;
-                            scene.AWSurl = `http://landsat-pds.s3.amazonaws.com/L8/${zeroPad(data.results[i].path, 3)}/${zeroPad(data.results[i].row, 3)}/${scene.awsID}/`;
+                            scene.AWSurl = `https://landsat-pds.s3.amazonaws.com/L8/${zeroPad(data.results[i].path, 3)}/${zeroPad(data.results[i].row, 3)}/${scene.awsID}/`;
                         } else {
                             scene.awsID = scene.productID;
-                            scene.AWSurl = `http://landsat-pds.s3.amazonaws.com/c1/L8/${zeroPad(data.results[i].path, 3)}/${zeroPad(data.results[i].row, 3)}/${scene.awsID}/`;
+                            scene.AWSurl = `https://landsat-pds.s3.amazonaws.com/c1/L8/${zeroPad(data.results[i].path, 3)}/${zeroPad(data.results[i].row, 3)}/${scene.awsID}/`;
                         }
 
-                        scene.sumAWSurl = `http://landsatonaws.com/L8/${zeroPad(data.results[i].path, 3)}/${zeroPad(data.results[i].row, 3)}/${scene.awsID}/`;
+                        scene.sumAWSurl = `https://landsatonaws.com/L8/${zeroPad(data.results[i].path, 3)}/${zeroPad(data.results[i].row, 3)}/${scene.awsID}/`;
 
                         results.push(scene);
                     } else {
