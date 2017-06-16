@@ -1,12 +1,7 @@
-/*jslint browser: true*/
-/*global $, jQuery, alert*/
-/*global mapboxgl, mapboxgl, alert*/
-/*global moment, moment, alert*/
-/*global console, console, alert*/
+'use strict';
 
 function feeddownloadS2(elem, preview) {
-    "use strict";
-    var s2prefix = "http://sentinel-s2-l1c.s3.amazonaws.com/";
+    const s2prefix = 'http://sentinel-s2-l1c.s3.amazonaws.com/';
     $('#modalDownloadS2 .overview').attr('data-id', elem);
     $('#modalDownloadS2 .overview').attr('data-prev', preview);
     $('#modalDownloadS2 .dwn-bands').append(
@@ -30,7 +25,6 @@ function feeddownloadS2(elem, preview) {
 }
 
 function feeddownloadL8(url, id) {
-    "use strict";
     $('#modalDownloadL8 .overview').attr('data-id', id);
     $('#modalDownloadL8 .dwn-bands').append(
         '<span>Direct Download L8 band (Right Click on link)</span>' +
@@ -49,59 +43,51 @@ function feeddownloadL8(url, id) {
             '<a id="mtl" target="_blank" href="' + url + id + '_MTL.txt" download>MTL - Metadata</a>'
     );
 
-    var req = {
+    const params = {
         scene: id,
-        bands: "[4,3,2]"
+        bands: '[4,3,2]'
     };
 
-    $.post("https://npj2g2bwcc.execute-api.us-west-2.amazonaws.com/landsat/overview", JSON.stringify({info: req}))
+    $.get(rpix_api_us + 'l8_overview', params )
         .done(function (data) {
-            if (!(data.hasOwnProperty('errorMessage'))) {
-                $('#modalDownloadL8 .overview').html('<img src="data:image/png;base64,' + data.data + '">');
-            } else {
-                $('#modalDownloadL8 .overview').html('<span>Preview Unavailable</span>');
-            }
+            $('#modalDownloadL8 .overview').html('<img src="data:image/png;base64,' + data + '">');
         })
         .fail(function () {
             $('#modalDownloadL8 .overview').html('<span>Preview Unavailable</span>');
         });
+
     $('#modalDownloadL8').modal();
 }
 
 $('#modalDownloadL8').on('shown.bs.modal', function () {
-    "use strict";
-
-    $("#modalDownloadL8 .btn-download").removeClass("processing");
-    $("#modalDownloadL8 .btn-download").removeClass("error");
-    $("#modalDownloadL8 .btn-download").removeClass("ready");
-    $("#modalDownloadL8 .btn-download span").text('Download');
-    $("#modalDownloadL8 .btn-download a").attr('href', '');
-
-    $("#modalDownloadL8 .dropdown-menu li a").each(function () {
+    $('#modalDownloadL8 .btn-download').removeClass('processing');
+    $('#modalDownloadL8 .btn-download').removeClass('error');
+    $('#modalDownloadL8 .btn-download').removeClass('ready');
+    $('#modalDownloadL8 .btn-download span').text('Download');
+    $('#modalDownloadL8 .btn-download a').attr('href', '');
+    $('#modalDownloadL8 .dropdown-menu li a').each(function () {
         $(this).removeClass('on');
     });
-    $("#modalDownloadL8 .dropdown-menu li a").first().addClass("on");
-    $("#modalDownloadL8 .dropdown .btn:first-child").html($("#modalDownloadL8 .dropdown-menu li a").first().text() + ' <span class="caret"></span>');
+
+    $('#modalDownloadL8 .dropdown-menu li a').first().addClass('on');
+    $('#modalDownloadL8 .dropdown .btn:first-child').html($('#modalDownloadL8 .dropdown-menu li a').first().text() + ' <span class="caret"></span>');
 });
 
 $('#modalDownloadL8').on('hidden.bs.modal', function () {
-    "use strict";
     $('#modalDownloadL8 .dwn-bands').empty();
     $('#modalDownloadL8 .overview').attr('data-id', '');
     $('#modalDownloadL8 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
 });
 
 $('#modalDownloadS2').on('shown.bs.modal', function () {
-    "use strict";
-    $("#modalDownloadS2 .dropdown-menu li a").each(function () {
+    $('#modalDownloadS2 .dropdown-menu li a').each(function () {
         $(this).removeClass('on');
     });
-    $("#modalDownloadS2 .dropdown-menu li a").first().addClass("on");
-    $("#modalDownloadS2 .dropdown .btn:first-child").html($("#modalDownloadS2 .dropdown-menu li a").first().text() + ' <span class="caret"></span>');
+    $('#modalDownloadS2 .dropdown-menu li a').first().addClass('on');
+    $('#modalDownloadS2 .dropdown .btn:first-child').html($('#modalDownloadS2 .dropdown-menu li a').first().text() + ' <span class="caret"></span>');
 });
 
 $('#modalDownloadS2').on('hidden.bs.modal', function () {
-    "use strict";
     $('#modalDownloadS2 .dwn-bands').empty();
     $('#modalDownloadS2 .overview').attr('data-id', '');
     $('#modalDownloadS2 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
@@ -109,35 +95,28 @@ $('#modalDownloadS2').on('hidden.bs.modal', function () {
 
 
 $(function () {
-    "use strict";
-
-    $("#modalDownloadS2 .dropdown-menu li a").click(function () {
+    $('#modalDownloadS2 .dropdown-menu li a').click(function () {
         $('#modalDownloadS2 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-        $("#modalDownloadS2 .dropdown .btn:first-child").html($(this).text() + ' <span class="caret"></span>');
+        $('#modalDownloadS2 .dropdown .btn:first-child').html($(this).text() + ' <span class="caret"></span>');
 
-        var req = {
-            path: $('#modalDownloadS2 .overview').attr("data-id"),
-            bands: $(this).parent().attr("data-bands")
+        const params = {
+            path: $('#modalDownloadS2 .overview').attr('data-id'),
+            bands: $(this).parent().attr('data-bands')
         };
 
-        if (req.bands === "[4,3,2]") {
-            var preview = $('#modalDownloadS2 .overview').attr("data-prev");
-            $('#modalDownloadS2 .overview').html('<img src="' + preview + '">');
+        if (params.bands === ['04','03','02']) {
+            $('#modalDownloadS2 .overview').html('<img src="' + $('#modalDownloadS2 .overview').attr('data-prev') + '">');
         } else {
-            $.post("https://6bu43holc0.execute-api.eu-central-1.amazonaws.com/prod/sentinel2_ovr", JSON.stringify({info: req}))
+            $.get(rpix_api_eu + 's2_overview', params)
                 .done(function (data) {
-                    if (!(data.hasOwnProperty('errorMessage'))) {
-                        $('#modalDownloadS2 .overview').html('<img src="data:image/png;base64,' + data.data + '">');
-                    } else {
-                        $('#modalDownloadS2 .overview').html('<span>Preview Unavailable</span>');
-                    }
+                    $('#modalDownloadS2 .overview').html('<img src="data:image/png;base64,' + data + '">');
                 })
                 .fail(function () {
                     $('#modalDownloadS2 .overview').html('<span>Preview Unavailable</span>');
                 });
         }
 
-        $("#modalDownloadS2 .dropdown-menu li a").each(function () {
+        $('#modalDownloadS2 .dropdown-menu li a').each(function () {
             $(this).removeClass('on');
         });
         $(this).addClass('on');
@@ -145,37 +124,29 @@ $(function () {
 });
 
 $(function () {
-    "use strict";
-
-    $("#modalDownloadL8 .dropdown-menu li a").click(function () {
-
-        $("#modalDownloadL8 .btn-download").removeClass("processing");
-        $("#modalDownloadL8 .btn-download").removeClass("error");
-        $("#modalDownloadL8 .btn-download").removeClass("ready");
-        $("#modalDownloadL8 .btn-download span").text('Download');
-        $("#modalDownloadL8 .btn-download a").attr('href', '');
-
+    $('#modalDownloadL8 .dropdown-menu li a').click(function () {
+        $('#modalDownloadL8 .btn-download').removeClass('processing');
+        $('#modalDownloadL8 .btn-download').removeClass('error');
+        $('#modalDownloadL8 .btn-download').removeClass('ready');
+        $('#modalDownloadL8 .btn-download span').text('Download');
+        $('#modalDownloadL8 .btn-download a').attr('href', '');
         $('#modalDownloadL8 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-        $("#modalDownloadL8 .dropdown .btn:first-child").html($(this).text() + ' <span class="caret"></span>');
+        $('#modalDownloadL8 .dropdown .btn:first-child').html($(this).text() + ' <span class="caret"></span>');
 
-        var req = {
-            scene: $('#modalDownloadL8 .overview').attr("data-id"),
-            bands: $(this).parent().attr("data-bands")
+        const params = {
+            scene: $('#modalDownloadL8 .overview').attr('data-id'),
+            bands: $(this).parent().attr('data-bands')
         };
 
-        $.post("https://npj2g2bwcc.execute-api.us-west-2.amazonaws.com/landsat/overview", JSON.stringify({info: req}))
+        $.get(rpix_api_us + 'l8_overview', params )
             .done(function (data) {
-                if (!(data.hasOwnProperty('errorMessage'))) {
-                    $('#modalDownloadL8 .overview').html('<img src="data:image/png;base64,' + data.data + '">');
-                } else {
-                    $('#modalDownloadL8 .overview').html('<span>Preview Unavailable</span>');
-                }
+                $('#modalDownloadL8 .overview').html('<img src="data:image/png;base64,' + data + '">');
             })
             .fail(function () {
                 $('#modalDownloadL8 .overview').html('<span>Preview Unavailable</span>');
             });
 
-        $("#modalDownloadL8 .dropdown-menu li a").each(function () {
+        $('#modalDownloadL8 .dropdown-menu li a').each(function () {
             $(this).removeClass('on');
         });
         $(this).addClass('on');
@@ -183,30 +154,22 @@ $(function () {
 });
 
 function landsatdownload() {
-    "use strict";
+    $('#modalDownloadL8 button.btn-download').addClass('processing');
 
-    $("#modalDownloadL8 button.btn-download").addClass("processing");
-
-    var req = {
-        scene: $('#modalDownloadL8 .overview').attr("data-id"),
-        bands: $("#modalDownloadL8 .dropdown-menu li .on").parent().attr("data-bands")
+    const params = {
+        scene: $('#modalDownloadL8 .overview').attr('data-id'),
+        bands: $('#modalDownloadL8 .dropdown-menu li .on').parent().attr('data-bands')
     };
 
-    $.post("https://npj2g2bwcc.execute-api.us-west-2.amazonaws.com/landsat/toa", JSON.stringify(req))
-        .done(function (data) {
-            if (!(data.hasOwnProperty('errorMessage'))) {
-                $("#modalDownloadL8 button.btn-download").removeClass("processing");
-                $("#modalDownloadL8 button.btn-download").addClass("ready");
-                $("#modalDownloadL8 a.btn-download").attr('href', data.path);
-            } else {
-                $("#modalDownloadL8 button.btn-download").removeClass("processing");
-                $("#modalDownloadL8 button.btn-download").addClass("error");
-                $("#modalDownloadL8 button.btn-download span").text('Error');
-            }
+    $.get(rpix_api_us + 'l8_full', params)
+        .done(function () {
+            $('#modalDownloadL8 button.btn-download').removeClass('processing');
+            $('#modalDownloadL8 button.btn-download').addClass('error');
+            $('#modalDownloadL8 button.btn-download span').text('Error');
         })
-        .fail(function (error, data) {
-            $("#modalDownloadL8 button.btn-download").removeClass("processing");
-            $("#modalDownloadL8 button.btn-download").addClass("error");
-            $("#modalDownloadL8 button.btn-download span").text('Error');
+        .fail(function () {
+            $('#modalDownloadL8 button.btn-download').removeClass('processing');
+            $('#modalDownloadL8 button.btn-download').addClass('error');
+            $('#modalDownloadL8 button.btn-download span').text('Error');
         });
 }

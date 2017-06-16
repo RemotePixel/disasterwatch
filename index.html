@@ -7,39 +7,41 @@
 
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:site" content="@RemotePixel" />
-	<meta name="twitter:title" content="Disaster Watch By RemotePixel" />
-	<meta name="twitter:description" content="Disaster Watch - Disaster monitoring with satellite imagery" />
+	<meta name="twitter:title" content="DisasterWatch By RemotePixel" />
+	<meta name="twitter:description" content="DisasterWatch - Disaster monitoring with satellite imagery" />
 	<meta name="twitter:creator" content="@_VincentS_" />
 	<meta name="twitter:image:src" content="https://disasterwatch.remotepixel.ca/img/disasterwatch.jpg" />
 
-	<meta property="og:title" content="Disaster Watch By RemotePixel" />
+	<meta property="og:title" content="DisasterWatch By RemotePixel" />
 	<meta property="og:url" content="https://disasterwatch.remotepixel.ca" />
 	<meta property="og:image" content="https://disasterwatch.remotepixel.ca/img/disasterwatch.jpg" />
-	<meta property="og:description" content="Disaster Watch - Disaster monitoring with satellite imagery" />
-	<meta property="og:site_name" content="Remote Pixel" />
+	<meta property="og:description" content="DisasterWatch - Disaster monitoring with satellite imagery" />
+	<meta property="og:site_name" content="RemotePixel" />
 
-	<title>Disaster Watch By RemotePixel</title>
+	<title>DisasterWatch By RemotePixel</title>
 
 	<!-- Bootstrap Core CSS -->
 	<link href="/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link href="/js/bootstrap-datepicker/bootstrap-datepicker3.css" rel="stylesheet">
 
-	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.js'></script>
-	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.css' rel='stylesheet' />
+	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.js'></script>
+	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.css' rel='stylesheet' />
 
-	<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.js'></script>
-	<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.css' type='text/css' />
+	<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.0/mapbox-gl-geocoder.min.js'></script>
+	<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.0/mapbox-gl-geocoder.css' type='text/css' />
 
-	<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.16.0/mapbox-gl-draw.js'></script>
-	<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.16.0/mapbox-gl-draw.css' type='text/css' />
+	<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.17.4/mapbox-gl-draw.js'></script>
+	<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.17.4/mapbox-gl-draw.css' type='text/css' />
 
+	<link href="/css/style.css" rel="stylesheet">
 	<link href="/css/checkbox-slider.css" rel="stylesheet">
-  <link href="/css/style.css" rel="stylesheet">
 
 	<!-- Custom Fonts -->
 	<link href="/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
 	<!-- http://mapsk.in/# -->
 	<link href="https://mapskincdn.appspot.com/1.0/mapskin.min.css" rel="stylesheet">
+
 	<link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
 
@@ -54,8 +56,8 @@
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-	  ga('create', 'UA-71791227-1', 'auto');
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-60678866-1', 'auto');
 	  ga('send', 'pageview');
 	</script>
 
@@ -108,13 +110,11 @@
 
 			<div class="thanks-images row">
 				<a href="https://www.mapbox.com" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/mapbox.png"></a>
-				<a href="http://www.sinergise.com" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/sinergise.png"></a>
 				<a href="https://developmentseed.org" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/devseed.png"></a>
-				<a href="https://aws.amazon.com/" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/awservice.png"></a>
 				<a href="https://peps.cnes.fr/rocket/#/home" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/cnes.png"></a>
 			</div>
 
-			<div class="site-version">Version: 1.0</div>
+			<div class="site-version">Version: 2.0</div>
 		</div>
 	</div>
 
@@ -287,11 +287,11 @@
 			WhiteSpace
 		--><div id="map" class="map">
 
-				<div class="watermark">
-					<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" width="60" height="20" viewBox="0 0 60 20">
-					  <path d="M1.4 1C0.6 1.1 0 1.8 0 2.5l0 11.9C0 15.2 0.7 15.9 1.5 15.9l1.8 0c0.8 0 1.5-0.7 1.5-1.5l0-4.3 0.7 1.2c0.5 0.9 2 0.9 2.6 0l0.7-1.2 0 4.3c0 0.8 0.7 1.5 1.5 1.5l1.8 0c0.8 0 1.5-0.7 1.5-1.5l0-0.2c1 1.1 2.5 1.8 4.1 1.8l4.1 0 0 1.5c0 0.8 0.7 1.5 1.5 1.5l1.8 0c0.8 0 1.5-0.7 1.5-1.5l0-1.5c1.7 0 3.1-0.6 4.1-1.7l0 0.2c0 0.4 0.2 0.8 0.4 1.1 0.3 0.3 0.7 0.4 1.1 0.4l3.3 0c2 0 3.9-1.1 4.9-2.7 1.1 1.6 2.8 2.7 4.9 2.7 1 0 2-0.3 2.8-0.7 0.3 0.4 0.7 0.6 1.2 0.6l2.1 0c0.5 0 1-0.2 1.3-0.6l0.9-1.3 0.9 1.3c0.3 0.4 0.7 0.6 1.2 0.6l2.2 0c1.1 0 1.8-1.4 1.2-2.3l-2.6-3.6 2.4-3.4c0.6-0.9-0.1-2.4-1.2-2.4l-2.2 0c-0.5 0-0.9 0.2-1.2 0.6l-0.7 1-0.7-1c-0.3-0.4-0.7-0.6-1.2-0.6l-2.2 0c-0.5 0-1 0.3-1.2 0.7-0.9-0.5-1.8-0.8-2.9-0.8-2 0-3.8 1.1-4.9 2.7-1-1.6-2.9-2.7-4.9-2.7l0-1.5c0-0.4-0.2-0.8-0.4-1.1-0.3-0.3-0.7-0.4-1.1-0.4l-1.7 0c-0.7 0-1.5 0.8-1.5 1.5l0 3.2c-1.1-1.1-2.5-1.7-4.1-1.7l-3.3 0c-0.8 0-1.5 0.7-1.5 1.5l0 0.3c-1-1.1-2.5-1.8-4.1-1.8-1.6 0-3.1 0.7-4.1 1.8l0-3.3c0-0.8-0.7-1.5-1.5-1.5l-1.4 0C9.6 1 8.4 1.4 7.8 2.4l-1 1.7-1-1.7c-0.6-1.1-1.9-1.4-2.8-1.4l-1.4 0c0 0-0.1 0-0.1 0zM17.6 8.7c0.5 0 0.9 0.4 0.9 1.3l0 1.3-0.9 0c-0.5 0-0.9-0.4-0.9-1.3 0-0.9 0.4-1.3 0.9-1.3zm8.8 0c0.8 0 1.2 0.7 1.2 1.3 0 0.9-0.6 1.3-1.2 1.3zm8.7 0c0.7 0 1.4 0.6 1.4 1.3 0 0.8-0.5 1.3-1.4 1.3zm10 0c0.6 0 1.1 0.5 1.1 1.3 0 0.8-0.5 1.3-1.1 1.3-0.6 0-1.1-0.5-1.1-1.3 0-0.8 0.5-1.3 1.1-1.3z" fill="rgba(0,0,0,0.25)" />
-					  <path d="m1.5 2.5 0 12 1.8 0 0-9.9 3.5 5.9 3.5-5.9 0 9.9 1.8 0 0-12-1.4 0C9.9 2.5 9.3 2.7 9 3.2l-2.3 3.9-2.3-3.9c-0.3-0.5-0.9-0.7-1.6-0.7zm30.6 0 0 12 3.3 0c2.4 0 4.4-1.9 4.4-4.5 0-2.6-1.9-4.5-4.4-4.5-0.5 0-0.9 0-1.5 0l0-3zm-14.5 3c-2.4 0-4.2 1.9-4.2 4.5 0 2.6 1.8 4.5 4.2 4.5l4.2 0 0-4.5c0-2.6-1.7-4.5-4.2-4.5zm27.6 0c-2.4 0-4.4 2-4.4 4.5 0 2.5 2 4.5 4.4 4.5 2.4 0 4.3-2 4.3-4.5 0-2.5-1.9-4.5-4.3-4.5zm-22 0 0 12 1.8 0 0-3c0.6 0 1 0 1.6 0 2.4 0 4.3-1.9 4.3-4.5 0-2.6-1.9-4.5-4.3-4.5zm26.2 0 3 4.4-3.2 4.6 2.1 0 2.2-3.1 2.1 3.1 2.2 0-3.2-4.6 3-4.4-2.2 0-1.9 2.8-2-2.8zm-31.7 1.7c1.4 0 2.4 1.2 2.4 2.8l0 2.8-2.4 0c-1.4 0-2.4-1.2-2.4-2.8 0-1.6 1-2.8 2.4-2.8zm27.6 0c1.4 0 2.6 1.2 2.6 2.8 0 1.5-1.1 2.8-2.6 2.8-1.4 0-2.6-1.2-2.6-2.8 0-1.5 1.2-2.8 2.6-2.8zm-20.2 0 1.6 0c1.6 0 2.6 1.3 2.6 2.8 0 1.5-1.1 2.8-2.6 2.8l-1.6 0zm9 0 1.5 0c1.5 0 2.6 1.3 2.6 2.8 0 1.5-1 2.8-2.6 2.8l-1.5 0z" fill="#fff" />
-					</svg>
+				<div class="block-control-map">
+					<div class="text-align-left">On-Going Events</div>
+					<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary green" >
+						<input id="event-checkbox" type="checkbox" checked/><span></span>
+					</label>
 				</div>
 
 				<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
@@ -475,12 +475,6 @@
 							<span class="glyphicon glyphicon-chevron-left"></span>
 						</button>
 						<div class="title">Events</div>
-						<div class="block-control">
-							<div class="text-align-left">Show only On-Going</div>
-							<label class="checkbox-slider checkbox-slider-sm checkbox-slider-primary green" >
-								<input id="event-checkbox" type="checkbox" checked/><span></span>
-							</label>
-						</div>
 					</div>
 
 					<div class="row side-view-content">
@@ -733,6 +727,7 @@
 	<script src="https://d3js.org/d3-queue.v3.min.js"></script>
 
 	<!-- DisasterWatch JS -->
+	<script src='/js/config.js'></script>
 	<script src='/js/utils.js'></script>
 	<script src='/js/external_data.js'></script>
 	<script src='/js/database_interactions.js'></script>
