@@ -2,3 +2,5 @@
 config.yml
 history.lock
 .eslintrc.js
+
+node_modules

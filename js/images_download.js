@@ -94,63 +94,59 @@ $('#modalDownloadS2').on('hidden.bs.modal', function () {
 });
 
 
-$(function () {
-    $('#modalDownloadS2 .dropdown-menu li a').click(function () {
-        $('#modalDownloadS2 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-        $('#modalDownloadS2 .dropdown .btn:first-child').html($(this).text() + ' <span class="caret"></span>');
+$('#modalDownloadS2 .dropdown-menu li a').click(function () {
+    $('#modalDownloadS2 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+    $('#modalDownloadS2 .dropdown .btn:first-child').html($(this).text() + ' <span class="caret"></span>');
 
-        const params = {
-            path: $('#modalDownloadS2 .overview').attr('data-id'),
-            bands: $(this).parent().attr('data-bands')
-        };
+    const params = {
+        path: $('#modalDownloadS2 .overview').attr('data-id'),
+        bands: $(this).parent().attr('data-bands')
+    };
 
-        if (params.bands === ['04','03','02']) {
-            $('#modalDownloadS2 .overview').html('<img src="' + $('#modalDownloadS2 .overview').attr('data-prev') + '">');
-        } else {
-            $.get(`${rpix_api_eu}/s2_overview`, params)
-                .done(function (data) {
-                    $('#modalDownloadS2 .overview').html('<img src="data:image/png;base64,' + data + '">');
-                })
-                .fail(function () {
-                    $('#modalDownloadS2 .overview').html('<span>Preview Unavailable</span>');
-                });
-        }
-
-        $('#modalDownloadS2 .dropdown-menu li a').each(function () {
-            $(this).removeClass('on');
-        });
-        $(this).addClass('on');
-    });
-});
-
-$(function () {
-    $('#modalDownloadL8 .dropdown-menu li a').click(function () {
-        $('#modalDownloadL8 .btn-download').removeClass('processing');
-        $('#modalDownloadL8 .btn-download').removeClass('error');
-        $('#modalDownloadL8 .btn-download').removeClass('ready');
-        $('#modalDownloadL8 .btn-download span').text('Download');
-        $('#modalDownloadL8 .btn-download a').attr('href', '');
-        $('#modalDownloadL8 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
-        $('#modalDownloadL8 .dropdown .btn:first-child').html($(this).text() + ' <span class="caret"></span>');
-
-        const params = {
-            scene: $('#modalDownloadL8 .overview').attr('data-id'),
-            bands: $(this).parent().attr('data-bands')
-        };
-
-        $.get(`${rpix_api_us}/l8_overview`, params )
+    if (params.bands === ['04','03','02']) {
+        $('#modalDownloadS2 .overview').html('<img src="' + $('#modalDownloadS2 .overview').attr('data-prev') + '">');
+    } else {
+        $.get(`${rpix_api_eu}/s2_overview`, params)
             .done(function (data) {
-                $('#modalDownloadL8 .overview').html('<img src="data:image/png;base64,' + data + '">');
+                $('#modalDownloadS2 .overview').html('<img src="data:image/png;base64,' + data + '">');
             })
             .fail(function () {
-                $('#modalDownloadL8 .overview').html('<span>Preview Unavailable</span>');
+                $('#modalDownloadS2 .overview').html('<span>Preview Unavailable</span>');
             });
+    }
 
-        $('#modalDownloadL8 .dropdown-menu li a').each(function () {
-            $(this).removeClass('on');
-        });
-        $(this).addClass('on');
+    $('#modalDownloadS2 .dropdown-menu li a').each(function () {
+        $(this).removeClass('on');
     });
+    $(this).addClass('on');
+});
+
+$('#modalDownloadL8 .dropdown-menu li a').click(function () {
+    $('#modalDownloadL8 .btn-download').removeClass('processing');
+    $('#modalDownloadL8 .btn-download').removeClass('error');
+    $('#modalDownloadL8 .btn-download').removeClass('ready');
+    $('#modalDownloadL8 .btn-download span').text('Download');
+    $('#modalDownloadL8 .btn-download a').attr('href', '');
+    $('#modalDownloadL8 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
+    $('#modalDownloadL8 .dropdown .btn:first-child').html($(this).text() + ' <span class="caret"></span>');
+
+    const params = {
+        scene: $('#modalDownloadL8 .overview').attr('data-id'),
+        bands: $(this).parent().attr('data-bands')
+    };
+
+    $.get(`${rpix_api_us}/l8_overview`, params )
+        .done(function (data) {
+            $('#modalDownloadL8 .overview').html('<img src="data:image/png;base64,' + data + '">');
+        })
+        .fail(function () {
+            $('#modalDownloadL8 .overview').html('<span>Preview Unavailable</span>');
+        });
+
+    $('#modalDownloadL8 .dropdown-menu li a').each(function () {
+        $(this).removeClass('on');
+    });
+    $(this).addClass('on');
 });
 
 function landsatdownload() {
@@ -164,8 +160,8 @@ function landsatdownload() {
     $.get(`${rpix_api_us}/l8_full`, params)
         .done(function () {
             $('#modalDownloadL8 button.btn-download').removeClass('processing');
-            $('#modalDownloadL8 button.btn-download').addClass('error');
-            $('#modalDownloadL8 button.btn-download span').text('Error');
+            $('#modalDownloadL8 button.btn-download').addClass('ready');
+            $('#modalDownloadL8 a.btn-download').attr('href', data.path);
         })
         .fail(function () {
             $('#modalDownloadL8 button.btn-download').removeClass('processing');
