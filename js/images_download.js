@@ -157,15 +157,15 @@ function landsatdownload() {
         bands: $('#modalDownloadL8 .dropdown-menu li .on').parent().attr('data-bands')
     };
 
-    $.get(`${rpix_api_us}/l8_full`, params)
-        .done(function () {
-            $('#modalDownloadL8 button.btn-download').removeClass('processing');
-            $('#modalDownloadL8 button.btn-download').addClass('ready');
-            $('#modalDownloadL8 a.btn-download').attr('href', data.path);
-        })
+    $.getJSON(`${rpix_api_us}/l8_full`, params, function (data) {
+        $('#modalDownloadL8 button.btn-download').removeClass('processing');
+        $('#modalDownloadL8 button.btn-download').addClass('ready');
+        $('#modalDownloadL8 a.btn-download').attr('href', data.path);
+    })
         .fail(function () {
             $('#modalDownloadL8 button.btn-download').removeClass('processing');
             $('#modalDownloadL8 button.btn-download').addClass('error');
             $('#modalDownloadL8 button.btn-download span').text('Error');
         });
+
 }
