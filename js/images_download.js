@@ -98,10 +98,14 @@ $('#modalDownloadS2 .dropdown-menu li a').click(function () {
     $('#modalDownloadS2 .overview').html('<span><i class="fa fa-spinner fa-spin"></i></span>');
     $('#modalDownloadS2 .dropdown .btn:first-child').html($(this).text() + ' <span class="caret"></span>');
 
-    const params = {
-        scene: $('#modalDownloadS2 .overview').attr('data-id'),
-        bands: this.parentNode.getAttribute('data-bands')
-    };
+    const params = { scene: $('#modalDownloadS2 .overview').attr('data-id')};
+
+    let bands = this.parentNode.getAttribute('data-bands');
+    if (bands === 'ndvi') {
+        params.ndvi = true;
+    } else {
+        params.bands = bands;
+    }
 
     if (params.bands === ['04','03','02']) {
         $('#modalDownloadS2 .overview').html('<img src="' + $('#modalDownloadS2 .overview').attr('data-prev') + '">');
