@@ -49,7 +49,7 @@ function filterListDisaster() {
 
     const filterClass = $('#disasterType2 span[type="dtype"]')[0].className;
     if (filterClass === 'all') {
-        if (document.getElementById('event-checkbox').checked) {
+        if (!document.getElementById('event-checkbox').checked) {
             $('.list-disasters .list-element[date-end!=""]').addClass('display-none');
             map.setFilter('disasterdb-points', ['all', ['in', '$type', 'Point', 'LineString', 'Polygon'], ['==', 'dateEnd', '']]);
             map.setFilter('disasterdb-lines', ['all', ['==', '$type', 'LineString'], ['==', 'dateEnd', '']]);
@@ -57,7 +57,7 @@ function filterListDisaster() {
         }
     } else {
         $(`.list-disasters .list-element[dw-type!="${filterClass}"]`).addClass('display-none');
-        if (document.getElementById('event-checkbox').checked) {
+        if (!document.getElementById('event-checkbox').checked) {
             $('.list-disasters .list-element[date-end!=""]').addClass('display-none');
             map.setFilter('disasterdb-points', ['all', ['in', '$type', 'Point', 'LineString', 'Polygon'], ['==', 'dateEnd', ''], ['==', 'icon', filterClass]]);
             map.setFilter('disasterdb-lines', ['all', ['==', '$type', 'LineString'], ['==', 'dateEnd', ''], ['==', 'icon', filterClass]]);
