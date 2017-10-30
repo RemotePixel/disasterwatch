@@ -37,7 +37,7 @@ imagery ressources.
 
 ```
 npm install uglify-es -g
-
+cd js/
 cat config.js database_interactions.js external_data.js images_download.js map.js others.js utils.js > app.js
 uglifyjs app.js > app.min.js
 ```
