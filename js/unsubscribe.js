@@ -1,4 +1,7 @@
 
+const MAPBOX_ACCESS_TOKEN = '{YOUR-TOKEN}';
+const disasterwatch_api_url = '{DW-API}'; //https://github.com/RemotePixel/disasterwatch-lambda
+
 const getUrlVars = () => {
     const vars = {};
     window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
@@ -7,7 +10,7 @@ const getUrlVars = () => {
     return vars;
 };
 
-const unsubscribe => () => {
+const unsubscribe = () => {
 
     $('.btn-unsub').addClass('on');
 
@@ -33,7 +36,7 @@ const unsubscribe => () => {
             $('.btn-unsub').addClass('error');
             $('.btn-unsub span').text('Error');
         });
-}
+};
 
 const keys = getUrlVars();
 if (keys.hasOwnProperty('uuid') && keys.hasOwnProperty('mail') ) {
