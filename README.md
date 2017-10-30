@@ -1,6 +1,4 @@
 
-v1 branch is live on [http://disasterwatch.remotepixel.ca](http://disasterwatch.remotepixel.ca)
-
 [disasterwatch](http://disasterwatch.remotepixel.ca) is the new RemotePixel.ca project ( [post](http://remotepixel.ca/blog/disasterwatch-20151231.html)).
 
 For this new project, I (RemotePixel) am looking for people to help me so please
