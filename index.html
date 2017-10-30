@@ -65,7 +65,7 @@
 
 <body>
 
-	<div class="dwhelp-block on">
+	<div class="dwhelp-block">
 		<div class="close-help" onclick="toggleHelp()">
 			<div class="lr">
 				<div class="rl"></div>
@@ -114,7 +114,7 @@
 				<a href="https://peps.cnes.fr/rocket/#/home" target="_blank" class="col-xs-3"><img class="img-responsive" src="img/cnes.png"></a>
 			</div>
 
-			<div class="site-version">Version: 2.0</div>
+			<div class="site-version">Version: 3.0</div>
 		</div>
 	</div>
 
@@ -296,23 +296,85 @@
 
 				<span class="spin display-none"><i class="fa fa-spinner fa-spin"></i></span>
 
-				<div class="bottom-right-control display-none">
+				<div class="bottom-right-control-basemap display-none">
 					<div class="close-block" onclick="toggleImageryOption()">
 						<i class="fa fa-angle-right fa-2x"></i>
 						<i class="fa fa-angle-left fa-2x"></i>
 					</div>
 
 					<div class="block-control">
-						<div class="text-align-left">Basemap Imagery Date:</div>
+						<div class="text-align-left">Basemap Imagery date:</div>
 						<span class="date-button">date</span>
 					</div>
-
-					<div class="block-control slider">
-						<div class="text-align-left">Basemap Imagery opacity: <span id='slider-value'>100%</span></div>
+					<div class="block-control">
+						<div class="text-align-left">Basemap Imagery opacity:</div>
+						<div class="text-align-left" id='slider-value'>100%</div>
 						<input id='slider' type='range' min='0' max='100' step='0' value='100' />
 					</div>
 				</div>
+
+				<div class="bottom-right-control-tiles display-none">
+					<div class="close-block" onclick="toggleTileOption()">
+						<i class="fa fa-angle-right fa-2x"></i>
+						<i class="fa fa-angle-left fa-2x"></i>
+					</div>
+
+					<div class="block-control ">
+						<span id='sceneid'></span>
+					</div>
+
+					<div id='landsat-option' class="dropup">
+						<span class="dropdown-toggle disasterType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							<span class="caret"></span><span id='rgb-select' value='4,3,2'>Natural Color (4,3,2)</span>
+						</span>
+						<ul id="dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuLandsat">
+							<li value="4,3,2"><a class="on">Natural Color (4,3,2)</a></li>
+							<li value="7,6,4"><a>False Color Urban (7,6,4)</a></li>
+							<li value="5,4,3"><a>Color Infrared Vegetation (5,4,3)</a></li>
+							<li value="6,5,2"><a>Agriculture (6,5,2)</a></li>
+							<li value="7,6,5"><a>Atmospheric Penetration (7,6,5)</a></li>
+							<li value="5,6,2"><a>Healthy Vegetation (5,6,2)</a></li>
+							<li value="7,5,2"><a>Forest Burn (7,5,2)</a></li>
+							<li value="5,6,4"><a>Land/Water (5,6,4)</a></li>
+							<li value="7,5,3"><a>Natural With Atmo Removal (7,5,3)</a></li>
+							<li value="7,5,4"><a>Shortwave Infrared (7,5,4)</a></li>
+							<li value="5,7,1"><a>False color 2 (5,7,1)</a></li>
+							<li value="6,5,4"><a>Vegetation Analysis (6,5,4)</a></li>
+						</ul>
+					</div>
+
+					<div id='sentinel-option' class="dropup display-none">
+						<span class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							<span class="caret"></span><span id='rgb-select' value='04,03,02'>Natural Color (4,3,2)</span>
+						</span>
+						<ul id="dropdown-menu" class="dropdown-menu disasterType" aria-labelledby="dropdownMenuSentinel">
+							<li value="04,03,02"><a class="on">Natural Color (4,3,2)</a></li>
+							<li value="11,8A,04"><a>Vegetation Analysis (11,8A,4)</a></li>
+							<li value="12,11,04"><a>False Color Urban (12,11,4)</a></li>
+							<li value="08,04,03"><a>Color Infrared Vegetation (8,4,3)</a></li>
+							<li value="8A,11,04"><a>Land/Water (8A,11,04)</a></li>
+							<li value="12,11,8A"><a>Atmospheric Penetration (12,11,8A)</a></li>
+							<li value="11,8A,02"><a>Agriculture (11,8A,2)</a></li>
+							<li value="11,8A,02"><a>Healthy Vegetation (8A,11,2)</a></li>
+							<li value="12,8A,04"><a>hortwave Infrared (12,8A,04)</a></li>
+						</ul>
+					</div>
+					<div class="block-control ">
+						<span>% Cumulative cut</span>
+						<form class="form-inline">
+							<button id='updateHisto' class="btn btn-mini btn-primary" type="button">apply</button>
+						  <input id='minCount' type="text" class="input-small" value="5">
+						  <input id='maxCount' type="text" class="input-small" value="95">
+						</form>
+					</div>
+
+					<div class="block-control ">
+						 <button id='clearTiles' class="btn btn-mini btn-primary" type="button">Clear</button>
+					</div>
+				</div>
+
 			</div>
+
 			<div id="geocoder-container" class="geocoder-container" tabindex="1"></div>
 
 			<div id="SideViewCtrl" class="side-view">
@@ -488,7 +550,7 @@
 							<span type="dtype" class="all">All</span>
 						  </span>
 						  <ul id="dropdown-menu2" class="dropdown-menu disasterType" aria-labelledby="dropdownMenu2">
-							<li><a onclick="filterType(this)"><span type="dtype" class="all">All</span></a></li>
+								<li><a onclick="filterType(this)"><span type="dtype" class="all">All</span></a></li>
 						  	<li><a onclick="filterType(this)"><span type="dtype" class="fire">fire</span></a></li>
 						  	<li><a onclick="filterType(this)"><span type="dtype" class="earthquake">earthquake</span></a></li>
 						  	<li><a onclick="filterType(this)"><span type="dtype" class="weather">weather</span></a></li>
@@ -573,17 +635,17 @@
 							<a class="btn btn-download" href="" target="_blank" download>Ready</a>
 
 						  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-							<li data-bands="[4,3,2]"><a class="on">Natural Color (4,3,2)</a></li>
-							<li data-bands="[7,6,4]"><a>False Color Urban (7,6,4)</a></li>
-							<li data-bands="[5,4,3]"><a>Color Infrared Vegetation (5,4,3)</a></li>
-							<li data-bands="[6,5,2]"><a>Agriculture (6,5,2)</a></li>
-							<li data-bands="[7,6,5]"><a>Atmospheric Penetration (7,6,5)</a></li>
-							<li data-bands="[5,6,2]"><a>Healthy Vegetation (5,6,2)</a></li>
-							<li data-bands="[5,6,4]"><a>Land/Water (5,6,4)</a></li>
-							<li data-bands="[7,5,3]"><a>Natural With Atmo Removal (7,5,3)</a></li>
-							<li data-bands="[7,5,4]"><a>Shortwave Infrared (7,5,4)</a></li>
-							<li data-bands="[6,5,4]"><a>Vegetation Analysis (6,5,4)</a></li>
-							<li data-bands="ndvi"><a>NDVI Normalized Vegetation index</a></li>
+								<li data-bands="[4,3,2]"><a class="on">Natural Color (4,3,2)</a></li>
+								<li data-bands="[7,6,4]"><a>False Color Urban (7,6,4)</a></li>
+								<li data-bands="[5,4,3]"><a>Color Infrared Vegetation (5,4,3)</a></li>
+								<li data-bands="[6,5,2]"><a>Agriculture (6,5,2)</a></li>
+								<li data-bands="[7,6,5]"><a>Atmospheric Penetration (7,6,5)</a></li>
+								<li data-bands="[5,6,2]"><a>Healthy Vegetation (5,6,2)</a></li>
+								<li data-bands="[5,6,4]"><a>Land/Water (5,6,4)</a></li>
+								<li data-bands="[7,5,3]"><a>Natural With Atmo Removal (7,5,3)</a></li>
+								<li data-bands="[7,5,4]"><a>Shortwave Infrared (7,5,4)</a></li>
+								<li data-bands="[6,5,4]"><a>Vegetation Analysis (6,5,4)</a></li>
+								<li data-bands="ndvi"><a>NDVI Normalized Vegetation index</a></li>
 						  </ul>
 						</div>
 
@@ -615,9 +677,9 @@
 							<span class="caret"></span>
 						  </button>
 						  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-								<li data-bands="04,03,02'"><a class="on">Natural Color (4,3,2)</a></li>
-								<li data-bands="08,04,03'"><a>Color Infrared Vegetation (8,4,3)</a></li>
-								<li data-bands="12,11,05'"><a>False Color Urban (12,11,5) 20m</a></li>
+								<li data-bands="04,03,02"><a class="on">Natural Color (4,3,2)</a></li>
+								<li data-bands="08,04,03"><a>Color Infrared Vegetation (8,4,3)</a></li>
+								<li data-bands="12,11,05"><a>False Color Urban (12,11,5) 20m</a></li>
 								<li data-bands="ndvi"><a>NDVI Normalized Vegetation index</a></li>
 							</ul>
 						</div>
@@ -708,12 +770,12 @@
     <!-- /.modal -->
 
 
-    <!-- jQuery -->
-    <script src="/js/jquery.min.js"></script>
+  <!-- jQuery -->
+  <script src="/js/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="/js/bootstrap/js/bootstrap.min.js"></script>
+  <!-- Bootstrap Core JavaScript -->
+  <script src="/js/bootstrap/js/bootstrap.min.js"></script>
 	<script src="/js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 
 	<script>
@@ -729,12 +791,6 @@
 	<script src="https://d3js.org/d3-queue.v3.min.js"></script>
 
 	<!-- DisasterWatch JS -->
-	<script src='/js/config.js'></script>
-	<script src='/js/utils.js'></script>
-	<script src='/js/external_data.js'></script>
-	<script src='/js/database_interactions.js'></script>
-	<script src='/js/images_download.js'></script>
-	<script src='/js/map.js'></script>
-	<script src='/js/others.js'></script>
+	<script src='/js/app.min.js'></script>
 </body>
 </html>

@@ -33,3 +33,13 @@ imagery ressources.
 - [Pacific Disaster Center](http://atlas.pdc.org/atlas/)
 - [Pacific Disaster Center - Sources](http://ghin.pdc.org/ghin/catalog/search/browse/browse.page)
 - [Emergency and Disaster Information Service](http://hisz.rsoe.hu)
+
+
+#### Create `app.min.js`
+
+```
+npm install uglify-es -g
+
+cat config.js database_interactions.js external_data.js images_download.js map.js others.js utils.js > app.js
+uglifyjs app.js > app.min.js
+```

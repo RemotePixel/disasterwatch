@@ -1,39 +1,40 @@
-'use strict';
 
-function getDisasterdb(callback) {
+const getDisasterdb = (callback) => {
 
     $('#disasters-panel .spin2').removeClass('display-none');
     $('.list-disasters').scrollTop(0);
     $('.list-disasters').empty();
 
-    $.get(`${disasterwatch_api_url}/database/toGEOJSON`)
-        .success(function(data){
-            map.getSource('disasterdb').setData(data);
-            for(let i = 0; i < data.features.length; i++) {
-                $('.list-disasters').append(
-                    '<div class="list-element" dw-type="' + data.features[i].properties.icon + '" date-start="' +  data.features[i].properties.dateStart + '" date-end="' + data.features[i].properties.dateEnd + '" target="_blank" onclick="mapFlyToDisaster(\'' + data.features[i].properties.uuid + '\')">'+
-                        '<div class="col">' +
-                            '<div class="disaster-descr"><div class="icon icon-' + data.features[i].properties.icon + '" title="' + data.features[i].properties.icon + '"></div></div>' +
-                            '<div class="disaster-descr">'+
-                                '<span class="dtitle">'+ data.features[i].properties.name +'</span>' +
-                                '<span class="dplace">' + data.features[i].properties.place + '</span>' +
-                            '</div>' +
+    $.get(`${disasterwatch_api_url}/database/toGEOJSON`, (data) => {
+
+        map.getSource('disasterdb').setData(data);
+
+        for(let i = 0; i < data.features.length; i++) {
+            $('.list-disasters').append(
+                `<div class="list-element" dw-type="${data.features[i].properties.icon}" date-start="${data.features[i].properties.dateStart}" date-end="${data.features[i].properties.dateEnd}" target="_blank" onclick="mapFlyToDisaster('${data.features[i].properties.uuid}')">` +
+                    '<div class="col">' +
+                        '<div class="disaster-descr">' +
+                            `<div class="icon icon-${data.features[i].properties.icon}" title="${data.features[i].properties.icon}"></div>` +
                         '</div>' +
-                    '</div>');
-            }
+                        '<div class="disaster-descr">'+
+                            `<span class="dtitle">${data.features[i].properties.name}</span>` +
+                            `<span class="dplace">${data.features[i].properties.place}</span>` +
+                        '</div>' +
+                    '</div>' +
+                '</div>');
+        }
 
-            filterListDisaster();
+        filterListDisaster();
 
-            $('#disasters-panel .spin2').addClass('display-none');
-
-            return callback(null, 'ready');
-        })
-        .fail(function() {
+        $('#disasters-panel .spin2').addClass('display-none');
+        return callback(null, 'ready');
+    })
+        .fail(() => {
             return callback('Could not retrieve the database');
         });
-}
+};
 
-function addDisastTodb() {
+const addDisastTodb = () => {
 
     const features = draw.getAll();
     const geojson = features.features[0];
@@ -53,7 +54,7 @@ function addDisastTodb() {
     geojson.properties.uuid = generateUUID();
 
     if (document.getElementById('mailCheckbox').checked) {
-        const sat = $.map($('.disaster-info .sat-filter input:checked'), function (e) {
+        const sat = $.map($('.disaster-info .sat-filter input:checked'), (e) => {
             return e.getAttribute('data');
         });
 
@@ -89,21 +90,21 @@ function addDisastTodb() {
         dataType: 'json',
         contentType: 'application/json',
     })
-        .success(function(){
-            getDisasterdb(function(err){
+        .success(() => {
+            getDisasterdb((err) => {
                 if (err) $('#modalDBerror').modal();
                 closeleftblock();
                 $('.map .spin').addClass('display-none');
             });
         })
-        .fail(function () {
+        .fail(() => {
             $('.disaster-info .error').addClass('on');
             $('.disaster-info button[type="submit"]').attr('disabled', false);
             $('.map .spin').addClass('display-none');
         });
-}
+};
 
-function updateDisastTodb() {
+const updateDisastTodb = () => {
 
     const features = draw.getAll();
     const geojson = features.features[0];
@@ -121,7 +122,7 @@ function updateDisastTodb() {
     delete geojson['id'];
 
     if (document.getElementById('mailCheckbox').checked) {
-        const sat = $.map($('.disaster-info .sat-filter input:checked'), function (e) {
+        const sat = $.map($('.disaster-info .sat-filter input:checked'), (e) => {
             return e.getAttribute('data');
         });
         geojson.properties.mail = {
@@ -152,36 +153,32 @@ function updateDisastTodb() {
         dataType: 'json',
         contentType: 'application/json',
     })
-    .success(function(){
-        getDisasterdb(function(err){
-            if (err) $('#modalDBerror').modal();
-            closeleftblock();
+        .success(() => {
+            getDisasterdb((err) => {
+                if (err) $('#modalDBerror').modal();
+                closeleftblock();
+                $('.map .spin').addClass('display-none');
+            });
+        })
+        .fail(() => {
+            $('.disaster-info .error').addClass('on');
+            $('.disaster-info button[type="submit"]').attr('disabled', false);
             $('.map .spin').addClass('display-none');
         });
-    })
-    .fail(function () {
-        $('.disaster-info .error').addClass('on');
-        $('.disaster-info button[type="submit"]').attr('disabled', false);
-        $('.map .spin').addClass('display-none');
-    });
-}
+};
 
-function subscribeEvt(elem) {
-
+const subscribeEvt = (elem) => {
     $('.map .spin').removeClass('display-none');
 
     const div = $(elem).parent();
     const uuid = div.attr('data-uuid');
-
     const sat = $.map($(div).find('.sat-filter input:checked'), function (e) {
         return e.getAttribute('data');
     });
-
     const mail = {
         'mail': $(div).find('input[type="email"]').val(),
         'satellite': sat
     };
-
     const request = {
         'uuid': uuid,
         'mail' : mail
@@ -194,23 +191,23 @@ function subscribeEvt(elem) {
         dataType: 'json',
         contentType: 'application/json',
     })
-        .success(function() {
+        .success(() => {
             closePopup();
-            getDisasterdb(function(err){
+            getDisasterdb((err) => {
                 if (err) $('#modalDBerror').modal();
                 $('.map .spin').addClass('display-none');
             });
         })
-        .fail(function() {
+        .fail(() => {
             $('.map .spin').addClass('display-none');
             $('.mapboxgl-popup-content .subscribe-section .error').addClass('on');
         });
 
-}
+};
 
-function removeEvt(id) {
-
+const removeEvt = (id) => {
     $('.map .spin').removeClass('display-none');
+
     $.ajax({
         url: `${disasterwatch_api_url}/database/remove`,
         type: 'POST',
@@ -218,21 +215,21 @@ function removeEvt(id) {
         dataType: 'json',
         contentType: 'application/json',
     })
-    .success(function() {
-        getDisasterdb(function(err) {
-            if (err) $('#modalDBerror').modal();
-            closePopup();
-            $('.map .spin').addClass('display-none');
+        .success(() => {
+            getDisasterdb((err) => {
+                if (err) $('#modalDBerror').modal();
+                closePopup();
+                $('.map .spin').addClass('display-none');
+            });
+        })
+        .fail(() => {
+            $('.mapboxgl-popup-content .db-error').addClass('on');
         });
-    })
-    .fail(function () {
-        $('.mapboxgl-popup-content .db-error').addClass('on');
-    });
-}
+};
 
-function seeEvtDBimages(id) {
+const seeEvtDBimages = (id) => {
 
-    const features = map.getSource('disasterdb')._data.features.filter(function(e){
+    const features = map.getSource('disasterdb')._data.features.filter((e) => {
         return (e.properties.uuid === id);
     });
 
@@ -245,14 +242,11 @@ function seeEvtDBimages(id) {
         $('.tab-selector-1').addClass('out');
         $('.tab-selector-2').addClass('out');
 
-        if (draw.getMode() !== 'static'){
-            draw.changeMode('static');
-        }
-
+        if (draw.getMode() !== 'static') draw.changeMode('static');
         draw.add(features[0]);
+
         const drawfeat = draw.getAll();
         let bbox;
-
         if (drawfeat.features[0].geometry.type === 'Point') {
             let round = turf.buffer(drawfeat.features[0], 100, 'kilometers');
             bbox = turf.bbox(round);
@@ -264,9 +258,9 @@ function seeEvtDBimages(id) {
         getImages();
         closePopup();
     }
-}
+};
 
-function editEvt(id) {
+const editEvt = (id) => {
 
     const features = map.getSource('disasterdb')._data.features.filter(function(e){
         return (e.properties.uuid === id);
@@ -299,7 +293,7 @@ function editEvt(id) {
 
         document.getElementById('uuid').textContent = 'UUID: ' + id;
 
-        features[0].properties.dtype.forEach(function(e){
+        features[0].properties.dtype.forEach((e) => {
             addType(document.getElementById('dropdown-menu').getElementsByClassName(e)[0].parentElement);
         });
 
@@ -316,4 +310,4 @@ function editEvt(id) {
         document.getElementById('disasterComments').value = features[0].properties.comments.replace(/<br\s?\/?>/g,'\n');
         closePopup();
     }
-}
+};

@@ -1,14 +1,16 @@
-'use strict';
 
-function getUrlVars() {
+const MAPBOX_ACCESS_TOKEN = '{YOUR-TOKEN}';
+const disasterwatch_api_url = '{DW-API}'; //https://github.com/RemotePixel/disasterwatch-lambda
+
+const getUrlVars = () => {
     const vars = {};
     window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
         vars[key] = value;
     });
     return vars;
-}
+};
 
-function unsubscribe() {
+const unsubscribe = () => {
 
     $('.btn-unsub').addClass('on');
 
@@ -24,17 +26,17 @@ function unsubscribe() {
         dataType: 'json',
         contentType: 'application/json',
     })
-    .success(function() {
-        $('.btn-unsub span').text('Done');
-        $('.btn-unsub').removeClass('on');
-        $('.btn-unsub').addClass('done');
-    })
-    .fail(function () {
-        $('.btn-unsub').removeClass('on');
-        $('.btn-unsub').addClass('error');
-        $('.btn-unsub span').text('Error');
-    });
-}
+        .success(() => {
+            $('.btn-unsub span').text('Done');
+            $('.btn-unsub').removeClass('on');
+            $('.btn-unsub').addClass('done');
+        })
+        .fail(() => {
+            $('.btn-unsub').removeClass('on');
+            $('.btn-unsub').addClass('error');
+            $('.btn-unsub span').text('Error');
+        });
+};
 
 const keys = getUrlVars();
 if (keys.hasOwnProperty('uuid') && keys.hasOwnProperty('mail') ) {
@@ -48,30 +50,28 @@ if (keys.hasOwnProperty('uuid') && keys.hasOwnProperty('mail') ) {
         dataType: 'json',
         contentType: 'application/json',
     })
-    .success(function(data){
-        $('#name i').text(data.features[0].properties.name);
+        .success((data) => {
+            $('#name i').text(data.features[0].properties.name);
 
-        let llstr;
-        if (data.features[0].geometry.type === 'Polygon') {
-            let centroid = turf.centroid(data);
-            llstr = centroid.geometry.coordinates[0] + ',' + centroid.geometry.coordinates[1] + ',6';
-        }
+            let llstr;
+            if (data.features[0].geometry.type === 'Polygon') {
+                let centroid = turf.centroid(data);
+                llstr = centroid.geometry.coordinates[0] + ',' + centroid.geometry.coordinates[1] + ',6';
+            }
 
-        if (data.features[0].geometry.type === 'Point') {
-            llstr = data.features[0].geometry.coordinates[0] + ',' + data.features[0].geometry.coordinates[1] + ',9';
-        }
+            if (data.features[0].geometry.type === 'Point') {
+                llstr = data.features[0].geometry.coordinates[0] + ',' + data.features[0].geometry.coordinates[1] + ',9';
+            }
 
-        const url = 'https://api.mapbox.com/v4/mapbox.light/geojson(' + encodeURIComponent(JSON.stringify(data.features[0])) + ')/' + llstr + '/800x800@2x.png?attribution=true&access_token=' + MAPBOX_ACCESS_TOKEN;
-        $('.map-pane img').attr('src', url);
-
-    })
-    .always(function () {
-        $('.map-pane .spin').addClass('display-none');
-    })
-    .fail(function () {
-        console.log('Could not Retrieve Disaster Event to database');
-    });
-
+            const url = 'https://api.mapbox.com/v4/mapbox.light/geojson(' + encodeURIComponent(JSON.stringify(data.features[0])) + ')/' + llstr + '/800x800@2x.png?attribution=true&access_token=' + MAPBOX_ACCESS_TOKEN;
+            $('.map-pane img').attr('src', url);
+        })
+        .fail(() => {
+            console.warn('Could not Retrieve Disaster Event to database');
+        })
+        .always(() => {
+            $('.map-pane .spin').addClass('display-none');
+        });
 } else {
     $('.map-pane .spin').addClass('display-none');
 }

@@ -1,4 +1,3 @@
-'use strict';
 
 $('#dateCheckbox').change(function () {
     if (this.checked) {
@@ -9,7 +8,6 @@ $('#dateCheckbox').change(function () {
 });
 
 $('#mailCheckbox').change(function () {
-    'use strict';
     if (this.checked) {
         $('#disastermailTo').attr('disabled', false);
         $('.disaster-info .sat-filter input').attr('disabled', false);
@@ -20,7 +18,7 @@ $('#mailCheckbox').change(function () {
 });
 
 //Disaster-info Form Interaction
-function addType(elem) {
+const addType = (elem) => {
     const type = elem.childNodes[0];
     const dTypelist = document.getElementById('disasterType');
 
@@ -32,16 +30,16 @@ function addType(elem) {
         elem.childNodes[1].className = 'fa fa-check right-block-in';
         dTypelist.appendChild(type.cloneNode(true));
     }
-}
+};
 
-function filterType(elem) {
+const filterType = (elem) => {
     const type = elem.childNodes[0];
     const dTypelist = document.getElementById('disasterType2');
     dTypelist.innerHTML = '<span class="caret"></span>' + type.outerHTML;
     filterListDisaster();
-}
+};
 
-function filterListDisaster() {
+const filterListDisaster = () => {
     $('.list-disasters .list-element').removeClass('display-none');
     map.setFilter('disasterdb-points', ['in', '$type', 'Point', 'LineString', 'Polygon']);
     map.setFilter('disasterdb-lines', ['==', '$type', 'LineString']);
@@ -68,43 +66,43 @@ function filterListDisaster() {
             map.setFilter('disasterdb-polygons', ['all', ['==', '$type', 'Polygon'], ['==', 'icon', filterClass]]);
         }
     }
-}
+};
 
-function filterListImage() {
-    const sat2show = $.map($('.disaster-images .sat-filter input:checked'), function (e) {
+const filterListImage = () => {
+    const sat2show = $.map($('.disaster-images .sat-filter input:checked'), (e) => {
         return e.getAttribute('data');
     });
 
-    const sat2check = $.map($('.disaster-images .sat-filter input'), function (e) {
+    const sat2check = $.map($('.disaster-images .sat-filter input'), (e) => {
         return e.getAttribute('data');
     });
 
-    sat2check.forEach(function(e){
+    sat2check.forEach((e) => {
         if (sat2show.indexOf(e) === -1) {
             $(`.img-preview div[sat="${e}"]`).addClass('display-none');
         } else {
             $(`.img-preview div[sat="${e}"]`).removeClass('display-none');
         }
     });
-}
+};
 
-function sortListImage() {
+const sortListImage = () => {
     const list = $('.img-preview').children();
     list.sort(sortScenes);
     list.detach().appendTo($('.img-preview'));
-}
+};
 
-$('#event-checkbox').change(function () {
+$('#event-checkbox').change(() => {
     $('#event-checkbox').parent().toggleClass('green');
     filterListDisaster();
 });
 
 
-$('.disaster-images .sat-filter input').change(function () {
+$('.disaster-images .sat-filter input').change(() => {
     filterListImage();
 });
 
-function resetForm() {
+const resetForm = () => {
     $('.disaster-info button[type="submit"]').attr('disabled', false);
 
     $('#disasterType span[type="dtype"]').remove();
@@ -128,9 +126,9 @@ function resetForm() {
     $('#disasterEndDate').datepicker('clearDates');
 
     $('.disaster-info').scrollTop(0);
-}
+};
 
-function openleftBlock() {
+const openleftBlock = () => {
 
     $('.leftblock').addClass('in');
     $('.tab-selector-1').prop('checked', true);
@@ -138,19 +136,19 @@ function openleftBlock() {
         $(this).attr('disabled', true);
     });
 
-    ['#layers-panel', '#layers-btn', '#basemaps-panel', '#basemaps-btn', '#disasters-panel', '#disasters-btn'].forEach(function (e) {
+    ['#layers-panel', '#layers-btn', '#basemaps-panel', '#basemaps-btn', '#disasters-panel', '#disasters-btn'].forEach((e) => {
         $(e).removeClass('on');
     });
 
     map.resize();
-}
+};
 
-function openImagesSettings() {
+const openImagesSettings = () => {
     $('.opensettings').toggleClass('active');
     $('.disaster-images .sat-filter').toggleClass('active');
-}
+};
 
-function closeleftblock() {
+const closeleftblock = () => {
     $('.disaster-images .spin').addClass('display-none');
 
     $('.leftblock').removeClass('in');
@@ -171,28 +169,33 @@ function closeleftblock() {
 
     map.resize();
     draw.deleteAll();
-}
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
-function toggleHelp() {
+const toggleHelp = () => {
     $('.dwhelp-block').toggleClass('on');
-}
+};
 
-function toggleImageryOption() {
-    $('.bottom-right-control').toggleClass('on');
-}
+const toggleImageryOption = () => {
+    $('.bottom-right-control-basemap').toggleClass('off');
+};
 
-function toggleSubscribe() {
+const toggleTileOption = () => {
+    $('.bottom-right-control-tiles').toggleClass('off');
+};
+
+
+const toggleSubscribe = () => {
     $('.subscribe-section').toggleClass('display-none');
-}
+};
 
-function toggleSearch() {
+const toggleSearch = () => {
     $('.geocoder-container').toggleClass('in');
     $('.geocoder-container input').focus();
-}
+};
 
-function toggleParam(setting) {
+const toggleParam = (setting) => {
     switch (setting) {
     case 'basemaps':
         $('#basemaps-panel .side-view-content').scrollTop(0);
@@ -235,16 +238,16 @@ function toggleParam(setting) {
     case null:
         break;
     }
-}
+};
 
-$(document).ready(function () {
+$(document).ready(() => {
     $('#disasterStartDate').datepicker({
         format : 'yyyy-mm-dd',
         autoclose : true,
         todayHighlight : true,
         startDate : '2016-01-01',
         endDate : moment.utc().format('YYYY-MM-DD')
-    }).on('changeDate', function (e) {
+    }).on('changeDate', (e) => {
         const dateValue = moment(e.date).format('YYYY-MM-DD');
         $('#disasterEndDate').datepicker('setStartDate', dateValue);
         $('#disasterEndDate').datepicker('setDate', dateValue);
@@ -264,7 +267,7 @@ $(document).ready(function () {
         todayHighlight : true,
         startDate : '2012-05-08',
         endDate : moment.utc().format('YYYY-MM-DD')
-    }).on('changeDate', function (e) {
+    }).on('changeDate', (e) => {
         const dateValue = moment(e.date).format('YYYY-MM-DD');
         const overlay = document.getElementsByClassName('link-on on')[0].parentElement.getAttribute('id');
 
