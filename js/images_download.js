@@ -217,7 +217,7 @@ const initSceneS2 = (sceneID) => {
 
     let min = $('.bottom-right-control-tiles #minCount').val();
     let max = $('.bottom-right-control-tiles #maxCount').val();
-    const query = `${sentinel_tiler_url}/metadata/${sceneID}?'pmim=${min}&pmax=${max}`;
+    const query = `${sentinel_tiler_url}/s2/metadata/${sceneID}?'pmim=${min}&pmax=${max}`;
 
     $.getJSON(query, (data) => {
         scope = data;
@@ -253,7 +253,7 @@ const updateRasterTile = () => {
     if (scope.satellite === 'sentinel') {
         rgb = $('.map .bottom-right-control-tiles #sentinel-option #rgb-select').attr('value');
         bands = rgb.split(',');
-        tileURL = `${sentinel_tiler_url}/tiles/${scope.sceneid}/{z}/{x}/{y}.png?` +
+        tileURL = `${sentinel_tiler_url}/s2/tiles/${scope.sceneid}/{z}/{x}/{y}.png?` +
             `rgb=${rgb}` +
             '&tile=256' +
             `&r_bds=${scope.rgbMinMax[bands[0]]}` +
