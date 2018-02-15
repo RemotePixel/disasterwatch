@@ -7,4 +7,4 @@ node_modules
 /js/app.js
 /js/app.min.js
 /js/secret.js
-config.js
+/js/config.js
