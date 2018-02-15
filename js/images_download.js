@@ -217,7 +217,7 @@ const initSceneS2 = (sceneID) => {
 
     let min = $('.bottom-right-control-tiles #minCount').val();
     let max = $('.bottom-right-control-tiles #maxCount').val();
-    const query = `${sentinel_tiler_url}/s3/metadata/${sceneID}?'pmim=${min}&pmax=${max}&access_token=${ENDPOINT_TOKEN}`;
+    const query = `${sentinel_tiler_url}/s2/metadata/${sceneID}?'pmim=${min}&pmax=${max}&access_token=${ENDPOINT_TOKEN}`;
 
     $.getJSON(query, (data) => {
         scope = data;

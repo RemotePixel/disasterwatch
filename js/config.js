@@ -1,0 +1,9 @@
+const rpix_api_us = 'https://lhb7x0r2bf.execute-api.us-west-2.amazonaws.com/production';
+const rpix_api_eu = 'https://lm0w96zbz4.execute-api.eu-central-1.amazonaws.com/production';
+const landsat_tiler_url = 'https://landsat.remotepixel.ca';
+const sentinel_tiler_url = 'https://sentinel.remotepixel.ca';
+const volcanoes_api_url ='https://joqhmu5n9g.execute-api.us-east-1.amazonaws.com/production';
+const disasterwatch_api_url = 'https://jriian4se3.execute-api.us-east-1.amazonaws.com/production';
+const sat_api_url = 'https://api.developmentseed.org/satellites/';
+const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoidmluY2VudHNhcmFnbyIsImEiOiJjaXZ2MjlxbWUwMG41MnlwNzNnaGN0a2NmIn0.HxKPljj1_AK5333eBz-YxQ';
+const ENDPOINT_TOKEN = 'wYRiRut8CL828xr2hzv3Z2swd4uumCBo8SFf6yH9';
