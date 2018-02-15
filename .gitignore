@@ -1,9 +1,0 @@
-.DS_Store
-config.yml
-history.lock
-.eslintrc.js
-
-node_modules
-/js/app.js
-/js/app.min.js
-/js/secret.js
